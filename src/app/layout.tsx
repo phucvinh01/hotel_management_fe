@@ -5,7 +5,7 @@ import Header from '@/components/shared/Layout/Header';
 import { cn } from '@/lib/utils';
 import Hero from '@/components/shared/BgHero';
 import TabHero from '@/components/shared/TabHero';
-
+import { Toaster } from "@/components/ui/toaster"
 const fontSans = FontSans({
   subsets: ['latin'],
   variable: '--font-sans',
@@ -22,7 +22,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang='en'>
+    <html lang='en' suppressHydrationWarning={true}>
       <body
         className={cn(
           'min-h-screen bg-background font-sans antialiased',
@@ -36,7 +36,7 @@ export default function RootLayout({
           <TabHero />
         </Hero>
         {children}
-
+<Toaster />
       </body>
     </html>
   );

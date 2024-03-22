@@ -13,9 +13,14 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 
+type PropsDatePickerWithRange = {
+  className?: React.HTMLAttributes<HTMLDivElement>,
+  setRangeDay:React.Dispatch<React.SetStateAction<DateRange | undefined>>
+}
+
 export function DatePickerWithRange({
-  className,
-}: React.HTMLAttributes<HTMLDivElement>) {
+  className, setRangeDay
+}: PropsDatePickerWithRange) {
 
   const currentDate = new Date();
   currentDate.setDate(currentDate.getDate() + 1);
@@ -32,9 +37,17 @@ const [disabledDate, setDisabledDate] = React.useState<DateRange | undefined>({
   to: yesterday,
 });
 
+  React.useEffect(() => {
+    if (date !== undefined) {
+        setRangeDay(date);
+    }
+}, [date, setRangeDay]);
+
+
+
 
   return (
-    <div className={cn('grid gap-2 !m-0', className)}>
+    <div className={cn('grid gap-2 bg-gray-50 border border-gray-300', className)}>
       <Popover>
         <PopoverTrigger asChild>
           <Button

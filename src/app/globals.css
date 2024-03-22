@@ -76,6 +76,13 @@
 }
 
 @layer utilities {
+.search-input-label {
+  @apply block mb-2 text-sm font-medium text-white
+}
+
+
+
+  
 
   .flex-center {
     @apply flex items-center justify-center
@@ -91,6 +98,7 @@
   .tag {
     @apply text-cyan-500 border-cyan-500 border rounded-3xl text-center 
   }
+
 
  
 }

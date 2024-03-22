@@ -7,18 +7,11 @@ import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
 
 import {
   DropdownMenu,
@@ -28,181 +21,261 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-
+import { toast, useToast } from '@/components/ui/use-toast';
 import { Input } from '@/components/ui/input';
-import { LocateIcon, SearchIcon } from 'lucide-react';
+import {
+  BabyIcon,
+  HomeIcon,
+  MinusIcon,
+  PersonStandingIcon,
+  PlusIcon,
+  SearchIcon,
+} from 'lucide-react';
 import { DatePickerWithRange } from './DayRangePicker';
+import { Fragment, useEffect, useState } from 'react';
+import QuantityPeopleForm from './AmountPeopleForm';
+import { DateRange } from 'react-day-picker';
+import AmountPeopleForm from './AmountPeopleForm';
 
-const formSchema = z.object({
-  username: z.string().min(2).max(50),
-});
+const dropDownData: SuggestLocationSearch[] = [
+  {
+    city: 'Đà Nẵng',
+    country: 'Việt Nam',
+    tag: 'Vùng',
+    num_of_hotel: 1777,
+  },
+  {
+    city: 'Nha Trang',
+    country: 'Việt Nam',
+    tag: 'Vùng',
+    num_of_hotel: 1777,
+  },
+  {
+    city: 'Đà Lạt',
+    country: 'Việt Nam',
+    tag: 'Thành Phố',
+    num_of_hotel: 1777,
+  },
+  {
+    city: 'Hồ Chí Minh',
+    country: 'Việt Nam',
+    tag: 'Thành Phố',
+    num_of_hotel: 1777,
+  },
+];
+
+const initForm: SearchForm = {
+  address: '',
+  amount_room: 1,
+  check_in: '',
+  check_out: '',
+  amount_adult: 0,
+  amount_children: 0,
+};
 
 const SearchForm = () => {
-  // 1. Define your form.
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      username: '',
-    },
-  });
+  const [open, setOpen] = useState(false);
+  const [formData, setFormData] = useState<SearchForm>(initForm);
+  const [rangeDay, setRangeDay] = useState<DateRange | undefined>();
 
-  // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
-  }
+  useEffect(() => {
+    const handleClickOutside = (event: any) => {
+      // Kiểm tra xem click có xảy ra bên ngoài component hay không
+      if (!event.target.closest('address') && !event.target.closest('#my-component')) {
+        console.log(!event.target.closest('address') && !event.target.closest('#my-component'));
+ setOpen(false)
+       
+        
+      }
+    };
+
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, []);
+
   return (
-    <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className='flex items-center w-full justify-stretch'>
-        <FormField
-          control={form.control}
-          name='username'
-          render={({ field }) => (
-            <FormItem className='w-[35%]'>
-              <Popover>
-                <PopoverTrigger className='flex flex-col gap-3 w-full'>
-                  <FormLabel className='text-white'>
-                    Thành phố, địa điểm hoặc tên khách sạn:
-                  </FormLabel>
-                  <FormControl className='w-full'>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger className='w-full'>
-                        <Input
-                          className='w-full rounded-none rounded-s-2xl py-4'
-                          placeholder='Thành phố, địa điểm hoặc tên khách sạn:'
-                          {...field}
-                        />
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent className='w-full'>
-                        <DropdownMenuLabel className='w-[350px]'>
-                          Điạ điểm đến phổ biến
-                        </DropdownMenuLabel>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem  className='flex justify-between items-center'>
-                          <div className='flex flex-col justify-start gap-1'>
-                            <p className='font-semibold'>Đà Nẳng</p>
-                            <p className='text-sm'>Việt Nam</p>
-                          </div>
-                          <div className='flex flex-col justify-end gap-1'>
-                            <p className='tag'>Vùng</p>
-                            <p className='text-[12px] text-gray-500'>
-                              1.728 khách sạn
-                            </p>
-                          </div>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem className='flex justify-between items-center'> 
-                          <div className='flex flex-col justify-start gap-1'>
-                            <p className='font-semibold'>Đà Nẳng</p>
-                            <p className='text-sm'>Việt Nam</p>
-                          </div>
-                          <div className='flex flex-col justify-end gap-1'>
-                            <p className='tag'>Vùng</p>
-                            <p className='text-[12px] text-gray-500'>
-                              1.728 khách sạn
-                            </p>
-                          </div>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem className='flex justify-between items-center'> 
-                          <div className='flex flex-col justify-start gap-1'>
-                            <p className='font-semibold'>Đà Nẳng</p>
-                            <p className='text-sm'>Việt Nam</p>
-                          </div>
-                          <div className='flex flex-col justify-end gap-1'>
-                            <p className='tag'>Vùng</p>
-                            <p className='text-[12px] text-gray-500'>
-                              1.728 khách sạn
-                            </p>
-                          </div>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem className='flex justify-between items-center'> 
-                          <div className='flex flex-col justify-start gap-1'>
-                            <p className='font-semibold'>Đà Nẳng</p>
-                            <p className='text-sm'>Việt Nam</p>
-                          </div>
-                          <div className='flex flex-col justify-end gap-1'>
-                            <p className='tag'>Vùng</p>
-                            <p className='text-[12px] text-gray-500'>
-                              1.728 khách sạn
-                            </p>
-                          </div>
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </FormControl>
-                  <FormMessage />
-                </PopoverTrigger>
-                <PopoverContent>
-                  Place content for the popover here.
-                </PopoverContent>
-              </Popover>
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name='username'
-          render={({ field }) => (
-            <FormItem className='flex flex-col gap-3 w-[30%]'>
-              <FormLabel className='text-white '>
-                Ngày nhận phòng và trả phòng:
-              </FormLabel>
-              <FormControl>
-                <DatePickerWithRange />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name='username'
-          render={({ field }) => (
-            <FormItem className='w-[35%]'>
-              <Popover>
-                <PopoverTrigger className='flex flex-col gap-3 w-full'>
-                  <FormLabel className='text-white'>Khách và Phòng</FormLabel>
-                  <FormControl className='w-full'>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger className='w-full'>
-                        <Input
-                          className='w-full rounded-none  py-4'
-                          placeholder='3 người lớn, 0 Trẻ em, 1 phòng'
-                          {...field}
-                        />
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent>
-                        <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem className='flex justify-between items-center'> Profile</DropdownMenuItem>
-                        <DropdownMenuItem className='flex justify-between items-center'> Billing</DropdownMenuItem>
-                        <DropdownMenuItem className='flex justify-between items-center'> Team</DropdownMenuItem>
-                        <DropdownMenuItem className='flex justify-between items-center'> Subscription</DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </FormControl>
-                  <FormMessage />
-                </PopoverTrigger>
-                <PopoverContent>
-                  Place content for the popover here.
-                </PopoverContent>
-              </Popover>
-            </FormItem>
-          )}
-        />
-
-        <Button
-          variant={'secondary'}
-          type='submit'
-          className='bg-orange-500 mt-[27px] rounded-none rounded-e-2xl'>
-          <SearchIcon color='#FFF' />
-        </Button>
-      </form>
-    </Form>
+    <form className='flex items-center w-full justify-stretch' onSubmit={() => alert('Chưa implement')}>
+      {/* {"City, region, country, hotel"} */}
+      <div className='w-[30%] relative'>
+       
+        <label
+          htmlFor='address'
+          className='search-input-label'>
+          Thành phố, địa điểm hoặc tên khách sạn:
+        </label>
+        <input
+          required
+          value={formData.address}
+          onFocus={() => setOpen(true)}
+          type='text'
+          id='address'
+          name="address"
+          className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-s-2xl  block w-full p-2.5 '
+          placeholder='Thành phố, khách sạn, điểm đến'
+          onChange={(e) =>
+            setFormData((prev) => ({ ...prev, address: e.target.value }))
+          }
+        /> {open &&  <div  id='my-component' className='absolute top-[80px] w-full bg-white rounded-2xl p-5 transition-transform '  >
+          <p className='text-black font-semibold p-2 border-b-[2px] border-[#000]'>Điểm đến nổi tiếng</p>
+          {
+            dropDownData.map((data) => <div key={data.city}
+             className='flex justify-between mt-4 border-b cursor-pointer'
+             onClick={() => setFormData((prev) => ({ ...prev, address: `${data.city}, ${data.country}` }))}
+            >
+              <div className='flex flex-col gap-1'>
+                <p className='font-medium'>{data.city}</p>
+                <p className='text-xs text-gray'>{data.country}</p>
+              </div>
+              <div className='flex flex-col gap-1 items-end'>
+                 <p className='tag px-1 text-sm'>{data.tag}</p>
+                <p className='text-xs text-gray'>{data.num_of_hotel}</p>
+              </div>
+            </div>)
+          }
+        </div>}
+       
+      </div>
+      <div className='w-[30%]'>
+        <label className='search-input-label'>
+          Ngày nhận phòng và trả phòng:
+        </label>
+        <DatePickerWithRange  setRangeDay={setRangeDay} />
+      </div>
+      <div className='w-[30%]'>
+        <label className='search-input-label'>Khách và Phòng</label>
+        <DropdownMenu>
+          <DropdownMenuTrigger className='bg-gray-50 border border-gray-300 text-gray-900 text-sm  focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 '>
+            {formData.amount_adult} người lớn, {formData.amount_children} Trẻ
+            em, {formData.amount_room} phòng
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <div className='container flex gap-4 flex-col py-4 w-[330px]'>
+              <div className='flex justify-between items-center '>
+                <div className='flex gap-3'>
+                  <HomeIcon className='text-cyan-500' />
+                  <p>Số phòng</p>
+                </div>
+                <div className='flex gap-3 justify-center items-center'>
+                  <Button
+                    className={`${
+                      formData.amount_room <= 1 ? 'hover:cursor-alias' : ''
+                    }`}
+                    disabled={formData.amount_room <= 1}
+                    onClick={(e) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        amount_room: prev.amount_room - 1,
+                      }))
+                    }
+                    variant={'ghost'}>
+                    <MinusIcon className='text-cyan-500' />
+                  </Button>
+                  <p className='px-1 border-b border-[#333]'>
+                    {formData.amount_room}
+                  </p>
+                  <Button
+                    onClick={() => {
+                      if (formData.amount_room >= formData.amount_adult) {
+                        toast({
+                          variant: 'destructive',
+                          title: 'Uh oh! Something went wrong.',
+                        });
+                        setFormData((prev) => ({
+                          ...prev,
+                          amount_room: formData.amount_adult,
+                        }));
+                      } else
+                        setFormData((prev) => ({
+                          ...prev,
+                          amount_room: formData.amount_room + 1,
+                        }));
+                    }}
+                    variant={'ghost'}>
+                    <PlusIcon className='text-cyan-500' />
+                  </Button>
+                </div>
+              </div>
+              <div className='flex justify-between items-center '>
+                <div className='flex gap-3'>
+                  <PersonStandingIcon className='text-cyan-500' />
+                  <p>Người lớn</p>
+                </div>
+                <div className='flex gap-3 justify-center items-center'>
+                  <Button
+                    className={`${
+                      formData.amount_adult <= 1 ? 'cursor-not-allowed' : ''
+                    }`}
+                    disabled={formData.amount_adult <= 1}
+                    onClick={() =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        amount_adult: formData.amount_adult - 1,
+                      }))
+                    }
+                    variant={'ghost'}>
+                    <MinusIcon className='text-cyan-500' />
+                  </Button>
+                  <p className='px-1 border-b border-[#333]'>
+                    {formData.amount_adult}
+                  </p>
+                  <Button
+                    onClick={() =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        amount_adult: formData.amount_adult + 1,
+                      }))
+                    }
+                    variant={'ghost'}>
+                    <PlusIcon className='text-cyan-500' />
+                  </Button>
+                </div>
+              </div>
+              <div className='flex justify-between items-center '>
+                <div className='flex gap-3'>
+                  <BabyIcon className='text-cyan-500' />
+                  <p>Trẻ em</p>
+                </div>
+                <div className='flex gap-3 justify-center items-center'>
+                  <Button
+                    className={`${
+                      formData.amount_children <= 0 ? 'cursor-not-allowed' : ''
+                    }`}
+                    disabled={formData.amount_children <= 0}
+                    onClick={() =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        amount_children: formData.amount_children - 1,
+                      }))
+                    }
+                    variant={'ghost'}>
+                    <MinusIcon className='text-cyan-500' />
+                  </Button>
+                  <p className='px-1 border-b border-[#333]'>
+                    {formData.amount_children}
+                  </p>
+                  <Button
+                    onClick={() =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        amount_children: formData.amount_children + 1,
+                      }))
+                    }
+                    variant={'ghost'}>
+                    <PlusIcon className='text-cyan-500' />
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+      <Button
+        variant={'secondary'}
+        type='submit'
+        className='bg-orange-500 mt-[30px]  rounded-none rounded-e-2xl'>
+        <SearchIcon color='#FFF' />
+      </Button>
+    </form>
   );
 };
 
