@@ -1,28 +1,8 @@
-'use client';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-
+'use client';;
 import { Button } from '@/components/ui/button';
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
 
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { toast, useToast } from '@/components/ui/use-toast';
-import { Input } from '@/components/ui/input';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { toast } from '@/components/ui/use-toast';
 import {
   BabyIcon,
   HomeIcon,
@@ -32,10 +12,8 @@ import {
   SearchIcon,
 } from 'lucide-react';
 import { DatePickerWithRange } from './DayRangePicker';
-import { Fragment, useEffect, useState } from 'react';
-import QuantityPeopleForm from './AmountPeopleForm';
+import { FormEvent, useEffect, useRef, useState } from 'react';
 import { DateRange } from 'react-day-picker';
-import AmountPeopleForm from './AmountPeopleForm';
 
 const dropDownData: SuggestLocationSearch[] = [
   {
@@ -67,8 +45,8 @@ const dropDownData: SuggestLocationSearch[] = [
 const initForm: SearchForm = {
   address: '',
   amount_room: 1,
-  check_in: '',
-  check_out: '',
+  check_in: new Date(),
+  check_out: new Date(),
   amount_adult: 0,
   amount_children: 0,
 };
@@ -77,15 +55,19 @@ const SearchForm = () => {
   const [open, setOpen] = useState(false);
   const [formData, setFormData] = useState<SearchForm>(initForm);
   const [rangeDay, setRangeDay] = useState<DateRange | undefined>();
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const suggestionsRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    const handleClickOutside = (event: any) => {
-      // Kiểm tra xem click có xảy ra bên ngoài component hay không
-      if (!event.target.closest('address') && !event.target.closest('#my-component')) {
-        console.log(!event.target.closest('address') && !event.target.closest('#my-component'));
- setOpen(false)
-       
-        
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        inputRef.current &&
+        !inputRef.current.contains(event.target as Node) &&
+        suggestionsRef.current &&
+        !suggestionsRef.current.contains(event.target as Node)
+      ) {
+        setShowSuggestions(false);
       }
     };
 
@@ -93,53 +75,86 @@ const SearchForm = () => {
     return () => document.removeEventListener('click', handleClickOutside);
   }, []);
 
+  const handleSubmit = (e:FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if(rangeDay) {
+      formData.check_in = rangeDay?.from;
+      formData.check_out = rangeDay?.to ;
+    }
+
+    
+    console.log(formData);
+  }
+
   return (
-    <form className='flex items-center w-full justify-stretch' onSubmit={() => alert('Chưa implement')}>
+    <form
+      className='flex items-center w-full justify-stretch'
+      onSubmit={handleSubmit}>
       {/* {"City, region, country, hotel"} */}
       <div className='w-[30%] relative'>
-       
         <label
           htmlFor='address'
           className='search-input-label'>
           Thành phố, địa điểm hoặc tên khách sạn:
         </label>
         <input
+          ref={inputRef}
           required
           value={formData.address}
-          onFocus={() => setOpen(true)}
+          onBlur={() => {
+            // Nếu click vào component gợi ý, không ẩn suggestions
+            if (!suggestionsRef.current) {
+              setShowSuggestions(false);
+            }
+          }}
+          onFocus={() => {
+            setShowSuggestions(true);
+          }}
           type='text'
           id='address'
-          name="address"
+          name='address'
           className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-s-2xl  block w-full p-2.5 '
           placeholder='Thành phố, khách sạn, điểm đến'
           onChange={(e) =>
             setFormData((prev) => ({ ...prev, address: e.target.value }))
           }
-        /> {open &&  <div  id='my-component' className='absolute top-[80px] w-full bg-white rounded-2xl p-5 transition-transform '  >
-          <p className='text-black font-semibold p-2 border-b-[2px] border-[#000]'>Điểm đến nổi tiếng</p>
-          {
-            dropDownData.map((data) => <div key={data.city}
-             className='flex justify-between mt-4 border-b cursor-pointer'
-             onClick={() => setFormData((prev) => ({ ...prev, address: `${data.city}, ${data.country}` }))}
-            >
-              <div className='flex flex-col gap-1'>
-                <p className='font-medium'>{data.city}</p>
-                <p className='text-xs text-gray'>{data.country}</p>
+        />{' '}
+        {showSuggestions && (
+          <div
+            ref={suggestionsRef}
+            className='absolute top-[80px] w-full bg-white rounded-2xl p-5 transition-transform '>
+            <p className='text-black font-semibold p-2 border-b-[2px] border-[#000]'>
+              Điểm đến nổi tiếng
+            </p>
+            {dropDownData.map((data) => (
+              <div
+                key={data.city}
+                className='flex justify-between mt-4 border-b cursor-pointer'
+                onClick={() =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    address: `${data.city}, ${data.country}`,
+                  }))
+                }>
+                <div className='flex flex-col gap-1'>
+                  <p className='font-medium'>{data.city}</p>
+                  <p className='text-xs text-gray'>{data.country}</p>
+                </div>
+                <div className='flex flex-col gap-1 items-end'>
+                  <p className='tag px-1 text-sm'>{data.tag}</p>
+                  <p className='text-xs text-gray'>{data.num_of_hotel}</p>
+                </div>
               </div>
-              <div className='flex flex-col gap-1 items-end'>
-                 <p className='tag px-1 text-sm'>{data.tag}</p>
-                <p className='text-xs text-gray'>{data.num_of_hotel}</p>
-              </div>
-            </div>)
-          }
-        </div>}
-       
+            ))}
+          </div>
+        )}
       </div>
       <div className='w-[30%]'>
         <label className='search-input-label'>
           Ngày nhận phòng và trả phòng:
         </label>
-        <DatePickerWithRange  setRangeDay={setRangeDay} />
+        <DatePickerWithRange setRangeDay={setRangeDay} />
       </div>
       <div className='w-[30%]'>
         <label className='search-input-label'>Khách và Phòng</label>

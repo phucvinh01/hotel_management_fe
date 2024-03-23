@@ -7,8 +7,8 @@ type SuggestLocationSearch = {
 
 type SearchForm = {
     address: string,
-    check_in: string ,
-    check_out: string ,
+    check_in?: Date ,
+    check_out?: Date ,
     amount_room: number,
     amount_children: number,
     amount_adult: number
