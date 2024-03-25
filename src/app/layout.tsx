@@ -6,6 +6,8 @@ import { cn } from '@/lib/utils';
 import Hero from '@/components/shared/BgHero';
 import TabHero from '@/components/shared/TabHero';
 import { Toaster } from "@/components/ui/toaster"
+import { CarouselTrustBy } from '@/components/shared/CarouselTrustBy';
+import BannerSection from '@/components/shared/BannerSection';
 const fontSans = FontSans({
   subsets: ['latin'],
   variable: '--font-sans',
@@ -34,6 +36,10 @@ export default function RootLayout({
           <h2 className='text-center text-4xl font-bold text-white  py-3'>Từ Đông Nam Á Đến Thế Giới, Trong Tầm Tay Bạn</h2>
 
           <TabHero />
+          <CarouselTrustBy />
+
+          <BannerSection />
+
         </Hero>
         {children}
 <Toaster />

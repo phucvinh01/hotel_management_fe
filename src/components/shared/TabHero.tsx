@@ -104,7 +104,7 @@ const TabHero = () => {
   return (
     <Tabs
       defaultValue='Hotel'
-      className='container w-full py-3 border-b'>
+      className='container w-full py-3'>
       <TabsList className='bg-transparent gap-7 '>
         {tabList.map((item, index) => (
           <TabsTrigger
