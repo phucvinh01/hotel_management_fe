@@ -5,10 +5,11 @@ const Hero = ({ children }: { children: React.ReactNode }) => {
     backgroundImage: "url('/background/image.png')",
     backgroundSize: 'cover',
     backgroundPosition: 'center',
+    height: '50vh'
 
   };
 
-  return <section style={bgHero} className='flex flex-col gap-5 min-h-screen'>{children}</section>;
+  return <div style={bgHero} className='flex flex-col gap-5 min-h-screen'>{children}</div>;
 };
 
 export default Hero;

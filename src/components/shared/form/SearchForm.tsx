@@ -123,7 +123,7 @@ const SearchForm = () => {
         {showSuggestions && (
           <div
             ref={suggestionsRef}
-            className='absolute top-[80px] w-full bg-white rounded-2xl p-5 transition-transform '>
+            className='z-20 absolute top-[80px] w-full bg-white rounded-2xl p-5 transition-transform '>
             <p className='text-black font-semibold p-2 border-b-[2px] border-[#000]'>
               Điểm đến nổi tiếng
             </p>
