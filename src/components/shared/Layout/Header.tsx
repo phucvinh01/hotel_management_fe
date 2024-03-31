@@ -5,6 +5,7 @@ import LangAndCur from '../LangAndCur';
 import Logo from '../Logo';
 import { User } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 
 const Header = () => {
   const [scrollY, setScrollY] = useState<number>(0);
@@ -72,7 +73,7 @@ const Header = () => {
       </div>
 
       <div className='flex gap-1'>
-            <Button variant={'ghost'} className={`transition-colors ${scroll ?  'text-black' : 'text-white'}`}>Khách sạn</Button>
+            <Button variant={'ghost'} className={`transition-colors ${scroll ?  'text-black' : 'text-white'}`}><Link href={'/hotel'}>Khách sạn</Link></Button>
             <Button variant={'ghost'} className={`transition-colors ${scroll ?  'text-black' : 'text-white'}`}>Vé máy bay</Button>
             <Button variant={'ghost'} className={`transition-colors ${scroll ?  'text-black' : 'text-white'}`}>Vé xe khách</Button>
             <Button variant={'ghost'} className={`transition-colors ${scroll ?  'text-black' : 'text-white'}`}>Đưa đón sân bay</Button>

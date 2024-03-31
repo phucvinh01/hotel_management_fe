@@ -9,7 +9,7 @@ const Hero = ({ children }: { children: React.ReactNode }) => {
 
   };
 
-  return <div style={bgHero} className='flex flex-col gap-5 min-h-screen'>{children}</div>;
+  return <main style={bgHero} className='flex flex-col gap-5 min-h-screen'>{children}</main>;
 };
 
 export default Hero;
