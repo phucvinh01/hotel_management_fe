@@ -13,3 +13,8 @@ type SearchForm = {
     amount_children: number,
     amount_adult: number
 }
+
+type Temp = {
+    "id": number,
+    "name": string
+}

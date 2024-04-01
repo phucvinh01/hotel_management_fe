@@ -32,7 +32,7 @@ const voucherImageList = [
 
 const CarouselVoucher = () => {
   return (
-    <Carousel className="w-full px-3">
+    <Carousel className="w-full ">
       <CarouselContent className="">
         {voucherImageList.map((item) => (
           <CarouselItem key={item.id} className="basis-1/4">

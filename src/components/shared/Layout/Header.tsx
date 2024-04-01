@@ -6,6 +6,7 @@ import Logo from '../Logo';
 import { User } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import DialogSignIn from '../DialogSignIn';
 
 const Header = () => {
   const [scrollY, setScrollY] = useState<number>(0);
@@ -55,19 +56,8 @@ const Header = () => {
           </Button>
 
           <div className='flex gap-1'>
-            <Button
-              variant={'ghost'}
-              className={`button-outline ${
-                scroll ? 'text-black' : 'text-white'
-              } `}>
-              <User className='mr-2 h-4 w-4' />
-              Đăng nhập
-            </Button>
-            <Button
-              variant={'ghost'}
-              className='button-primary text-white'>
-              Đăng Ký
-            </Button>
+            <DialogSignIn scroll={scroll} title='Đăng nhập'/>
+             <DialogSignIn scroll={scroll} title='Đăng ký'/>
           </div>
         </div>
       </div>
