@@ -16,11 +16,11 @@ export const metadata: Metadata = {
   description: 'Traveloka',
 };
 
- const bgHero = {
-    backgroundImage: "url('/background/image.png')",
-    backgroundSize: 'contain',
+const bgHero = {
+  backgroundImage: "url('/background/image.png')",
+  backgroundSize: 'contain',
 
-  };
+};
 
 export default function RootLayout({
   children,
@@ -30,16 +30,17 @@ export default function RootLayout({
   return (
     <html
       lang='en'
-      suppressHydrationWarning={true}>
+      suppressHydrationWarning={true}
+    >
       <body
         style={bgHero}
         className={cn(
           ' bg-background font-sans antialiased',
           fontSans.variable
         )}>
-          <Header />
-          {children}
-          <Footer />
+        <Header usingScrollEvent={true} />
+        {children}
+        <Footer />
         <Toaster />
       </body>
     </html>
