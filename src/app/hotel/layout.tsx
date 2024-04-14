@@ -6,7 +6,7 @@ import Footer from '@/components/shared/Layout/Footer';
 import Header from '@/components/shared/Layout/Header';
 import { cn } from '@/lib/utils';
 import { Inter as FontSans } from 'next/font/google';
-//import './../globals.css';
+import '../globals.css'
 //import './style.css';
 const fontSans = FontSans({
     subsets: ['latin'],

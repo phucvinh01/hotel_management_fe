@@ -58,7 +58,7 @@ export function CarouselCountry() {
       <CarouselContent className="">
         {listContryImg.map((item) => (
           <CarouselItem key={item.id} className="basis-1/4">
-              <Image src={item.url} alt={item.url} width={300} height={120}objectFit="cover" className="rounded-xl"/>
+              <Image src={item.url} alt={item.url} width={300} height={120} className="rounded-xl object-cover"/>
           </CarouselItem>
         ))}
       </CarouselContent >

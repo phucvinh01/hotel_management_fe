@@ -65,22 +65,26 @@
     --ring: 212.7 26.8% 83.9%;
   }
 }
- 
-@layer base {
-  * {
-    @apply border-border;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
-}
 
 @layer utilities {
 .search-input-label {
   @apply block mb-2 text-sm font-medium text-white
 }
 
-
+.lable-input {
+    @apply text-gray-500 font-medium text-lg;
+  }
+  .icon-input {
+    @apply absolute bg-gray-500 h-full flex flex-row items-center
+    justify-center rounded-l-xl w-10;
+  }
+  .text-input {
+    @apply pl-12 bg-gray-50 border border-gray-300 text-gray-900
+    text-lg rounded-xl  block w-full p-2.5 font-medium focus:outline-dotted focus:outline-cyan-500;
+  }
+  .row-modal-ds-tinh {
+    @apply bg-white w-full flex flex-row h-16 rounded-lg items-center hover:bg-cyan-50;
+  }
 
   
 

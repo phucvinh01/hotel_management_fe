@@ -7,8 +7,8 @@ import {
     CarouselNext,
     CarouselPrevious,
 } from "@/components/ui/carousel"
-import './globals.css';
 import { useState } from 'react';
+import React from 'react';
 
 const dateNow = (): string => {
     var currentDate = new Date();
@@ -170,7 +170,7 @@ export default function Hotel() {
                             </CarouselItem>
                             {listContryImg.map((item) => (
                                 <CarouselItem key={item.id} className="basis-1/4">
-                                    <Image src={item.url} alt={item.url} width={300} height={120} objectFit="cover" className="rounded-xl" />
+                                    <Image src={item.url} alt={item.url} width={300} height={120}  className="rounded-xl object-cover" />
                                 </CarouselItem>
                             ))}
                         </CarouselContent >
@@ -224,7 +224,7 @@ export default function Hotel() {
                                 <input type="text"
                                     placeholder="Chọn địa điểm của bạn"
                                     className='text-input'
-                                    value={valueTinh} />
+                                    defaultValue={valueTinh} />
                             </div>
                             {/* modal hien thi danh sach tinh thanh */}
                             <div id='dsTinh' className={`${dsTinhState} bg-white rounded-lg w-full absolute z-10 shadow-md shadow-cyan-700`}>
@@ -292,7 +292,7 @@ export default function Hotel() {
                                     </span>
                                     <input type="text"
                                         placeholder="Chọn số đếm bạn thuê"
-                                        value={valueSoDem}
+                                        defaultValue={valueSoDem}
                                         className='text-input' />
                                 </div>
                                 {/* modal hien thi danh sach so dem thue phong */}
@@ -345,7 +345,7 @@ export default function Hotel() {
                                     </span>
                                     <input type="text"
                                         placeholder="Chọn số đếm bạn thuê"
-                                        value={valueNguoiLonTreEmPhong}
+                                        defaultValue={valueNguoiLonTreEmPhong}
                                         className='text-input' />
                                 </div>
                                 {/* modal hien thi chon so luong thanh vien */}
@@ -358,7 +358,7 @@ export default function Hotel() {
                                             <button className='border-2 border-gray-400 bg-cyan-50 h-12 w-12 rounded-lg mx-1'
                                                 onClick={() => handleSubstractNguoiLon(event)}>-</button>
                                             <input className='border-2 border-gray-400 bg-white h-12 w-12 rounded-lg mx-1 
-                                            text-center focus:outline-gray-400' readOnly type='text' value={valueSoNguoiLon} />
+                                            text-center focus:outline-gray-400' readOnly type='text' defaultValue={valueSoNguoiLon} />
                                             <button className='border-2 border-gray-400 bg-cyan-50 h-12 w-12 rounded-lg mx-1'
                                                 onClick={() => handleAddNguoiLon(event)}>+</button>
                                         </div>
@@ -371,7 +371,7 @@ export default function Hotel() {
                                             <button className='border-2 border-gray-400 bg-cyan-50 h-12 w-12 rounded-lg mx-1'
                                                 onClick={() => handleSubstractTreEm(event)}>-</button>
                                             <input className='border-2 border-gray-400 bg-white h-12 w-12 rounded-lg mx-1 
-                                            text-center focus:outline-gray-400' readOnly type='text' value={valueSoTreEm} />
+                                            text-center focus:outline-gray-400' readOnly type='text' defaultValue={valueSoTreEm} />
                                             <button className='border-2 border-gray-400 bg-cyan-50 h-12 w-12 rounded-lg mx-1'
                                                 onClick={() => handleAddTreEm(event)}>+</button>
                                         </div>
@@ -384,7 +384,7 @@ export default function Hotel() {
                                             <button className='border-2 border-gray-400 bg-cyan-50 h-12 w-12 rounded-lg mx-1'
                                                 onClick={() => handleSubstractPhong(event)}>-</button>
                                             <input className='border-2 border-gray-400 bg-white h-12 w-12 rounded-lg mx-1 
-                                            text-center focus:outline-gray-400' readOnly type='text' value={valueSoPhong} />
+                                            text-center focus:outline-gray-400' readOnly type='text' defaultValue={valueSoPhong} />
                                             <button className='border-2 border-gray-400 bg-cyan-50 h-12 w-12 rounded-lg mx-1'
                                                 onClick={() => handleAddPhong(event)}>+</button>
                                         </div>
