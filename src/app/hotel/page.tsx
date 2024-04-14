@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/carousel"
 import './globals.css';
 import { useState } from 'react';
+import React from 'react';
 
 const dateNow = (): string => {
     var currentDate = new Date();
