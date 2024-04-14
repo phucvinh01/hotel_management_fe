@@ -6,7 +6,7 @@
 
 @layer base {
     body {
-        @apply relative z-1 bg-whiten text-base font-normal text-body;
+        @apply relative z-1 bg-whiten text-base font-normal text-white;
     }
 }
 
@@ -40,23 +40,21 @@
 }
 
 .tableCheckbox:checked ~ div {
-    @apply border-primary bg-primary;
+    @apply border-cyan-400 bg-cyan-400;
 }
 
 .apexcharts-legend-text {
-    @apply !text-body dark:!text-bodydark;
+    @apply !text-white dark:!text-white;
 }
 
-.apexcharts-text {
-    @apply !fill-body dark:!fill-bodydark;
-}
+
 
 .apexcharts-xcrosshairs {
-    @apply !fill-stroke dark:!fill-strokedark;
+    @apply  dark:!fill-strokedark;
 }
 
 .apexcharts-gridline {
-    @apply !stroke-stroke dark:!stroke-strokedark;
+    @apply  dark:!stroke-strokedark;
 }
 
 .apexcharts-series.apexcharts-pie-series path {
@@ -68,28 +66,28 @@
 }
 
 .apexcharts-tooltip.apexcharts-theme-light {
-    @apply dark:!border-strokedark dark:!bg-boxdark;
+    @apply dark:!border-white dark:!bg-boxdark;
 }
 
 .apexcharts-tooltip.apexcharts-theme-light .apexcharts-tooltip-title {
-    @apply dark:!border-strokedark dark:!bg-meta-4;
+    @apply dark:!border-white dark:!bg-meta-4;
 }
 
 .apexcharts-xaxistooltip,
 .apexcharts-yaxistooltip {
-    @apply dark:!border-meta-4 dark:!bg-meta-4 dark:!text-bodydark1;
+    @apply dark:!border-meta-4 dark:!bg-meta-4 dark:!text-white;
 }
 
 .apexcharts-xaxistooltip-bottom:after {
-    @apply !border-b-gray dark:!border-b-meta-4;
+    @apply !border-b dark:!border-b-meta-4;
 }
 
 .apexcharts-xaxistooltip-bottom:before {
-    @apply !border-b-gray dark:!border-b-meta-4;
+    @apply !border-b dark:!border-b-meta-4;
 }
 
 .apexcharts-xaxistooltip-bottom {
-    @apply !rounded !border-none !bg-gray !text-xs !font-medium !text-black dark:!text-white;
+    @apply !rounded !border-none !bg-gray-600 !text-xs !font-medium !text-black dark:!text-white;
 }
 
 .apexcharts-tooltip-series-group {
@@ -102,7 +100,7 @@
 
 .flatpickr-months .flatpickr-prev-month:hover svg,
 .flatpickr-months .flatpickr-next-month:hover svg {
-    @apply !fill-primary;
+    @apply !fill-cyan-400;
 }
 
 @layer {
@@ -115,14 +113,14 @@
 }
 
 .flatpickr-calendar {
-    @apply !p-6 dark:!bg-boxdark dark:!text-bodydark dark:!shadow-8 ;
+    @apply !p-6 dark:!bg-boxdark dark:!text-white dark:!shadow-8 ;
 }
 }
 
 
 
 .flatpickr-day {
-    @apply dark:!text-bodydark dark:hover:!border-meta-4 dark:hover:!bg-meta-4;
+    @apply dark:!text-white dark:hover:!border-meta-4 dark:hover:!bg-meta-4;
 }
 
 .flatpickr-months .flatpickr-prev-month,
@@ -191,7 +189,7 @@ span.flatpickr-weekday,
 .flatpickr-day.startRange.nextMonthDay,
 .flatpickr-day.endRange.nextMonthDay {
     background: #3c50e0;
-    @apply !border-primary !bg-primary hover:!border-primary hover:!bg-primary;
+    @apply !border-cyan-400 !bg-cyan-400 hover:!border-cyan-400 hover:!bg-cyan-400;
 }
 
 .flatpickr-day.selected.startRange + .endRange:not(:nth-child(7n + 1)),
@@ -201,7 +199,7 @@ span.flatpickr-weekday,
 }
 
 .map-btn .jvm-zoom-btn {
-    @apply flex h-7.5 w-7.5 items-center justify-center rounded border border-stroke bg-white px-0 pb-0.5 pt-0 text-2xl leading-none text-body hover:border-primary hover:bg-primary hover:text-white dark:border-strokedark dark:bg-meta-4 dark:text-bodydark dark:hover:border-primary dark:hover:bg-primary dark:hover:text-white;
+    @apply flex h-7.5 w-7.5 items-center justify-center rounded border border-white bg-white px-0 pb-0.5 pt-0 text-2xl leading-none text-white hover:border-cyan-400 hover:bg-cyan-400 hover:text-white dark:border-boxdark dark:bg-meta-4 dark:text-white dark:hover:border-cyan-400 dark:hover:bg-cyan-400 dark:hover:text-white;
 }
 
 .mapOne .jvm-zoom-btn {
@@ -225,7 +223,7 @@ span.flatpickr-weekday,
 }
 
 .taskCheckbox:checked ~ .box {
-    @apply border-primary bg-primary dark:border-primary;
+    @apply border-cyan-400 bg-cyan-400 dark:border-cyan-400;
 }
 
 .custom-input-date::-webkit-calendar-picker-indicator {
