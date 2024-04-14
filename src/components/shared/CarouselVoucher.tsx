@@ -36,7 +36,7 @@ const CarouselVoucher = () => {
       <CarouselContent className="">
         {voucherImageList.map((item) => (
           <CarouselItem key={item.id} className="basis-1/4">
-              <Image src={item.url} alt={item.url} width={300} height={120}objectFit="cover" className="rounded-xl"/>
+              <Image src={item.url} alt={item.url} width={300} height={120}className="rounded-xl"/>
           </CarouselItem>
         ))}
       </CarouselContent >

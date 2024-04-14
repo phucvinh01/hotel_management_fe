@@ -62,7 +62,7 @@ export function CarouselTrustBy() {
           {LogoCarousel.slice(0, 4).map((item) => (
             <div  key={item.id} className='p-3 rounded-2xl hover:bg-white'> <img
              
-              className=' '
+              className='object-contain '
               
               src={item.url}
               alt={item.url}

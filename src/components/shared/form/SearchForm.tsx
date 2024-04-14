@@ -159,7 +159,7 @@ const SearchForm = () => {
       <div className='w-[30%]'>
         <label className='search-input-label'>Khách và Phòng</label>
         <DropdownMenu>
-          <DropdownMenuTrigger className='bg-gray-50 border border-gray-300 text-gray-900 text-sm  focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 '>
+          <DropdownMenuTrigger className='!bg-white border border-gray-300 text-gray-900 text-sm  focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 '>
             {formData.amount_adult} người lớn, {formData.amount_children} Trẻ
             em, {formData.amount_room} phòng
           </DropdownMenuTrigger>

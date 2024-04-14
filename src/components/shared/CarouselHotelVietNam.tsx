@@ -112,7 +112,7 @@ const CarouselHotelVietNam = () => {
             <div className='rounded-lg shadow-md border'>
               <div className='relative'>
                 <Image
-                  className='rounded-lg'
+                  className='rounded-lg object-contain'
                   src={item.image}
                   alt={item.image}
                   width={240}
