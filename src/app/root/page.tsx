@@ -1,5 +1,4 @@
-import Header from '@/components/shared/Layout/Header';
-import Hero from '@/components/shared/BgHero';
+
 import TabHero from '@/components/shared/TabHero';
 import { CarouselTrustBy } from '@/components/shared/CarouselTrustBy';
 import BannerSection from '@/components/shared/BannerSection';
@@ -10,7 +9,8 @@ import Footer from '@/components/shared/Layout/Footer';
 import CarouselVoucher from '@/components/shared/CarouselVoucher';
 import CarouselHotelVietNam from '@/components/shared/CarouselHotelVietNam';
 import TabsCarouselHotel from '@/components/shared/TabsCarouselHotel';
-export default function Home() {
+import { getHotelPage } from '@/service/hotel.service';
+export default async  function Home() {
   const dataLocationList = [
     {
       id: 1,
@@ -64,6 +64,9 @@ export default function Home() {
       name: 'Bali',
     },
   ];
+
+
+
   return (
     <main className='flex flex-col'>
       <h2 className='text-center text-4xl font-bold text-white  py-3'>

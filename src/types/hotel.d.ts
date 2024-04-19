@@ -1,3 +1,18 @@
+interface ApiGetPageResponse {
+  result: {
+    current_page: number;
+    data: IHotel[]; // Đây là một mảng các đối tượng, không thể biết trước cấu trúc của chúng từ mô tả.
+    first_page_url: string;
+    from: number;
+    next_page_url: string | null;
+    path: string;
+    per_page: number;
+    prev_page_url: string | null;
+    to: number;
+  };
+  total: number;
+}
+
 interface IHotel {
   id: string;
   Name: string;

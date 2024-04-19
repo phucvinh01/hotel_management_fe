@@ -9,8 +9,9 @@ import {
 } from '@/components/ui/carousel';
 import Image from 'next/image';
 import Rate from '@/components/shared/Rate'
-import { Dot } from 'lucide-react';
+import { CloudFog, Dot } from 'lucide-react';
 import { formatCurrency } from '@/lib/formatCurrency';
+import extractProvinceCity from '@/lib/extractProvinceCity';
 /* HTML: <div class="ribbon">Your text content</div> */
 
 const ribbonStyle = {
@@ -99,24 +100,18 @@ const hotelList = [
   },
 ];
 
-const CarouselHotelVietNam = async () => {
+type CarouselHotelProps = {
+  listData: IHotel[] | false
+}
 
-
-  try {
-      const data = await fetch('http://127.0.0.1:8000/api/hotel/get-page?page=1')
-   let result = await data.json();
-   console.log(result);
-  } catch (error) {
-    console.log(error);
-  }
-
+const CarouselHotelVietNam =  ({listData}: CarouselHotelProps) => {
 
   return (
     <Fragment>
         
     <Carousel className='w-full '>
       <CarouselContent className=''>
-        {hotelList.map((item) => (
+        {listData && listData.map((item) => (
           <CarouselItem
             key={item.id}
             className='basis-1/5'>
@@ -124,29 +119,29 @@ const CarouselHotelVietNam = async () => {
               <div className='relative'>
                 <Image
                   className='rounded-lg object-contain'
-                  src={item.image}
-                  alt={item.image}
+                  src={`http://localhost:8000/images/${ item.images[1].FileName}`}
+                  alt={`http://localhost:8000/images/${ item.images[1].FileName}`}
                   width={240}
                   height={60}
                 />
                 <span className='absolute top-0 px-2 py-1 bg-cyan-700 text-white font-bold text-md rounded-md'>
-                  {item.address}
+                  {extractProvinceCity(item.Address)}
                 </span>
                 <span
                   style={ribbonStyle}
                   className='absolute bottom-0'>
-                  {item.discount}
+                  {10}
                 </span>
               </div>
               <div className='flex flex-col gap-1 px-3 py-1 max-h-52'>
-                <p className='font-bold text-sm text-black line-clamp-2'>{item.name}</p>
+                <p className='font-bold text-sm text-black line-clamp-2'>{item.Name}</p>
                 <div className='w-full flex gap-1 items-center'>
-                  <Rate  count={item.star} value={item.star} />
+                  <Rate  count={item.StarRate as number} value={item.StarRate as number} />
                   <Dot />
-                  <p className='text-cyan-400 text-sm font-bold'>{item.vote}</p>
+                  <p className='text-cyan-400 text-sm font-bold'>{item.Telephone}</p>
                 </div>
-                <p className='text-xs text-gray-500 font-bold line-through'>{formatCurrency(item.price)}</p>
-                <p className='text-lg text-orange-600 font-bold'>{formatCurrency(item.priceSale)}</p>
+                <p className='text-xs text-gray-500 font-bold line-through'>{formatCurrency(10000000)}</p>
+                <p className='text-lg text-orange-600 font-bold'>{formatCurrency(9000000)}</p>
               </div>
             </div>
           </CarouselItem>

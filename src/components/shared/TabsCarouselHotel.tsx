@@ -1,6 +1,7 @@
 import React from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import CarouselHotelVietNam from './CarouselHotelVietNam';
+import { getHotelPage } from '@/service/hotel.service';
 
 
 
@@ -9,7 +10,11 @@ type TabsCarouselHotelProps = {
   "data": Temp[]
 }
 
-const TabsCarouselHotel = ({title,data}:TabsCarouselHotelProps) => {
+const TabsCarouselHotel = async ({title,data}:TabsCarouselHotelProps) => {
+
+  const listData: ApiGetPageResponse | false = await getHotelPage(1)
+  const dataHotel:IHotel[] | false= listData && listData.result.data
+
   return (
     <>
     <p className='text-2xl font-extrabold text-black'>{title}</p>
@@ -24,7 +29,7 @@ const TabsCarouselHotel = ({title,data}:TabsCarouselHotelProps) => {
       {
             data.map((item) =>
              <TabsContent key={item.id} value={item.name}>
-                <CarouselHotelVietNam/>
+                <CarouselHotelVietNam listData ={dataHotel}/>
             </TabsContent>
              )
         }

@@ -9,14 +9,16 @@ const nextConfig = {
             },
         ];
     },
-    async rewrites() {
-        return [
+    images: {
+        remotePatterns: [
             {
-                source: '/api/:path*',
-                destination: 'http://127.0.0.1:8000/api/:path*',
+                protocol: 'http',
+                hostname: 'localhost',
+                port: '8000',
             },
-        ]
-    }
+        ],
+    },
+
 };
 
 export default nextConfig;
