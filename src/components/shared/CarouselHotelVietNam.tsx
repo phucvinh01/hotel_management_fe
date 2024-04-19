@@ -1,5 +1,5 @@
-'use client';
 import React, { Fragment } from 'react';
+import { getHotelPage } from '../../service/hotel.service'
 import {
   Carousel,
   CarouselContent,
@@ -8,7 +8,7 @@ import {
   CarouselPrevious,
 } from '@/components/ui/carousel';
 import Image from 'next/image';
-import { Rating } from 'react-simple-star-rating';
+import Rate from '@/components/shared/Rate'
 import { Dot } from 'lucide-react';
 import { formatCurrency } from '@/lib/formatCurrency';
 /* HTML: <div class="ribbon">Your text content</div> */
@@ -99,7 +99,18 @@ const hotelList = [
   },
 ];
 
-const CarouselHotelVietNam = () => {
+const CarouselHotelVietNam = async () => {
+
+
+  try {
+      const data = await fetch('http://127.0.0.1:8000/api/hotel/get-page?page=1')
+   let result = await data.json();
+   console.log(result);
+  } catch (error) {
+    console.log(error);
+  }
+
+
   return (
     <Fragment>
         
@@ -130,16 +141,7 @@ const CarouselHotelVietNam = () => {
               <div className='flex flex-col gap-1 px-3 py-1 max-h-52'>
                 <p className='font-bold text-sm text-black line-clamp-2'>{item.name}</p>
                 <div className='w-full flex gap-1 items-center'>
-                  <Rating
-                    SVGclassName={`inline-block`}
-                    style={{
-                      display: 'block',
-                    }}
-                    size={18}
-                    readonly
-                    iconsCount={item.star}
-                    initialValue={item.star}
-                  />
+                  <Rate  count={item.star} value={item.star} />
                   <Dot />
                   <p className='text-cyan-400 text-sm font-bold'>{item.vote}</p>
                 </div>
