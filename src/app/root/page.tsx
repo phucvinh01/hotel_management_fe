@@ -30,11 +30,15 @@ export default async  function Home() {
     },
     {
       id: 5,
-      name: 'Nha Tran',
+      name: 'Nha Trang',
     },
     {
       id: 6,
       name: 'Phú Quốc',
+    },
+    {
+      id: 7,
+      name: 'Đà Nẵng',
     },
   ];
 

@@ -3,7 +3,7 @@ export default function extractProvinceCity(addressString: string): string {
   const regex = /^(.*?), (.*?), (.*?), (.*?)$/;
 
   // Match the address string against the regular expression
-  const match = addressString.match(regex);
+  const match = addressString?.match(regex);
 
   // Check if the match is successful
   if (match) {

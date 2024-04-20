@@ -101,17 +101,16 @@ const hotelList = [
 ];
 
 type CarouselHotelProps = {
-  listData: IHotel[] | false
+  listData: ICardHotel[] | false | undefined
 }
 
-const CarouselHotelVietNam =  ({listData}: CarouselHotelProps) => {
-
+const CarouselHotelVietNam = ({listData}: CarouselHotelProps) => {
+  console.log(listData);
   return (
     <Fragment>
-        
     <Carousel className='w-full '>
       <CarouselContent className=''>
-        {listData && listData.map((item) => (
+        {listData && listData.length > 0 && listData.map((item) => (
           <CarouselItem
             key={item.id}
             className='basis-1/5'>
@@ -119,8 +118,8 @@ const CarouselHotelVietNam =  ({listData}: CarouselHotelProps) => {
               <div className='relative'>
                 <Image
                   className='rounded-lg object-contain'
-                  src={`http://localhost:8000/images/${ item.images[1].FileName}`}
-                  alt={`http://localhost:8000/images/${ item.images[1].FileName}`}
+                  src={`http://localhost:8000/images/${ item.FileName}`}
+                  alt={`http://localhost:8000/images/${ item.FileName}`}
                   width={240}
                   height={60}
                 />
@@ -136,12 +135,12 @@ const CarouselHotelVietNam =  ({listData}: CarouselHotelProps) => {
               <div className='flex flex-col gap-1 px-3 py-1 max-h-52'>
                 <p className='font-bold text-sm text-black line-clamp-2'>{item.Name}</p>
                 <div className='w-full flex gap-1 items-center'>
-                  <Rate  count={item.StarRate as number} value={item.StarRate as number} />
+                  <Rate  count={item.average_rating === null ? 0 : item.average_rating} value={item.average_rating === null ? 0 : item.average_rating} />
                   <Dot />
-                  <p className='text-cyan-400 text-sm font-bold'>{item.Telephone}</p>
+                  <p className='text-cyan-400 text-sm font-bold'>{item.total_reviews}</p>
                 </div>
-                <p className='text-xs text-gray-500 font-bold line-through'>{formatCurrency(10000000)}</p>
-                <p className='text-lg text-orange-600 font-bold'>{formatCurrency(9000000)}</p>
+                {/* <p className='text-xs text-gray-500 font-bold line-through'>{formatCurrency(item.minPrice)}</p> */}
+                <p className='text-lg text-orange-600 font-bold'>{formatCurrency(item.min_price)}</p>
               </div>
             </div>
           </CarouselItem>

@@ -11,7 +11,6 @@ class Http {
         'Access-Control-Allow-Credentials': 'true',
         'Content-Type':'application/json'
       },
-      withCredentials: true
     })
   }
 }
