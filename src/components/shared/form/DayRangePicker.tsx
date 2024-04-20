@@ -15,7 +15,7 @@ import {
 
 type PropsDatePickerWithRange = {
   className?: React.HTMLAttributes<HTMLDivElement>,
-  setRangeDay:React.Dispatch<React.SetStateAction<DateRange | undefined>>
+  setRangeDay: React.Dispatch<React.SetStateAction<DateRange | undefined>>
 }
 
 export function DatePickerWithRange({
@@ -29,32 +29,32 @@ export function DatePickerWithRange({
     to: addDays(currentDate, 1),
   });
 
-const firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
-const yesterday = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - 2);
+  const firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+  const yesterday = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - 2);
 
-const [disabledDate, setDisabledDate] = React.useState<DateRange | undefined>({
-  from: firstDayOfMonth,
-  to: yesterday,
-});
+  const [disabledDate, setDisabledDate] = React.useState<DateRange | undefined>({
+    from: firstDayOfMonth,
+    to: yesterday,
+  });
 
   React.useEffect(() => {
     if (date !== undefined) {
-        setRangeDay(date);
+      setRangeDay(date);
     }
-}, [date, setRangeDay]);
+  }, [date, setRangeDay]);
 
 
 
 
   return (
-    <div className={cn('grid gap-2 bg-gray-50 border border-gray-300', className)}>
+    <div className={cn('grid gap-2 bg-gray-50 border border-gray-300 h-12', className)}>
       <Popover>
         <PopoverTrigger asChild>
           <Button
             id='date'
             variant={'outline'}
             className={cn(
-              ' justify-start text-left font-normal rounded-none',
+              ' justify-start text-left font-normal rounded-none h-full',
               !date && 'text-muted-foreground'
             )}>
             <CalendarIcon className='mr-2 h-4 w-4' />
@@ -76,7 +76,7 @@ const [disabledDate, setDisabledDate] = React.useState<DateRange | undefined>({
           className='w-auto p-0'
           align='start'>
           <Calendar
-          disabled={disabledDate}
+            disabled={disabledDate}
             fromMonth={date?.from}
             initialFocus
             mode='range'

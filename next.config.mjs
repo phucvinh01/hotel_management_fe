@@ -16,7 +16,10 @@ const nextConfig = {
                 destination: 'http://127.0.0.1:8000/api/:path*',
             },
         ]
-    }
+    },
+    images: {
+        domains: ['127.0.0.1'],
+    },
 };
 
 export default nextConfig;

@@ -1,5 +1,4 @@
-import Header from '@/components/shared/Layout/Header';
-import Hero from '@/components/shared/BgHero';
+//'use client'
 import TabHero from '@/components/shared/TabHero';
 import { CarouselTrustBy } from '@/components/shared/CarouselTrustBy';
 import BannerSection from '@/components/shared/BannerSection';
@@ -10,7 +9,8 @@ import Footer from '@/components/shared/Layout/Footer';
 import CarouselVoucher from '@/components/shared/CarouselVoucher';
 import CarouselHotelVietNam from '@/components/shared/CarouselHotelVietNam';
 import TabsCarouselHotel from '@/components/shared/TabsCarouselHotel';
-export default function Home() {
+
+export default async function Home() {
   const dataLocationList = [
     {
       id: 1,

@@ -75,21 +75,21 @@ const SearchForm = () => {
     return () => document.removeEventListener('click', handleClickOutside);
   }, []);
 
-  const handleSubmit = (e:FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if(rangeDay) {
+    if (rangeDay) {
       formData.check_in = rangeDay?.from;
-      formData.check_out = rangeDay?.to ;
+      formData.check_out = rangeDay?.to;
     }
 
-    
+
     console.log(formData);
   }
 
   return (
     <form
-      className='flex items-center w-full justify-stretch'
+      className='flex flex-col lg:flex-row items-center w-full justify-stretch'
       onSubmit={handleSubmit}>
       {/* {"City, region, country, hotel"} */}
       <div className='w-[30%] relative'>
@@ -114,7 +114,7 @@ const SearchForm = () => {
           type='text'
           id='address'
           name='address'
-          className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-s-2xl  block w-full p-2.5 '
+          className='h-12 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-none lg:rounded-s-2xl  block w-full p-2.5 '
           placeholder='Thành phố, khách sạn, điểm đến'
           onChange={(e) =>
             setFormData((prev) => ({ ...prev, address: e.target.value }))
@@ -159,7 +159,8 @@ const SearchForm = () => {
       <div className='w-[30%]'>
         <label className='search-input-label'>Khách và Phòng</label>
         <DropdownMenu>
-          <DropdownMenuTrigger className='!bg-white border border-gray-300 text-gray-900 text-sm  focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 '>
+          <DropdownMenuTrigger className='!bg-white border border-gray-300 text-gray-900 text-sm 
+           focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 h-12'>
             {formData.amount_adult} người lớn, {formData.amount_children} Trẻ
             em, {formData.amount_room} phòng
           </DropdownMenuTrigger>
@@ -172,9 +173,8 @@ const SearchForm = () => {
                 </div>
                 <div className='flex gap-3 justify-center items-center'>
                   <Button
-                    className={`${
-                      formData.amount_room <= 1 ? 'hover:cursor-alias' : ''
-                    }`}
+                    className={`${formData.amount_room <= 1 ? 'hover:cursor-alias' : ''
+                      }`}
                     disabled={formData.amount_room <= 1}
                     onClick={(e) =>
                       setFormData((prev) => ({
@@ -217,9 +217,8 @@ const SearchForm = () => {
                 </div>
                 <div className='flex gap-3 justify-center items-center'>
                   <Button
-                    className={`${
-                      formData.amount_adult <= 1 ? 'cursor-not-allowed' : ''
-                    }`}
+                    className={`${formData.amount_adult <= 1 ? 'cursor-not-allowed' : ''
+                      }`}
                     disabled={formData.amount_adult <= 1}
                     onClick={() =>
                       setFormData((prev) => ({
@@ -252,9 +251,8 @@ const SearchForm = () => {
                 </div>
                 <div className='flex gap-3 justify-center items-center'>
                   <Button
-                    className={`${
-                      formData.amount_children <= 0 ? 'cursor-not-allowed' : ''
-                    }`}
+                    className={`${formData.amount_children <= 0 ? 'cursor-not-allowed' : ''
+                      }`}
                     disabled={formData.amount_children <= 0}
                     onClick={() =>
                       setFormData((prev) => ({
@@ -287,7 +285,7 @@ const SearchForm = () => {
       <Button
         variant={'secondary'}
         type='submit'
-        className='bg-orange-500 mt-[30px]  rounded-none rounded-e-2xl'>
+        className='bg-orange-500 h-12 mt-[21px]  rounded-none rounded-e-2xl'>
         <SearchIcon color='#FFF' />
       </Button>
     </form>

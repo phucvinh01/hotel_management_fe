@@ -7,8 +7,11 @@ import {
     CarouselNext,
     CarouselPrevious,
 } from "@/components/ui/carousel"
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import React from 'react';
+import URL_Enum from '@/axios/URL_Enum';
+import http from '@/axios/http';
+import Link from 'next/link';
 
 const dateNow = (): string => {
     var currentDate = new Date();
@@ -150,9 +153,31 @@ export default function Hotel() {
         }
 
     }
+    const [provinces, setProvinces] = useState<IProvince[]>([]);
+    const [selectedProvinceOption, setSelectedProvinceOption] = useState<string>('');
+    // Trạng thái lưu giữ giá trị radio button dia danh được chọn
+    useEffect(() => {
+        const fecthData = async (url: string) => {
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+                setProvinces(data.result.data);
+                setSelectedProvinceOption(provinces[0].id);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        fecthData('http://127.0.0.1:8000/api/province/get-page?page=1')
 
+    }, []);
+
+    const handleProvinceOptionChange = (id_province: string): void => {
+        setSelectedProvinceOption(id_province); // Cập nhật giá trị của radio button được chọn
+    };
+
+    console.log('url', `${URL_Enum.BaseURL_Poster}poster1.jpg`)
     return (
-        <main className="w-full " style={{ height: 1000 }}>
+        <main className="w-full mb-10">
             <div className="w-full radius rounded-sm
             bg-gradient-to-b from-sky-500 via-sky-600 to-blue-700" style={{ height: 320 }}>
                 <div className="flex h-3/4 w-full justify-center items-center">
@@ -170,7 +195,7 @@ export default function Hotel() {
                             </CarouselItem>
                             {listContryImg.map((item) => (
                                 <CarouselItem key={item.id} className="basis-1/4">
-                                    <Image src={item.url} alt={item.url} width={300} height={120}  className="rounded-xl object-cover" />
+                                    <Image src={item.url} alt={item.url} width={300} height={120} className="rounded-xl object-cover" />
                                 </CarouselItem>
                             ))}
                         </CarouselContent >
@@ -421,6 +446,119 @@ export default function Hotel() {
                     </form>
                 </div>
             </div>
-        </main>
+
+            {/* Postter */}
+            <div className='w-9/12 mx-auto'>
+                <button>
+                    <img src={`${URL_Enum.BaseURL_Poster}/poster1.jpg`} className='w-full my-6'
+                        alt='poster-page-hotel' />
+                </button>
+
+            </div>
+
+            {/* Danh sach dia danh trong nuoc */}
+            <div className='w-9/12 mx-auto flex flex-col'>
+                <h5 className='my-4'><b className='bg-blue-700 p-2 rounded-lg text-white cursor-pointer'>
+                    Điểm đến trong nước</b></h5>
+                <div className="flex h-3/4 w-full justify-center items-center">
+                    <Carousel className="w-full " id='slider'>
+                        <CarouselContent className="">
+                            {provinces.map((item) => (
+                                <CarouselItem key={item.id} className="basis-1/5">
+                                    <img src={`${URL_Enum.BaseURL_ImageProvince}/${item.Image}`} className='w-full rounded-lg'
+                                        alt={`${item.DisplayName}`} />
+                                </CarouselItem>
+                            ))}
+                        </CarouselContent >
+                        <CarouselPrevious className={`${provinces.length > 5 ? 'block' : 'hidden'} ml-10 `} />
+                        <CarouselNext className={`${provinces.length > 5 ? 'block' : 'hidden'} mr-10 `} />
+                    </Carousel>
+                </div>
+            </div>
+
+            {/* Danh sach dia diem gan nha*/}
+            <div className='w-9/12 mx-auto flex flex-col mt-5'>
+                <h5 className='my-4'><b className='bg-blue-700 p-2 rounded-lg text-white cursor-pointer'>
+                    Khách sạn gần đây</b></h5>
+                <div className=' flex flex-row my-4'>
+                    {provinces.map((item) => (
+                        <span className={`${selectedProvinceOption === item.id
+                            ? 'bg-blue-700 text-white' : 'text-blue-700 bg-gray-200'
+                            }
+                             p-3 rounded-xl font-bold mx-1 cursor-pointer`}
+                            onClick={() => handleProvinceOptionChange(item.id)}
+                        >{item.DisplayName}</span>
+                    ))}
+
+                </div>
+                <div className="flex h-3/4 w-full justify-center items-center">
+                    <Carousel className="w-full " id='slider'>
+                        <CarouselContent className="">
+                            {provinces.map((item) => (
+                                <CarouselItem key={item.id} className="basis-1/5">
+                                    <img src={`${URL_Enum.BaseURL_ImageProvince}/${item.Image}`} className='w-full rounded-lg'
+                                        alt={`${item.DisplayName}`} />
+                                </CarouselItem>
+                            ))}
+                        </CarouselContent >
+                        <CarouselPrevious className={`${provinces.length > 5 ? 'block' : 'hidden'} ml-10 `} />
+                        <CarouselNext className={`${provinces.length > 5 ? 'block' : 'hidden'} mr-10 `} />
+                    </Carousel>
+                </div>
+            </div>
+
+            {/* Chinh sach dat phong */}
+            <div className='w-9/12 mx-auto flex flex-col mt-5'>
+                <h5 className='my-4'><b className='bg-blue-700 p-2 rounded-lg text-white cursor-pointer'>
+                    Chính sách đặt phòng</b></h5>
+                <div className="flex h-3/4 w-full justify-center items-center">
+                    <Carousel className="w-full " id='slider'>
+                        <CarouselContent className="">
+                            <CarouselItem key={1} className="basis-1/5">
+                                <Link href={''}>
+                                    <img src='/policy/MienHuyPhong.jpg' className='w-full rounded-lg'
+                                        alt={`MienHuyPhong`} />
+                                </Link>
+                            </CarouselItem>
+
+                            <CarouselItem key={2} className="basis-1/5">
+                                <Link href={''}>
+                                    <img src='/policy/ThanhToanTaiKhachSan.jpg' className='w-full rounded-lg'
+                                        alt={`ThanhToanTaiKhachSan`} />
+                                </Link>
+                            </CarouselItem>
+
+                            <CarouselItem key={3} className="basis-1/5">
+                                <Link href={''}>
+                                    <img src='/policy/DeDangDoiLich.jpg' className='w-full rounded-lg'
+                                        alt={`DeDangDoiLich`} />
+                                </Link>
+                            </CarouselItem>
+                            <CarouselItem key={4} className="basis-1/5">
+                                <Link href={''}>
+                                    <img src='/policy/TichXuTraveloka.jpg' className='w-full rounded-lg'
+                                        alt={`TichXuTraveloka`} />
+                                </Link>
+                            </CarouselItem>
+                            <CarouselItem key={5} className="basis-1/5">
+                                <Link href={''}>
+                                    <img src='/policy/ReviewChanThuc.jpg' className='w-full rounded-lg'
+                                        alt={`ReviewChanThuc`} />
+                                </Link>
+                            </CarouselItem>
+                            <CarouselItem key={6} className="basis-1/5">
+                                <Link href={''}>
+                                    <img src='/policy/HoTro24Tren7.jpg' className='w-full rounded-lg'
+                                        alt={`HoTro24Tren7`} />
+                                </Link>
+                            </CarouselItem>
+                        </CarouselContent >
+                        <CarouselPrevious className="ml-10 " />
+                        <CarouselNext className="mr-10" />
+                    </Carousel>
+                </div>
+            </div>
+
+        </main >
     );
 }
