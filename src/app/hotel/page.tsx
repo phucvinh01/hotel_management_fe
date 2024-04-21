@@ -55,7 +55,7 @@ export default function Hotel() {
 
   return (
     <main
-      className='w-full '
+      className='w-full container'
       style={{ height: 1000 }}>
       <div
         className='w-full radius rounded-sm

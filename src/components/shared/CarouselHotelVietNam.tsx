@@ -105,7 +105,6 @@ type CarouselHotelProps = {
 }
 
 const CarouselHotelVietNam = ({listData}: CarouselHotelProps) => {
-  console.log(listData);
   return (
     <Fragment>
     <Carousel className='w-full '>

@@ -1,9 +1,13 @@
 import Image from 'next/image'
+import Link from 'next/link'
 import React from 'react'
 
 const Logo = () => {
   return (
-    <Image src={'/logo/Logo.png'} width={145} height={43} alt='Logo' loading='lazy' />
+    <Link href={'/'}>
+     <Image src={'/logo/Logo.png'} width={145} height={43} alt='Logo' loading='lazy' />
+    </Link>
+   
   )
 }
 
