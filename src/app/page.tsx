@@ -1,16 +1,13 @@
-import Header from '@/components/shared/Layout/Header';
-import Hero from '@/components/shared/BgHero';
 import TabHero from '@/components/shared/TabHero';
 import { CarouselTrustBy } from '@/components/shared/CarouselTrustBy';
 import BannerSection from '@/components/shared/BannerSection';
 import Discovery from '@/components/shared/Discovery';
 import DiscoveryHotel from '@/components/shared/DiscoveryHotel';
 import ContactEmail from '@/components/shared/ContactEmail';
-import Footer from '@/components/shared/Layout/Footer';
 import CarouselVoucher from '@/components/shared/CarouselVoucher';
-import CarouselHotelVietNam from '@/components/shared/CarouselHotelVietNam';
 import TabsCarouselHotel from '@/components/shared/TabsCarouselHotel';
-export default function Home() {
+import { getHotelPage } from '@/service/hotel.service';
+export default async function Home() {
   const dataLocationList = [
     {
       id: 1,
@@ -30,11 +27,15 @@ export default function Home() {
     },
     {
       id: 5,
-      name: 'Nha Tran',
+      name: 'Nha Trang',
     },
     {
       id: 6,
       name: 'Phú Quốc',
+    },
+    {
+      id: 7,
+      name: 'Đà Nẵng',
     },
   ];
 

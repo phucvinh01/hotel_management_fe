@@ -1,22 +1,22 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    async redirects() {
-        return [
+    images: {
+        remotePatterns: [
             {
-                source: '/',
-                destination: '/root',
-                permanent: true,
+                protocol: 'http',
+                hostname: 'localhost',
+                port: '8000',
             },
-        ];
+            {
+                protocol: 'https',
+                hostname: 'github.com',
+            },
+        ],
     },
-    async rewrites() {
-        return [
-            {
-                source: '/api/:path*',
-                destination: 'http://127.0.0.1:8000/api/:path*',
-            },
-        ]
-    }
+
+
 };
+
+
 
 export default nextConfig;

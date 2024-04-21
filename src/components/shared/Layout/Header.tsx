@@ -7,15 +7,15 @@ import { User } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import DialogSignIn from '../DialogSignIn';
-import { set } from 'date-fns';
-type headerProp = {
-  usingScrollEvent: boolean;
-}
+import { usePathname } from 'next/navigation';
+import { useAuth } from '@/hooks/useAuthContext';
+import { UserNav } from '../UserNav';
 
-const Header = (props: headerProp) => {
+
+const Header = () => {
   const [scrollY, setScrollY] = useState<number>(0);
   const [scroll, setScroll] = useState<boolean>(false);
-  const { usingScrollEvent } = props;
+  const pathname = usePathname()
   //neu usingScrollEvent=true thi moi co su dung event sroll  
   //de check sroll y de set background 
   //neu usingScrollEvent=flase thi mac dinh background=mau trang
@@ -24,7 +24,7 @@ const Header = (props: headerProp) => {
     const handleScroll = () => {
       setScrollY(window.scrollY);
     };
-    if (usingScrollEvent == true) {
+    if (pathname === '/') {
       window.addEventListener('scroll', handleScroll);
       if (scrollY > 20) {
         setScroll(true);
@@ -40,11 +40,17 @@ const Header = (props: headerProp) => {
       window.removeEventListener('scroll', handleScroll);
     };
 
-  }, [scrollY]);
+  }, [scrollY,pathname]);
+
+
+
+  const {user} = useAuth()
+
+
   return (
     <header
       className={`container sticky flex gap-3 flex-col py-2 top-0 left-0 w-full z-50 h-32
-       ${!usingScrollEvent ? 'bg-slate-100 text-gray-900' :
+       ${pathname !== "/" ? 'bg-white text-gray-900' :
           (scrollY > 20 ? 'bg-slate-100' : 'bg-transparent border-gray-200 ')
         } transition-all duration-300 ease-in-out`}>
 
@@ -66,11 +72,15 @@ const Header = (props: headerProp) => {
               } transition-colors hover:bg-[rgba(0,0,0,0.25)] hover:text-white`}>
             Hợp tác với chúng tôi
           </Button>
+          {
+            user ? <UserNav /> : 
+              <div className='flex gap-1'>
+              <DialogSignIn scroll={scroll} title='Đăng nhập' />
+              <DialogSignIn scroll={scroll} title='Đăng ký' />
+            </div>
+          }
 
-          <div className='flex gap-1'>
-            <DialogSignIn scroll={scroll} title='Đăng nhập' />
-            <DialogSignIn scroll={scroll} title='Đăng ký' />
-          </div>
+          
         </div>
       </div>
 
