@@ -38,29 +38,28 @@ export function AuthProvider({ children }: Props) {
   };
 
   useEffect(() => {
-    const loggedUser = localStorage.getItem('logined');
+    const token = localStorage.getItem('token');
     const fetchUserInfo = async () => {
-   
-      if (loggedUser) {
-        const res = await getMeInfo(loggedUser as string);
+      if (token) {
+        const res = await getMeInfo(token as string);
         if (res) {
           console.log('setItem');
-          localStorage.setItem('logined', res.id);
+          localStorage.setItem('token', res.id);
           setUser(res)
         }
       } else {
         setUser(null);
         console.log('removeItem');
-        localStorage.removeItem('logined');
+        localStorage.removeItem('token');
       }
     };
 
-    if (!loggedUser && pathname === '/me') {
+    if (!token || !user && pathname === '/me') {
       router.replace('/');
     }
 
     fetchUserInfo();
-  }, [pathname, router]);
+  }, []);
 
   const login = async (
     emailOrPhone: string,
@@ -90,13 +89,12 @@ export function AuthProvider({ children }: Props) {
       );
     }
     if (respone) {
-      console.log('check login', respone);
       if (respone.id) {
         toast({
           title: 'Đăng nhập thành công',
         });
         setUser(respone);
-        localStorage.setItem('logined', respone.id);
+        localStorage.setItem('token', respone.id);
       }
     } else {
       toast({
@@ -107,7 +105,8 @@ export function AuthProvider({ children }: Props) {
   };
 
   const logout = () => {
-    localStorage.removeItem('logined');
+     router.replace("/")
+    localStorage.removeItem('token');
     setUser(null)
   };
 
