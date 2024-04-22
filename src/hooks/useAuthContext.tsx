@@ -1,55 +1,129 @@
-"use client"
-import { usePathname, useRouter } from "next/navigation";
-import { createContext, ReactNode, SetStateAction, useContext, useState, Dispatch, useEffect } from "react";
+'use client';
 
-type authContextType = {
-    user: IUser | null | undefined;
-    setUser: Dispatch<SetStateAction<IUser | null | undefined>>;
-};
+import { usePathname, useRouter } from 'next/navigation';
+import {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
+import { getMe, login as SignIn } from '@/service/auth.service';
+import { useToast } from '@/components/ui/use-toast';
 
-const authContextDefaultValues: authContextType = {
-    user: null,
-    setUser: () => {}, 
+interface IAuthContext {
+  user: IUser | null;
+  login: (username: string, password: string, type: string) => void;
+  logout: () => void;
 }
 
+const AuthContext = createContext<IAuthContext>({
+  user: null,
+  login: () => {},
+  logout: () => {},
+});
+
 type Props = {
-    children: ReactNode;
+  children: ReactNode;
 };
 
 export function AuthProvider({ children }: Props) {
-    const [user, setUser] = useState<IUser | null>();
+  const [user, setUser] = useState<IUser | null>(null);
+  const pathname = usePathname();
+  const router = useRouter();
+  const { toast } = useToast();
+  const getMeInfo = async (id: string) => {
+    const res = await getMe(id);
+    return res;
+  };
 
-    const pathname = usePathname()
-    const router = useRouter()
-
-    useEffect(() => {
-        if(user) {
-            localStorage.setItem("logined",user.email)
-        }
-        if(pathname === "/me") {
-            if(!user) {
-                router.replace("/")
-            }
-        }
-
-    },[pathname, user, router])
+  useEffect(() => {
+    const loggedUser = localStorage.getItem('logined');
+    const fetchUserInfo = async () => {
    
-    const value:any= {
-        user,
-        setUser
+      if (loggedUser) {
+        const res = await getMeInfo(loggedUser as string);
+        if (res) {
+          console.log('setItem');
+          localStorage.setItem('logined', res.id);
+          setUser(res)
+        }
+      } else {
+        setUser(null);
+        console.log('removeItem');
+        localStorage.removeItem('logined');
+      }
+    };
+
+    if (!loggedUser && pathname === '/me') {
+      router.replace('/');
     }
-    return (
-        <>
-            <AuthContext.Provider value={value}>
-                {children}
-            </AuthContext.Provider>
-        </>
-    );
+
+    fetchUserInfo();
+  }, [pathname, router]);
+
+  const login = async (
+    emailOrPhone: string,
+    password: string,
+    type: string
+  ) => {
+    let respone = null;
+    if (type === 'Email') {
+      respone = await SignIn(
+        {
+          email: emailOrPhone,
+          password: password,
+        },
+        undefined,
+        'Email'
+      );
+    }
+
+    if (type === 'Phone') {
+      respone = await SignIn(
+        undefined,
+        {
+          Telephone: emailOrPhone,
+          password: password,
+        },
+        'Phone'
+      );
+    }
+    if (respone) {
+      console.log('check login', respone);
+      if (respone.id) {
+        toast({
+          title: 'Đăng nhập thành công',
+        });
+        setUser(respone);
+        localStorage.setItem('logined', respone.id);
+      }
+    } else {
+      toast({
+        variant: 'destructive',
+        title: 'Đăng nhập thất bại',
+      });
+    }
+  };
+
+  const logout = () => {
+    localStorage.removeItem('logined');
+    setUser(null)
+  };
+
+  const authContextValue: IAuthContext = {
+    user,
+    login,
+    logout,
+  };
+
+  return (
+    <AuthContext.Provider value={authContextValue}>
+      {children}
+    </AuthContext.Provider>
+  );
 }
 
-
-const AuthContext = createContext<authContextType>(authContextDefaultValues);
-
 export function useAuth() {
-    return useContext(AuthContext);
+  return useContext(AuthContext);
 }

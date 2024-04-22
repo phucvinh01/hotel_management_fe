@@ -14,7 +14,8 @@ type IRegister = {
     Telephone:string
 }
 
-type IUser = Pick<IRegister, 'email' | 'name' | 'Telephone'>
+type IUser = Pick<IRegister, 'email' | 'name' | 'Telephone'> & { id: string };
+
 
 type authContextType = {
     user: IUser | null;

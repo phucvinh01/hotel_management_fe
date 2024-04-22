@@ -16,11 +16,9 @@ import { useAuth } from '@/hooks/useAuthContext';
 import Link from 'next/link';
 
 export function UserNav() {
-  const { user, setUser } = useAuth();
+  const { user, logout } = useAuth();
 
-  const handleLogout = () => {
-    setUser(null);
-  };
+  
 
   return (
     <DropdownMenu>
@@ -68,7 +66,7 @@ export function UserNav() {
           <DropdownMenuItem>New Team</DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={() => handleLogout()}>
+        <DropdownMenuItem onClick={() => logout()}>
           Log out
           <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
         </DropdownMenuItem>
