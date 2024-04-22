@@ -38,7 +38,7 @@ export const register = async (dataForm:IRegister):Promise<boolean | undefined> 
 }
 
 
-export const login = async (loginEmail?:ILoginEmail, loginPhone?:ILoginPhone , type?:string): Promise<ILoginRespone | undefined> => {
+export const login = async (loginEmail?:ILoginEmail, loginPhone?:ILoginPhone , type?:string): Promise<IUser | undefined> => {
  try {
     if(type === 'Email') {
     const data = await axios.post(`/login-email`, loginEmail);
@@ -53,6 +53,18 @@ export const login = async (loginEmail?:ILoginEmail, loginPhone?:ILoginPhone , t
         }
     }
    
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+
+export const getMe = async (id:string): Promise<IUser | undefined> => {
+  try {
+    const data = await axios.get(`/me?id=${id}`);
+        if (data.status === 200) {
+          return data.data;
+        }
   } catch (error) {
     console.log(error);
   }

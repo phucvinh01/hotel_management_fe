@@ -1,5 +1,4 @@
 'use client';
-import { Separator } from '@/components/ui/separator';
 
 import React, { useEffect, useRef, useState } from 'react';
 import { Input } from '@/components/ui/input';
@@ -31,7 +30,7 @@ const DialogSignIn = ({ scroll, title }: DialogSignInProps) => {
   const [register, setRegister] = useState<boolean>(false);
   const [login, setLogin] = useState<boolean>(false);
 
-  const { setUser } = useAuth();
+  const { login : SignIn, user } = useAuth();
 
   const [open, setOpen] = useState<boolean>(false);
 
@@ -146,36 +145,13 @@ const DialogSignIn = ({ scroll, title }: DialogSignInProps) => {
       });
     }
     if (method === 'Email') {
-      respone = await SignIn(
-        {
-          email: inputField,
-          password: password,
-        },
-        undefined,
-        'Email'
-      );
+      SignIn(inputField,password,method)
     }
 
     if (method === 'Phone') {
-      respone = await SignIn(
-        undefined,
-        {
-          Telephone: inputField,
-          password: password,
-        },
-        'Phone'
-      );
+       SignIn(inputField,password,method)
     }
-    if (respone) {
-      toast({
-        title: 'Đăng nhập thành công',
-      });
-      setUser(respone);
-    } else {
-      toast({
-        title: 'Đăng nhập thất bại',
-      });
-    }
+    
   };
 
   const setClosed = () => {
