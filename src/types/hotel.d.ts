@@ -11,9 +11,9 @@ interface IHotel {
   created_at: string;
   updated_at: string;
   Type: string;
-  StarRate: number | null;
+  StarRate: number;// | null;
 
-  images?: IHotelImage[];
+  images: IHotelImage[];
   convenients?: IConvenient[];
   policies?: IPolicy[];
   rates?: IRate[];
@@ -74,6 +74,31 @@ interface ITypeRoom {
   Nuoc_Nong: boolean;
   Price: number;
   Voi_Tam_Dung: boolean;
+  TenLoaiGiuong: string;
+  SoLuongGiuong: number;
+  Lo_Vi_Song: boolean;
+  Tu_Lanh: boolean;
+  May_Giat: boolean;
+  No_Moking: boolean;
+  created_at: string | null;
+  updated_at: string | null;
+}
+interface IRoom {
+  id: string;
+  TypeRoomId: string;
+  State: boolean;
+  TimeRecive: Date;
+  TimeLeave: Date;
+  Gift: string;
+  Discount: number;
+  Breakfast: boolean;
+  Wifi: boolean;
+  NoMoking: boolean;
+  Cancel: boolean;
+  ChangeTimeRecive: boolean;
+  RoomName: string;
+  Hinh_Thuc_Thanh_Toan: string;
+  Bao_Gom_Thue_Va_Phi: string;
   created_at: string | null;
   updated_at: string | null;
 }

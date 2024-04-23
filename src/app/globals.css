@@ -103,6 +103,14 @@
     @apply text-cyan-500 border-cyan-500 border rounded-3xl text-center 
   }
 
-
+.display-none{
+  @apply hidden
+}
+.display-block{
+  @apply block text-danger
+}
+.display-block:hover .display-none{
+  @apply block
+}
  
 }
