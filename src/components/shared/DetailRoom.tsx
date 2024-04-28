@@ -1,6 +1,14 @@
+import Hotel from "@/app/hotel/page";
 import URL_Enum from "@/axios/URL_Enum";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import {
+    Carousel,
+    CarouselContent,
+    CarouselItem,
+    CarouselNext,
+    CarouselPrevious,
+} from "@/components/ui/carousel"
 
 interface IProps {
     typeRoom: ITypeRoom;
@@ -10,6 +18,8 @@ interface IProps {
 const DetailRoom = (props: IProps) => {
     const { typeRoom, listImage, listConvenient } = props;
     const [rooms, setRooms] = useState<IRoom[]>([]);
+    const convenientBathRoom = typeRoom.ConvenientBathRoom.split(';');
+    const convenientRoom = typeRoom.ConvenientRoom.split(';');
     useEffect(() => {
         const fetchData = (url: string) => {
             axios.get(url).then((response) => {
@@ -28,9 +38,37 @@ const DetailRoom = (props: IProps) => {
         fetchData(`http://127.0.0.1:8000/api/room/get-list-by-type-room-id?typeRoomID=${typeRoom.id}`);
 
     }, []);
+    const [modalState, setModalState] = useState<boolean>(false);
+    const handleShowModal = () => {
+        setModalState(!modalState);
+    }
+    const [indexImageModal, setIndexImageModal] = useState<number>(0)
+    const [imageModalCurrent, setImageModalCurrent] = useState<string>(URL_Enum.BaseURL_Image + listImage[0].FileName);
+    const handleNextImage = () => {
+        if (indexImageModal >= listImage.length - 1) {
+            setIndexImageModal(0);
+            setImageModalCurrent(URL_Enum.BaseURL_Image + listImage[0].FileName);
+        }
+        else {
+            setIndexImageModal(indexImageModal + 1);
+            setImageModalCurrent(URL_Enum.BaseURL_Image + listImage[indexImageModal + 1].FileName);
+        }
+
+    }
+    const handlePreviousImage = () => {
+        if (indexImageModal == 0) {
+            setIndexImageModal(listImage.length - 1);
+            setImageModalCurrent(URL_Enum.BaseURL_Image + listImage[listImage.length - 1].FileName);
+        }
+        else {
+            setIndexImageModal(indexImageModal - 1);
+            setImageModalCurrent(URL_Enum.BaseURL_Image + listImage[indexImageModal - 1].FileName);
+        }
+
+    }
     return (
 
-        <div className="w-full rounded-lg my-3">
+        <div className="w-full rounded-lg my-3 relative">
             {/* // chi tiet phong */}
             <div className="w-full bg-gray-100 rounded-lg flex  flex-col lg:flex-col p-3">
                 <p className="font-bold text-2xl text-gray-900 my-2">{typeRoom.Name}</p>
@@ -38,14 +76,16 @@ const DetailRoom = (props: IProps) => {
                     <div id='cardleft_phieudat' className="w-full lg:w-4/12 bg-white rounded-lg">
                         <div className="w-full relative flex items-end justify-end">
                             <img src={`${URL_Enum.BaseURL_Image}${listImage[0].FileName}`}
-                                className=" w-full rounded-t-lg h-60" />
+                                className=" w-full rounded-t-lg h-60 cursor-pointer"
+                                onClick={() => handleShowModal()} />
                             <p className="bg-gray-900 opacity-85 font-bold text-lg
                         absolute text-white px-2 py-1 rounded-md m-2">1/{listImage.length}</p>
                         </div>
                         <div className="flex flex-row">
                             {listImage.slice(1, 4).map((item, index) => (
                                 <img src={`${URL_Enum.BaseURL_Image}${item.FileName}`}
-                                    className={`w-4/12 h-20 ${index == 1 ? 'mx-2' : ''} my-2`} />))}
+                                    onClick={() => handleShowModal()}
+                                    className={`w-4/12 h-20 ${index == 1 ? 'mx-2' : ''} my-2 cursor-pointer`} />))}
                         </div>
                         <p className="flex pl-3 text-gray-900 font-bold text-lg my-2"><span>
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" className="mx-2"
@@ -119,7 +159,8 @@ const DetailRoom = (props: IProps) => {
                         </div>
                         <div className="w-full p-3">
                             <button className="text-center w-full font-bold text-cyan-500 cursor-pointer 
-                    py-2 rounded-lg bg-gray-200 flex flex-row justify-center items-center">
+                    py-2 rounded-lg bg-gray-200 flex flex-row justify-center items-center"
+                                onClick={() => handleShowModal()}>
                                 <span>
                                     <svg className="w-6 h-6 text-cyan-500 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
                                         <path fill-rule="evenodd" d="M11.403 5H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-6.403a3.01 3.01 0 0 1-1.743-1.612l-3.025 3.025A3 3 0 1 1 9.99 9.768l3.025-3.025A3.01 3.01 0 0 1 11.403 5Z" clip-rule="evenodd" />
@@ -304,8 +345,177 @@ const DetailRoom = (props: IProps) => {
                 </div>
             </div>
             {/* //modal chi tiet phong */}
-            <div className="w-full">
 
+            <div className={`w-full ${modalState ? 'block' : 'hidden'} h-full flex
+            z-50 fixed inset-0 justify-center items-center`} style={{ background: 'rgb(0 0 0 / 85%)' }}>
+                <div className="w-9/12 h-[90%] flex flex-row rounded-2xl
+                bg-black opacity-100">
+                    {/* danh sach hinh anh */}
+                    <div className="flex  flex-col w-8/12">
+                        <div className="flex flex-row w-full relative">
+                            <p className="font-bold text-2xl text-white my-2 p-3">{typeRoom.Name}</p>
+                            <button className="absolute right-5 top-5" onClick={() => handleShowModal()}>
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="text-whiten w-8 h-8">
+                                    <path fillRule="evenodd" d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z" clipRule="evenodd" />
+                                </svg>
+
+                            </button>
+                        </div>
+                        {/* hinh anh dai dien  */}
+                        <div className="flex flex-row relative items-center">
+                            <img src={imageModalCurrent}
+                                className="w-11/12 h-[390px] ml-4 rounded-lg" />
+                            <button className="bg-black opacity-50 w-9 h-9 absolute text-center
+                            justify-center items-center flex text-white left-2 ml-3 rounded-full"
+                                onClick={() => handlePreviousImage()}>
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
+                                    <path fillRule="evenodd" d="M7.72 12.53a.75.75 0 0 1 0-1.06l7.5-7.5a.75.75 0 1 1 1.06 1.06L9.31 12l6.97 6.97a.75.75 0 1 1-1.06 1.06l-7.5-7.5Z" clipRule="evenodd" />
+                                </svg>
+
+                            </button>
+                            <button className="bg-black opacity-50 w-9 h-9 absolute text-center
+                            justify-center items-center flex text-white right-12 mr-3 rounded-full"
+                                onClick={() => handleNextImage()}>
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
+                                    <path fillRule="evenodd" d="M16.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 0 1-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 0 1 1.06-1.06l7.5 7.5Z" clipRule="evenodd" />
+                                </svg>
+
+                            </button>
+                            <p className="font-bold text-xl text-white absolute
+                            left-0 bottom-0 m-5 p-2 rounded-lg bg-black opacity-85">
+                                {listImage[indexImageModal].TypeRoom.split(';')[1]}
+                            </p>
+                        </div>
+                        {/* list hinh anh */}
+                        <div className="flex flex-col ml-3 w-11/12 mt-4">
+                            <Carousel className="w-full" id='slider'>
+                                <CarouselContent className="">
+                                    {listImage.map((item, index) => (
+                                        <CarouselItem key={item.id} className="basis-1/5">
+                                            <img src={`${URL_Enum.BaseURL_Image}${item.FileName}`}
+                                                alt={item.FileName} className={`w-full
+                                                h-[70px] rounded-sm object-cover cursor-pointer
+                                                ${indexImageModal === index ? 'border border-b-2 border-blue-700' : ''}`}
+                                                onClick={() => {
+                                                    setIndexImageModal(index);
+                                                    setImageModalCurrent(URL_Enum.BaseURL_Image + listImage[indexImageModal].FileName);
+                                                }} />
+                                        </CarouselItem>
+                                    ))}
+                                </CarouselContent >
+                                {/* <CarouselPrevious className="ml-10 " />
+                                <CarouselNext className="mr-10" /> */}
+                            </Carousel>
+                        </div>
+
+                    </div>
+                    {/* chi tiet phong */}
+                    <div className="flex  flex-col w-4/12 bg-white rounded-lg h-full">
+                        <div className="flex flex-col h-[80%] overflow-y-scroll p-3">
+                            {/* Thong tin phong */}
+                            <p><b>Thông tin phòng</b></p>
+                            <p className="flex pl-3 text-gray-900 font-bold text-lg my-2 items-center"><span>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" className="mx-2"
+                                    xmlns="http://www.w3.org/2000/svg" data-id="IcHotelRoomMeasure">
+                                    <path d="M12 21H7L21 7V21H18M12 21V20M12 21H15M15 21V20M15 21H18M18 21V20M15 17H17V15" stroke="#0194F3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                    <path d="M8 8L9 9M8 8L5 11M8 8L11 5M5 11L6 12M5 11L2 14L5 17L17 5L14 2L11 5M11 5L12 6" stroke="#03121A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                </svg></span>{typeRoom.FloorArea.toFixed(1)} m²</p>
+                            <p className="flex pl-3 text-gray-900 font-bold text-lg my-2 items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" data-id="IcSystemGuestPassenger" className="mx-2"><g fill="none" fill-rule="evenodd"><rect width="24" height="24"></rect>
+                                    <path stroke="#03121A" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2,21 L13,21 L13,19.5 C13,16.4624339 10.5375661,14 7.5,14 L7.5,14 C4.46243388,14 2,16.4624339 2,19.5 L2,21 Z M7,4 L8,4 C9.65685425,4 11,5.34314575 11,7 L11,8.5 C11,10.4329966 9.43299662,12 7.5,12 L7.5,12 C5.56700338,12 4,10.4329966 4,8.5 L4,7 C4,5.34314575 5.34314575,4 7,4 Z"></path>
+                                    <path stroke="#0194F3" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16,19 L22,19 L22,18 C22,14.4624339 19.5581561,12 17,12 C15.6264236,12 14.7600111,12.2294943 14,13 M16,2 L16.3162278,2.9486833 C16.7245699,4.17370972 17.8709864,5 19.1622777,5 L21,5"></path>
+                                    <path stroke="#0194F3" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16,2 L17,2 C18.6568542,2 20,3.34314575 20,5 L20,6.5 C20,8.43299662 18.4329966,10 16.5,10 L16.5,10 C14.5670034,10 13,8.43299662 13,6.5 L13,5 C13,3.34314575 14.3431458,2 16,2 Z"></path></g>
+                                </svg>
+                                {typeRoom.MaxQuantityMember} người
+                            </p>
+                            <hr />
+                            {/* Tinh nang phong */}
+                            <p><b>Tính năng phòng</b></p>
+                            <div className="flex flex-row">
+                                <div className="w-1/2 flex flex-col">
+                                    {typeRoom.Bon_Tam ? <div className="flex flex-row ">
+                                        <span className="ml-3 flex flex-row text-blue-700 font-semibold text-sm
+                    bg-cyan-200 rounded-full p-2 my-1 flex-none">
+                                            <img src='/icon/bontam.webp' className="w-5 h-5 mr-2" />
+                                            Bồn tắm</span>
+                                    </div> : null}
+
+                                    {typeRoom.May_Lanh ? <div className="flex flex-row ">
+                                        <span className="ml-3 flex flex-row text-blue-700 font-semibold text-sm
+                    bg-cyan-200 rounded-full p-2 my-1 flex-none">
+                                            <img src='/icon/maylanh.webp' className="w-5 h-5 mr-2" />Máy lạnh</span> </div> : null}
+
+                                    {typeRoom.Khu_Vuc_Cho ? <div className="flex flex-row ">
+                                        <span className="ml-3 flex flex-row text-blue-700 font-semibold text-sm
+                    bg-cyan-200 rounded-full p-2 my-1 flex-none">
+                                            <img src='/icon/khuvucho.webp' className="w-5 h-5 mr-2" />Khu vực chờ</span></div> : null}
+
+                                    {typeRoom.Nuoc_Nong ? <div className="flex flex-row ">
+                                        <span className="ml-3 flex flex-row text-blue-700 font-semibold text-sm
+                    bg-cyan-200 rounded-full p-2 my-1 flex-none">
+                                            <img src='/icon/nuocnong.webp' className="w-5 h-5 mr-2" />Nước nóng</span> </div> : null}
+
+                                    {typeRoom.Voi_Tam_Dung ? <div className="flex flex-row ">
+                                        <span className="ml-3 flex flex-row text-blue-700 font-semibold text-sm
+                    bg-cyan-200 rounded-full p-2 my-1 flex-none">
+                                            <img src='/icon/voisen.webp' className="w-5 h-5 mr-2" />Vòi tắm đứng</span> </div> : null}
+
+                                </div>
+                                <div className="w-1/2 flex flex-col">
+                                    {typeRoom.Ban_Cong_San_Hien ? <div className="flex flex-row ">
+                                        <span className="ml-3 flex flex-row text-blue-700 font-semibold text-sm
+                    bg-cyan-200 rounded-full p-2 my-1 flex-none">
+                                            <img src='/icon/bancong.webp' className="w-5 h-5 mr-2" />Ban công/sân hiên</span> </div> : null}
+
+                                    {typeRoom.Lo_Vi_Song ? <div className="flex flex-row ">
+                                        <span className="ml-3 flex flex-row text-blue-700 font-semibold text-sm
+                    bg-cyan-200 rounded-full p-2 my-1 flex-none">
+                                            <img src='/icon/lovisong.webp' className="w-5 h-5 mr-2" />Lò vi sóng</span> </div> : null}
+
+                                    {typeRoom.Tu_Lanh ? <div className="flex flex-row ">
+                                        <span className="ml-3 flex flex-row text-blue-700 font-semibold text-sm
+                    bg-cyan-200 rounded-full p-2 my-1 flex-none">
+                                            <img src='/icon/tulanh.webp' className="w-5 h-5 mr-2" />Tủ lạnh</span> </div> : null}
+                                    {typeRoom.May_Giat ? <div className="flex flex-row ">
+                                        <span className="ml-3 flex flex-row text-blue-700 font-semibold text-sm
+                    bg-cyan-200 rounded-full p-2 my-1 flex-none">
+                                            <img src='/icon/maygiat.webp' className="w-5 h-5 mr-2" />Máy giặt</span> </div> : null}
+                                </div>
+                            </div>
+                            <hr />
+                            {/* Tien nghi phong */}
+                            <p className="my-3"><b>Tiện nghi phòng tắm</b></p>
+                            <ul className="text-lg font-semibold text-gray-900 ml-5
+                            grid grid-cols-2 gap-1">
+                                {convenientBathRoom.map((item) =>
+                                    (<li className="list-disc">{item}</li>))}
+                            </ul>
+                            <hr />
+                            {/* tien nghi phong */}
+                            <p className="my-3"><b>Tiện nghi phòng tắm</b></p>
+                            <ul className="text-lg font-semibold text-gray-900 ml-5
+                            grid grid-cols-2 gap-1">
+                                {convenientRoom.map((item) =>
+                                    (<li className="list-disc">{item}</li>))}
+                            </ul>
+                            <hr />
+                            {/* ve phong nay */}
+                            <p><b>Về phòng này</b></p>
+                            <p><b>{typeRoom.SoLuongGiuong + ' ' + typeRoom.TenLoaiGiuong} </b></p>
+                            <p className="text-red-700"><b>{typeRoom.No_Moking ? 'Không được hút thuốc' : ''} </b></p>
+                        </div>
+                        <div className="flex flex-col h-[20%] p-3">
+                            <p className="text-gray-900 text-xl font-bold">Giá khởi điểm từ:</p>
+                            <p className="text-red-500 text-2xl font-bold">
+                                {typeRoom.Price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
+                                <span className="text-lg font-bold text-gray-900 ml-2">/Phòng /Đêm</span></p>
+                            <button className="w-full bg-cyan-500 text-white
+                            font-bold rounded-lg py-2"
+                                onClick={() => handleShowModal()}>Thêm lựa chọn phòng</button>
+                        </div>
+                    </div>
+
+                </div>
 
             </div>
         </div>

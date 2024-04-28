@@ -102,3 +102,7 @@ interface IRoom {
   created_at: string | null;
   updated_at: string | null;
 }
+interface TypeImage {
+  TypeName: string;
+  Total: number;
+}
