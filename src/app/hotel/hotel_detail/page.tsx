@@ -3,15 +3,26 @@ import URL_Enum from '@/axios/URL_Enum'
 import DetailRoom from '@/components/shared/DetailRoom'
 import Loading from '@/components/shared/Loading'
 import ModalListImagesHotel from '@/components/shared/ModalListImagesHotel'
+import RateHotel from '@/components/shared/RateHotel'
 import Star from '@/components/shared/Star'
 import SearchForm2 from '@/components/shared/form/SearchForm2'
-import { Item } from '@radix-ui/react-navigation-menu'
 import axios from 'axios'
-import React, { lazy, useEffect, useState } from 'react'
+import {
+    Carousel,
+    CarouselContent,
+    CarouselItem,
+    CarouselNext,
+    CarouselPrevious,
+} from "@/components/ui/carousel"
+import React, { lazy, useEffect, useRef, useState } from 'react'
+import RateShortModal from '@/components/shared/RateShortModal'
 
 export default function HotelDetail() {
     const [loadingState, setLoadingState] = useState<boolean>(true);
     const [showDescript, setShowDescript] = useState<boolean>(false);
+    const [currentScreen, setCurrentScreen] = useState<string>('TongQuan');
+    const [rateShortModaState, setRateShortModaState] = useState<boolean>(false);
+    const [rateItem, setRateItem] = useState<IRate>();
     const [hotel, setHotel] = useState<IHotel>();
     const [diadiemlancan, setDiadiemlancan] = useState<IDiaDiemLanCan[]>([]);
     const [avgRate, setAvgRate] = useState<number>(0);
@@ -25,19 +36,17 @@ export default function HotelDetail() {
             setLoadingState(true);
             axios.get(url).then((response) => {
                 setHotel(response.data.result);
-                console.log('hotel1', response.data.result);
-                console.log('hotel', hotel);
 
-                if (hotel != null && hotel.rates != null) {
+                if (response.data.result.rates) {
                     var sumRate = 0;
 
-                    hotel.rates?.map((item) => {
+                    response.data.result.rates.map((item: IRate) => {
                         sumRate += item.Rating;
                     });
-                    setAvgRate(sumRate / hotel.rates.length);
-                    if (avgRate < 7)
+                    setAvgRate(Number((sumRate / response.data.result.rates.length).toFixed(1)));
+                    if ((sumRate / response.data.result.rates.length) < 7)
                         setAvgRateText('Trung bình');
-                    else if (avgRate < 8)
+                    else if ((sumRate / response.data.result.rates.length) < 8)
                         setAvgRateText('Tốt');
                     else
                         setAvgRateText('Ấn tượng');
@@ -106,15 +115,82 @@ export default function HotelDetail() {
         });
         return listTypes;
     }
+
+    function isElementVisible(element: HTMLElement): boolean {
+        const rect = element.getBoundingClientRect();
+        const windowHeight = window.innerHeight || document.documentElement.clientHeight;
+        const windowWidth = window.innerWidth || document.documentElement.clientWidth;
+
+        const elementInView = (
+            rect.top <= windowHeight &&
+            rect.bottom >= 0 &&
+            rect.left <= windowWidth &&
+            rect.right >= 0
+        );
+
+        return elementInView;
+    }
+    const targetElementRefs = {
+        TongQuan: useRef<HTMLDivElement>(null),
+        Phong: useRef<HTMLDivElement>(null),
+        ViTri: useRef<HTMLDivElement>(null),
+        TienIch: useRef<HTMLDivElement>(null),
+        ChinhSach: useRef<HTMLDivElement>(null),
+        DanhGia: useRef<HTMLDivElement>(null),
+    };
+
+    const handleGoToElement = (elementKey: string) => {
+        const targetElementRef = targetElementRefs[elementKey];
+        if (targetElementRef.current) {
+            targetElementRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
+    }
+    useEffect(() => {
+        const handleScroll = () => {
+            var eTongQuan = document.getElementById('TongQuan');
+            var ePhong = document.getElementById('ePhong');
+            var eViTri = document.getElementById('eViTri');
+            var eTienIch = document.getElementById('TienIch');
+            var eChinhSach = document.getElementById('ChinhSach');
+            var eDanhGia = document.getElementById('DanhGia');
+            if (eTongQuan && isElementVisible(eTongQuan)) {
+                setCurrentScreen('TongQuan')
+            }
+            else if (ePhong && isElementVisible(ePhong)) {
+                setCurrentScreen('Phong')
+            }
+            else if (eChinhSach && isElementVisible(eChinhSach)) {
+                setCurrentScreen('ChinhSach')
+            }
+            else if (eViTri && isElementVisible(eViTri)) {
+                setCurrentScreen('ViTri')
+            }
+            else if (eTienIch && isElementVisible(eTienIch)) {
+                setCurrentScreen('TienIch')
+            }
+            else if (eDanhGia && isElementVisible(eDanhGia)) {
+                setCurrentScreen('DanhGia')
+            }
+            else {
+                setCurrentScreen('TongQuan')
+            }
+            console.log('currentScreen', currentScreen);
+        };
+        window.addEventListener('scroll', handleScroll);
+        // Clean up
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+
+    }, [scrollY]);
     return (
         <>
             <Loading modalState={loadingState} />
             {hotel !== undefined ?
                 <main className='mb-20 flex flex-col items-center justify-center'>
-                    <SearchForm2 />
+                    <SearchForm2 currentScreen={currentScreen} handleGoToElement={handleGoToElement} />
                     {/* tieu de */}
                     <div className='w-10/12'>
-                        <label className='text-start'>Hotel????</label>
                         <div className='w-full flex'>
                             <div className='w-9/12'>
                                 <h1 className='text-3xl lg:text-[32px] text-gray-600'><b>{hotel?.Name}</b></h1>
@@ -201,7 +277,7 @@ export default function HotelDetail() {
                     <div></div>
 
                     {/* gioi thieu khach san */}
-                    <div className='w-10/12 flex flex-col lg:flex-row'>
+                    <div className='w-10/12 flex flex-col lg:flex-row' id='TongQuan' ref={targetElementRefs.TongQuan}>
                         <div className='w-full  my-5 lg:my-3 lg:w-4/12 flex bg-slate-100 rounded-lg p-3 flex-wrap'>
                             <p className='w-8/12 text-gray-950 font-bold'>Giới thiệu cơ sở lưu trú</p>
                             <span className='w-4/12  text-right font-bold text-blue-500 underline
@@ -256,14 +332,43 @@ export default function HotelDetail() {
                             <p className='w-8/12 text-gray-950 font-bold'>Khách nói gì về kỳ nghỉ của họ</p>
                             <span className='w-4/12  text-right font-bold text-blue-500 underline
                     cursor-pointer'>Xem thêm ⟩</span>
-                            <div className='w-full lg:w-1/2 h-30'>
+                            <div className='w-full h-[140px]'>
+                                <Carousel className="w-full min-w-[280px] h-full" id='slider'>
+                                    <CarouselContent className="w-full h-full">
+                                        {hotel.rates?.map((item, index) => (
+                                            <CarouselItem key={item.id} className="basis-1/2">
+                                                <div className='w-full p-3 rounded-md border border-gray-200
+                                    shadow-1 shadow-gray-400 flex flex-col cursor-pointer h-[140px] bg-white'
+                                                    onClick={() => {
+                                                        setRateItem(item);
+                                                        setRateShortModaState(!rateShortModaState);
+                                                    }}>
+                                                    <div className='w-full flex flex-row'>
+                                                        <div className='flex flex-row w-3/12'>
+                                                            <img src='/icon/5285ed4483dbe0a200497d4c3de31128.webp' className='w-8 h-8' />
+                                                            <p>{item.Rating}/10</p>
+                                                        </div>
+                                                        <p className='w-9/12 flex justify-end items-center
+                                                        font-semibold'>{item.guest.Name}</p>
 
+                                                    </div>
+                                                    <p>{item.Description.length > 200 ?
+                                                        item.Description.slice(0, 199) + '...'
+                                                        : item.Description}</p>
+                                                </div>
+
+                                            </CarouselItem>
+                                        ))}
+                                    </CarouselContent >
+                                    <CarouselPrevious className="ml-10 bg-cyan-300" />
+                                    <CarouselNext className="mr-10  bg-cyan-300" />
+                                </Carousel>
                             </div>
                         </div>
                     </div>
 
                     {/* danh muc phong */}
-                    <div className='w-10/12 flex flex-col bg-cyan-200 p-3 rounded-lg'>
+                    <div id='ePhong' className='w-10/12 flex flex-col bg-cyan-200 p-3 rounded-lg' ref={targetElementRefs.Phong}>
                         <p className='font-semibold text-xl'>Những phòng còn trống tại {hotel?.Name}</p>
                         <div className=' flex flex-row bg-blue-800 rounded-lg justify-start items-center pl-4
                 py-4 my-3'>
@@ -366,7 +471,8 @@ export default function HotelDetail() {
                     <div></div>
 
                     {/* thong tin khu vuc */}
-                    <div className='w-full lg:w-10/12 flex flex-col lg:flex-row flex-wrap bg-slate-100 rounded-lg'>
+                    <div className='w-full lg:w-10/12 flex flex-col lg:flex-row flex-wrap bg-slate-100 rounded-lg' id='eViTri'
+                        ref={targetElementRefs.ViTri}>
                         <div className='w-full lg:w-4/12 p-3'>
                             <p className='font-semibold text-lg text-gray-800 cursor-pointer
                             flex flex-row items-start'><span>
@@ -455,7 +561,7 @@ export default function HotelDetail() {
 
                     {/* tat ca tien ich*/}
                     <div className='my-3 w-full lg:w-10/12 flex flex-col lg:flex-row flex-wrap
-                     bg-slate-100 rounded-lg p-3'>
+                     bg-slate-100 rounded-lg p-3' id='TienIch' ref={targetElementRefs.TienIch}>
                         <p className='text-xl text-gray-900'><b>Tất cả tiện ích</b></p>
                         <div className='w-full flex flex-row flex-wrap'>
                             {getListTypeImage().slice(0, 5).map((item) => (
@@ -496,7 +602,7 @@ export default function HotelDetail() {
 
                     {/* chinh sach thong tin */}
                     <div className='my-3 w-full lg:w-10/12 flex flex-col lg:flex-row flex-wrap
-                     bg-slate-100 rounded-lg p-3'>
+                     bg-slate-100 rounded-lg p-3' id='ChinhSach' ref={targetElementRefs.ChinhSach}>
                         <div className='w-full lg:w-4/12 flex flex-row relative'>
                             <p className='text-2xl text-gray-900 absolute m-3'><b>Chính sách & Thông tin chung</b></p>
                             <img src='/background/ChinhSachVaThongTinChung.jpg' className='w-full h-full' />
@@ -556,10 +662,56 @@ export default function HotelDetail() {
                         </div>
 
                     </div>
+                    {/* danh gia cua khach */}
+                    <RateHotel listRate={hotel.rates} avgRate={avgRate} avgRateText={avgRateText}
+                        targetElementRefTongQuan={targetElementRefs.DanhGia} />
+
+                    {/* final bay  */}
+                    <div className='my-3 w-full lg:w-10/12 flex flex-col lg:flex-row flex-wrap rounded-lg h-[320px] items-end'>
+                        <div className='my-3 w-full flex flex-col lg:flex-row flex-wrap rounded-lg relative h-[210px]'>
+
+                            <div className='w-full rounded-lg bg-gradient-to-b from-sky-700 via-sky-500 to-blue-500 px-12 py-15'>
+                                <p className='text-4xl font-bold text-white'>Bạn đã sẵn sàng quyết định chưa?</p>
+                                <button className='px-3 py-4 text-2xl font-bold text-white
+                            bg-orange-400 rounded-lg my-3'
+                                    onClick={() => { handleGoToElement('Phong') }}>Đặt phòng ngay thôi</button>
+                                <img src={`${URL_Enum.BaseURL_Image}${hotel.images.find((item) => {
+                                    return item.TypeRoom == 'None;Ảnh bìa';
+                                })?.FileName}`} className='w-5/12 h-[290px] absolute bottom-3 right-8 rounded-lg' />
+
+                                <img />
+                            </div>
+                        </div>
+                    </div>
+                    <div className='w-10/12 flex flex-col justify-center items-start bg-cyan-100 p-3 border-l-2 border-blue-700'>
+                        <div className='flex flex-row justify-center items-center mb-2'>
+                            <span>
+                                <svg className="w-6 h-6 text-blue-500 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                                    <path fill-rule="evenodd" d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm9.408-5.5a1 1 0 1 0 0 2h.01a1 1 0 1 0 0-2h-.01ZM10 10a1 1 0 1 0 0 2h1v3h-1a1 1 0 1 0 0 2h4a1 1 0 1 0 0-2h-1v-4a1 1 0 0 0-1-1h-2Z" clip-rule="evenodd" />
+                                </svg>
+                            </span>
+                            <p className='text-2xl font-bold text-blue-500'>Miễn trừ trách nhiệm</p>
+                        </div>
+                        <p className='text-lg font-semibold text-gray-900'>
+                            <b>Miễn trừ trách nhiệm:</b>
+                            Khách sạn có trách nhiệm bảo đảm tính chính xác của tất cả các hình ảnh thể hiện.
+                            Hệ thống không chịu trách nhiệm đối với bất kỳ sai lệch nào về mặt hình ảnh.</p>
+                    </div>
+
+                    <div className='w-10/12 flex flex-col justify-center items-center my-12'>
+
+                        <p className='text-2xl font-semibold text-gray-900'>
+                            <b>Không tìm thấy những gì bạn cần?</b></p>
+                        <button className='px-3 py-4 text-2xl font-bold text-white
+                            bg-blue-400 rounded-lg my-3'>Tìm cơ sở lưu trú khác tại {hotel.province.DisplayName}</button>
+                    </div>
+
 
                     {/* modal */}
                     <ModalListImagesHotel listImages={hotel.images} modalState={modalListImagesState} currentImage={currentImageModal}
                         setModalState={setModalListImagesState} />
+                    <RateShortModal rateItem={rateItem} rateShortModaState={rateShortModaState}
+                        setRateShortModaState={setRateShortModaState} />
 
                 </main>
                 : null}

@@ -13,6 +13,7 @@ interface IHotel {
   Type: string;
   Province_Id: string;
   StarRate: number;// | null;
+  province: IProvince;
 
   images: IHotelImage[];
   convenients?: IConvenient[];
@@ -56,9 +57,10 @@ interface IRate {
   Sach_Se: number;
   Thoai_Mai: number;
   Dich_Vu: number;
-  HinhAnh: string;
-  created_at: string | null;
-  updated_at: string | null;
+  HinhAnh?: string;
+  guest: IGuest;
+  created_at: Date;
+  updated_at: Date;
 }
 interface ITypeRoom {
   id: string;
@@ -112,6 +114,22 @@ interface IDiaDiemLanCan {
   IsPopular: boolean;
   ImageIcon: string;
   Distance: string;
+  created_at?: string;
+  updated_at?: string;
+}
+
+interface IGuest {
+  id: string;
+  UserAccountId: string;
+  Email: string;
+  Telephone: string;
+  Name: string;
+  CCCD: string;
+  Sex: boolean;
+  Type: string;
+  Avarta: string;
+  DateOfBirth: string;
+  IsActive: number;
   created_at?: string;
   updated_at?: string;
 }
