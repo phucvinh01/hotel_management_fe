@@ -54,7 +54,7 @@ export function AuthProvider({ children }: Props) {
       }
     };
 
-    if (!token || !user && pathname === '/me') {
+    if (!user && pathname === '/me') {
       router.replace('/');
     }
 

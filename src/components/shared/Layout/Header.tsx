@@ -11,13 +11,12 @@ import { usePathname } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuthContext';
 import { UserNav } from '../UserNav';
 
-
 const Header = () => {
   const [scrollY, setScrollY] = useState<number>(0);
   const [scroll, setScroll] = useState<boolean>(false);
-  const pathname = usePathname()
-  //neu usingScrollEvent=true thi moi co su dung event sroll  
-  //de check sroll y de set background 
+  const pathname = usePathname();
+  //neu usingScrollEvent=true thi moi co su dung event sroll
+  //de check sroll y de set background
   //neu usingScrollEvent=flase thi mac dinh background=mau trang
 
   useEffect(() => {
@@ -31,29 +30,32 @@ const Header = () => {
       } else {
         setScroll(false);
       }
-    }
-    else {
+    } else {
       setScroll(true);
     }
     // Clean up
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-
-  }, [scrollY,pathname]);
-
+  }, [scrollY, pathname]);
 
 
-  const {user} = useAuth()
+  const { user } = useAuth();
+
+  console.log(pathname);
 
 
-  return (
+
+  return pathname !== '/partner' ? (
     <header
       className={`container sticky flex gap-3 flex-col py-2 top-0 left-0 w-full z-50 h-32
-       ${pathname !== "/" ? 'bg-white text-gray-900' :
-          (scrollY > 20 ? 'bg-slate-100' : 'bg-transparent border-gray-200 ')
-        } transition-all duration-300 ease-in-out`}>
-
+       ${
+         pathname !== '/'
+           ? 'bg-white text-gray-900'
+           : scrollY > 20
+           ? 'bg-slate-100'
+           : 'bg-transparent border-gray-200 '
+       } transition-all duration-300 ease-in-out ${pathname.includes("/register") && 'hidden'} ${pathname.includes("/login") && 'hidden'} ${pathname.includes("/forgotpassword")  && 'hidden' } ${pathname.includes("/dashbroad") && 'hidden'}`} >
       <div className='w-full flex-center '>
         <div className='flex flex-1'>
           <Logo />
@@ -62,38 +64,98 @@ const Header = () => {
           <LangAndCur scroll={scroll} />
           <Button
             variant={'ghost'}
-            className={`${scroll ? 'text-black' : 'text-white'
-              } transition-colors hover:bg-[rgba(0,0,0,0.25)]  hover:text-white`}>
+            className={`${
+              scroll ? 'text-black' : 'text-white'
+            } transition-colors hover:bg-[rgba(0,0,0,0.25)]  hover:text-white`}>
             Hỗ trợ
           </Button>
           <Button
             variant={'ghost'}
-            className={`${scroll ? 'text-black' : 'text-white'
-              } transition-colors hover:bg-[rgba(0,0,0,0.25)] hover:text-white`}>
-            Hợp tác với chúng tôi
+            className={`${
+              scroll ? 'text-black' : 'text-white'
+            } transition-colors hover:bg-[rgba(0,0,0,0.25)] hover:text-white`}>
+            <Link href={'/partner'}>Hợp tác với chúng tôi</Link>
           </Button>
-          {
-            user ? <UserNav /> : 
-              <div className='flex gap-1'>
-              <DialogSignIn scroll={scroll} title='Đăng nhập' />
-              <DialogSignIn scroll={scroll} title='Đăng ký' />
+          {user ? (
+            <UserNav />
+          ) : (
+            <div className='flex gap-1'>
+              <DialogSignIn
+                scroll={scroll}
+                title='Đăng nhập'
+              />
+              <DialogSignIn
+                scroll={scroll}
+                title='Đăng ký'
+              />
             </div>
-          }
-
-          
+          )}
         </div>
       </div>
 
       <div className='flex gap-1'>
-        <Button variant={'ghost'} className={`transition-colors ${scroll ? 'text-black' : 'text-white'}`}><Link href={'/hotel'}>Khách sạn</Link></Button>
-        <Button variant={'ghost'} className={`transition-colors ${scroll ? 'text-black' : 'text-white'}`}>Vé máy bay</Button>
-        <Button variant={'ghost'} className={`transition-colors ${scroll ? 'text-black' : 'text-white'}`}>Vé xe khách</Button>
-        <Button variant={'ghost'} className={`transition-colors ${scroll ? 'text-black' : 'text-white'}`}>Đưa đón sân bay</Button>
-        <Button variant={'ghost'} className={`transition-colors ${scroll ? 'text-black' : 'text-white'}`}>Cho thuê xe</Button>
-        <Button variant={'ghost'} className={`transition-colors ${scroll ? 'text-black' : 'text-white'}`}>Hoạt động vui chơi</Button>
-        <Button variant={'ghost'} className={`transition-colors ${scroll ? 'text-black' : 'text-white'}`}>More</Button>
+        <Button
+          variant={'ghost'}
+          className={`transition-colors ${
+            scroll ? 'text-black' : 'text-white'
+          }`}>
+          <Link href={'/hotel'}>Khách sạn</Link>
+        </Button>
+        <Button
+          variant={'ghost'}
+          className={`transition-colors ${
+            scroll ? 'text-black' : 'text-white'
+          }`}>
+          Vé máy bay
+        </Button>
+        <Button
+          variant={'ghost'}
+          className={`transition-colors ${
+            scroll ? 'text-black' : 'text-white'
+          }`}>
+          Vé xe khách
+        </Button>
+        <Button
+          variant={'ghost'}
+          className={`transition-colors ${
+            scroll ? 'text-black' : 'text-white'
+          }`}>
+          Đưa đón sân bay
+        </Button>
+        <Button
+          variant={'ghost'}
+          className={`transition-colors ${
+            scroll ? 'text-black' : 'text-white'
+          }`}>
+          Cho thuê xe
+        </Button>
+        <Button
+          variant={'ghost'}
+          className={`transition-colors ${
+            scroll ? 'text-black' : 'text-white'
+          }`}>
+          Hoạt động vui chơi
+        </Button>
+        <Button
+          variant={'ghost'}
+          className={`transition-colors ${
+            scroll ? 'text-black' : 'text-white'
+          }`}>
+          More
+        </Button>
       </div>
-
+    </header>
+  ) : (
+    <header  className='container sticky flex  gap-3 flex-col justify-center  py-2 top-0 left-0 w-full z-50 h-21 bg-white'>
+      <div className='flex justify-between'>
+        <h1>Partner</h1>
+        <div className='flex gap-4'>
+          <Button className='button-outline text-cyan-500'><Link href={'/partner/login'}>Đăng nhập</Link> </Button>
+          <Button className='bg-orange-500 text-white'>
+            Đăng ký hợp tác với chúng tôi
+          </Button>
+        </div>
+      </div>
     </header>
   );
 };

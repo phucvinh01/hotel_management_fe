@@ -187,7 +187,7 @@ const DialogSignIn = ({ scroll, title }: DialogSignInProps) => {
                 />
               </span>
               {register && (
-                <>
+                <div>
                   <span className='grid w-full items-center gap-1.5'>
                     <Label htmlFor='text'>Tên của bạn là ?</Label>
                     <Input
@@ -224,7 +224,7 @@ const DialogSignIn = ({ scroll, title }: DialogSignInProps) => {
                       id='setComfrim'
                     />
                   </span>
-                </>
+                </div>
               )}
               {login && (
                 <span className='grid w-full items-center gap-1.5'>

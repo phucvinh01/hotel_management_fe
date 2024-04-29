@@ -32,3 +32,21 @@ type ILoginPhone = Pick<IRegister, 'Telephone'| 'password' >
 type ILogin = {
     formData: ILoginEmail | ILoginPhone
 }
+
+type InfoUser = {
+    id: string;
+    Email: string;
+    Name: string;
+    Telephone: string;
+    CCCD: string;
+    Sex: number;
+    Type: string;
+    Avatar: string;
+    DateOfBirth: string;
+};
+
+type DateParts = {
+    day: string;
+    month: string;
+    year: string;
+};

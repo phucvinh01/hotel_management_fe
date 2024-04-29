@@ -1,18 +1,26 @@
+'use client';
+
+
 import Image from 'next/image'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import React from 'react'
 
 const Footer = () => {
+
+    const pathname = usePathname()
+
   return (
    
-
-<footer className="bg-[#1c2930] dark:bg-gray-900 mt-[-20px]">
+!pathname.includes("/partner") && 
+<footer className="bg-[#1c2930] dark:bg-gray-900 mt-[-20px]" hidden={pathname.includes("/dashbroad")}>
     <div className="mx-auto w-full max-w-screen-xl p-4 py-6 lg:py-8">
         <div className="md:flex md:justify-between">
           <div className="mb-6 md:mb-0">
-              <a href="https://flowbite.com/" className="flex items-center">
+              <Link href="https://flowbite.com/" className="flex items-center">
                   <Image src="/logo/Logo.png" className="h-8 me-3" alt="FlowBite Logo" width={200} height={40}/>
                 
-              </a>
+              </Link>
           </div>
           <div className="grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-3">
               <div>

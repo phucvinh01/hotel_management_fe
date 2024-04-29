@@ -1,11 +1,9 @@
 'use client';
 
-import Link from 'next/link';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useFieldArray, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -24,32 +22,40 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
 import { toast } from '@/components/ui/use-toast';
 import { getMonths, getThirtyOneDays, getYears } from '@/lib/dateNow';
 import { useAuth } from '@/hooks/useAuthContext';
+import { getUserInfo, updateUserInfo } from '@/service/auth.service';
+import { useEffect, useState } from 'react';
+import splitDate from '@/lib/splitDate';
 
 const profileFormSchema = z.object({
   username: z
     .string()
     .min(2, {
-      message: 'Username must be at least 2 characters.',
+      message: 'Tên phải dài hơn hai ký tự',
     })
     .max(30, {
-      message: 'Username must not be longer than 30 characters.',
+      message: 'Tên người dùng không được dài hơn 30 ký tự.',
     }),
   sex: z.string({
-    required_error: 'Please select an day to display.',
+    required_error: 'Vui lòng chọn giới tính',
   }),
   day: z.string({
-    required_error: 'Please select an day to display.',
+    required_error: 'Vui lòng chọn ngày để hiển thị.',
   }),
   month: z.string({
-    required_error: 'Please select an month to display.',
+    required_error: 'Vui lòng chọn tháng để hiển thị.',
   }),
   year: z.string({
-    required_error: 'Please select an year to display.',
+    required_error: 'Vui lòng chọn năm để hiển thị.',
   }),
+  cccd: z
+    .string({
+      required_error: 'Căn cước công dân phải là 12 ký tự.',
+    })
+    .min(12)
+    .max(12),
 });
 
 type ProfileFormValues = z.infer<typeof profileFormSchema>;
@@ -59,14 +65,38 @@ type ProfileFormValues = z.infer<typeof profileFormSchema>;
 export function ProfileForm() {
   const { user } = useAuth();
 
+  const [userInfo, setUserInfo] = useState<InfoUser | null | undefined>();
+  const [splitDay, setSpitDay] = useState<DateParts | null>()
+
+
+
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      const res = await getUserInfo(user?.id as string);
+      if (res) {
+        setUserInfo(res);
+        const daySplited = splitDate(res.DateOfBirth as string)
+        setSpitDay(daySplited)
+        console.log(typeof(splitDay?.day));
+      }
+    };
+    fetchUserInfo();
+  }, []);
+
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileFormSchema),
     defaultValues: {
-      username: user?.name,
+      username: userInfo?.Name,
+      cccd: userInfo?.CCCD,
+      day: splitDay?.day,
+      month:splitDay?.month,
+      year:splitDay?.year,
+      sex: userInfo?.Sex === 0 ? "Nam" : "Nữ"
+      
     },
   });
 
-  function onSubmit(data: ProfileFormValues) {
+  async function onSubmit(data: ProfileFormValues) {
     toast({
       title: 'You submitted the following values:',
       description: (
@@ -75,6 +105,43 @@ export function ProfileForm() {
         </pre>
       ),
     });
+
+    let gender = 0;
+    if (data.sex === 'Nam') {
+      gender = 0;
+    } else {
+      gender = 1;
+    }
+
+    let dob = `${data.day}/${data.month}/${data.year}`;
+
+    const dataForm = {
+      idAccount: user?.id,
+      name: data.username,
+      email: user?.email,
+      phone: user?.Telephone,
+      sex: gender,
+      cccd: data.cccd,
+      dob: dob,
+    };
+
+    const res = await updateUserInfo(dataForm);
+    if (res) {
+      const data = await getUserInfo(user?.id as string);
+      toast({
+        title: 'Data respone',
+        description: (
+          <pre className='mt-2 w-[340px] rounded-md bg-slate-950 p-4'>
+            <code className='text-white'>{JSON.stringify(data, null, 2)}</code>
+          </pre>
+        ),
+      });
+      setUserInfo(data)
+    } else {
+      toast({
+        title: 'Failed',
+      });
+    }
   }
 
   const thirtyOneDays = getThirtyOneDays();
@@ -94,6 +161,7 @@ export function ProfileForm() {
               <FormLabel>Tên đầy đủ</FormLabel>
               <FormControl>
                 <Input
+                defaultValue={user?.name}
                   placeholder='shadcn'
                   {...field}
                 />
@@ -107,117 +175,148 @@ export function ProfileForm() {
         />
 
         <div className='flex gap-4 justify-between'>
-        <FormField
-          control={form.control}
-          name='sex'
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Giới tính</FormLabel>
-              <Select
-                onValueChange={field.onChange}
-                defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder='Giới tính' />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  <SelectItem value={`Nam`}>Nam</SelectItem>
-                  <SelectItem value={`Nữ`}>Nữ</SelectItem>
-                </SelectContent>
-              </Select>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <div className='flex gap-3'>
-        <FormField
-          control={form.control}
-          name='day'
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Ngày sinh</FormLabel>
-              <Select
-                onValueChange={field.onChange}
-                defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder='Ngày' />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  {thirtyOneDays.map((item: string) => (
+          <FormField
+            control={form.control}
+            name='sex'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Giới tính</FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={userInfo?.Name}>
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder='Giới tính' defaultValue={userInfo?.Sex === 0 ? "Nam": "Nữ"}/>
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
                     <SelectItem
-                      key={item}
-                      value={`${item}`}>
-                      Ngày {item}
+                      value={`Nam`}
+                      textValue='Nam'>
+                      Nam
                     </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name='month'
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Tháng sinh</FormLabel>
-              <Select
-                onValueChange={field.onChange}
-                defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder='Tháng' />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  {months.map((item: any) => (
                     <SelectItem
-                      key={item}
-                      value={`${item}`}>
-                      Tháng {item}
+                      value={`Nữ`}
+                      textValue='Nữ'>
+                      Nữ
                     </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name='year'
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Năm sinh</FormLabel>
-              <Select
-                onValueChange={field.onChange}
-                defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder='Năm' />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  {years.map((item: any) => (
-                    <SelectItem
-                      key={item}
-                      value={`${item}`}>
-                      {item}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <div className='flex gap-3'>
+            <FormField
+              control={form.control}
+              name='day'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Ngày sinh</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder='Ngày' defaultValue={`Ngày ${splitDay?.day}`} />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {thirtyOneDays.map((item: string) => (
+                        <SelectItem
+                          key={item}
+                          value={`${item}`}>
+                          Ngày {item}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name='month'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Tháng sinh</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder='Tháng' defaultValue={splitDay?.month} />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {months.map((item: any) => (
+                        <SelectItem
+                          key={item}
+                          value={`${item}`}>
+                          Tháng {item}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name='year'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Năm sinh</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder='Năm'  defaultValue={splitDay?.year} />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {years.map((item: any) => (
+                        <SelectItem
+                          key={item}
+                          value={`${item}`}>
+                          {item}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
         </div>
-         </div>
-        <Button type='submit' variant={'secondary'} className='button-primary'>Cập nhật</Button>
+        <FormField
+          control={form.control}
+          name='cccd'
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Căn cước công dân của bạn là gì </FormLabel>
+              <FormControl>
+                <Input
+                defaultValue={userInfo?.CCCD}
+                  placeholder='shadcn'
+                  {...field}
+                />
+              </FormControl>
+              <FormDescription>Căn cước công dân gắn chíp</FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <Button
+          type='submit'
+          variant={'secondary'}
+          className='button-primary'>
+          Cập nhật
+        </Button>
       </form>
     </Form>
   );
