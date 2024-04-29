@@ -33,6 +33,8 @@ type ILogin = {
     formData: ILoginEmail | ILoginPhone
 }
 
+
+
 type InfoUser = {
     id: string;
     Email: string;
@@ -44,6 +46,9 @@ type InfoUser = {
     Avatar: string;
     DateOfBirth: string;
 };
+
+type IAdministratorHotel = Pick<InfoUser, 'id' | 'Email' | 'Name' | 'Type'> & { id_hotel: string };
+
 
 type DateParts = {
     day: string;

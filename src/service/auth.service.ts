@@ -65,6 +65,18 @@ export const login = async (
   }
 };
 
+export const loginWithAdministrator = async (formData:ILoginEmail ): Promise<IAdministratorHotel | undefined> => {
+   try {
+    const data = await axios.post(`/login-administrator`, formData);
+    if (data.status === 200) {
+      return data.data;
+    }
+  } catch (error) {
+    console.log(error);
+  }
+
+}
+
 export const getMe = async (id: string): Promise<IUser | undefined> => {
   try {
     const data = await axios.get(`/me?id=${id}`);

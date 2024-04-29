@@ -5,10 +5,12 @@ import { useState } from 'react';
 import FormHotelInfo from './form-hotel-info';
 import FormTypeRoom from './form-typeroom';
 import FormAddNewForm from './form-add-room';
+import { toast } from '@/components/ui/use-toast';
 
 export function RegisterNewHotelForm() {
   const [currentStep, setCurrentStep] = useState<string>('main');
-  const [timeCheckIn, setTimeCheckIn] = useState('');
+  const [dataHotel, setDataHotel] = useState<IHotel>();
+  const [dataTypeRoom, setDataTypeRoom] = useState<ITypeRoom[]>();
 
   return (
     <Tabs
@@ -33,29 +35,63 @@ export function RegisterNewHotelForm() {
           Thêm phòng
         </TabsTrigger>
         <TabsTrigger
-        disabled
+          disabled
           onClick={() => setCurrentStep('review')}
           value='review'>
           Tổng quan
         </TabsTrigger>
       </TabsList>
 
-       <TabsContent value='main' className='flex flex-col gap-3'>
-        <FormHotelInfo />
+      <TabsContent
+        value='main'
+        className='flex flex-col gap-3'>
+        <FormHotelInfo
+          setFormData={setDataHotel}
+          data={dataHotel}
+        />
         <div className='flex justify-end items-end'>
           <Button
-            onClick={() => setCurrentStep('typeroom')}
+            onClick={() => {
+              setCurrentStep('typeroom'),
+                toast({
+                  title: 'You submitted the following values:',
+                  description: (
+                    <pre className='mt-2 w-[340px] rounded-md bg-slate-950 p-4'>
+                      <code className='text-white'>
+                        {JSON.stringify(dataHotel, null, 2)}
+                      </code>
+                    </pre>
+                  ),
+                });
+            }}
             className='bg-orange-500 text-white w-full'>
             Lưu và tiếp tục bước tiếp theo
           </Button>
         </div>
       </TabsContent>
-      <TabsContent value='typeroom' className='flex flex-col gap-3'>
-        <FormTypeRoom />
+      <TabsContent
+        value='typeroom'
+        className='flex flex-col gap-3'>
+        <FormTypeRoom
+          setFormData={setDataTypeRoom}
+          data={dataTypeRoom}
+        />
 
         <div className='flex justify-end items-end'>
           <Button
-            onClick={() => setCurrentStep('room')}
+            onClick={() => {
+              setCurrentStep('room'),
+                toast({
+                  title: 'You submitted the following values:',
+                  description: (
+                    <pre className='mt-2 w-[340px] rounded-md bg-slate-950 p-4'>
+                      <code className='text-white'>
+                        {JSON.stringify(dataTypeRoom, null, 2)}
+                      </code>
+                    </pre>
+                  ),
+                });
+            }}
             className='bg-orange-500 text-white w-full'>
             Lưu và tiếp tục bước tiếp theo
           </Button>
@@ -74,18 +110,14 @@ export function RegisterNewHotelForm() {
           </Button>
         </div>
       </TabsContent>
-       <TabsContent
+      <TabsContent
         value='review'
         className='flex flex-col gap-3'>
         <FormAddNewForm />
         <div className='flex justify-end items-end'>
-          <Button
-            className='bg-orange-500 text-white'>
-              Xác nhận đăng ký
-          </Button>
+          <Button className='bg-orange-500 text-white'>Xác nhận đăng ký</Button>
         </div>
       </TabsContent>
-
     </Tabs>
   );
 }

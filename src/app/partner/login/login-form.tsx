@@ -8,16 +8,22 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { GitGraphIcon, Loader } from 'lucide-react';
 import Link from 'next/link';
+import { loginWithAdministrator } from '@/service/auth.service';
+import { useAuth } from '@/hooks/useAuthContext';
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export function LoginFormPartnert({ className, ...props }: UserAuthFormProps) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
+  const [email, setEmail] = React.useState<string>("");
+  const [password, setPassword] = React.useState<string>("");
+  const {loginAdministrator} = useAuth()
+
 
   async function onSubmit(event: React.SyntheticEvent) {
     event.preventDefault();
     setIsLoading(true);
-
+    loginAdministrator(email,password)
     setTimeout(() => {
       setIsLoading(false);
     }, 3000);
@@ -44,6 +50,7 @@ export function LoginFormPartnert({ className, ...props }: UserAuthFormProps) {
               autoCapitalize='none'
               autoComplete='email'
               autoCorrect='off'
+              onChange={(e) => setEmail(e.target.value)}
               disabled={isLoading}
             />
           </div>
@@ -54,6 +61,7 @@ export function LoginFormPartnert({ className, ...props }: UserAuthFormProps) {
               type='password'
               autoCorrect='off'
               disabled={isLoading}
+              onChange={(e) => setPassword(e.target.value)}
             />
           </div>
           <Link
@@ -64,14 +72,12 @@ export function LoginFormPartnert({ className, ...props }: UserAuthFormProps) {
           <Button
             disabled={isLoading}
             className='bg-orange-500 text-white'>
-            {isLoading && <Loader />}
-            <Link href={'/dashbroad'}>Đăng nhập</Link>
+            {isLoading && <Loader />}Đăng nhập
           </Button>
 
           <div className='h-[1px] border border-dashed'>
         </div>
         </div>
-        
         <p>
           Bạn chưa là partner?{' '}
           <Link

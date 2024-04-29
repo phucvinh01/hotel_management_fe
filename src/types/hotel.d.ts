@@ -23,16 +23,16 @@ interface IHotel {
   Name: string;
   Address: string;
   Telephone: string;
-  Description: string;
-  LocationDetail: string;
+  Description?: string;
+  LocationDetail?: string;
   IsActive: number;
   TimeCheckIn: string;
   TimeCheckOut: string;
-  created_at: string;
-  updated_at: string;
+  created_at?: string;
+  updated_at?: string;
   Type: string;
-  StarRate: number | null;
-  images: IHotelImage[];
+  StarRate?: number | null;
+  images?: IHotelImage[];
 }
 
 
@@ -103,4 +103,30 @@ interface IHotelImage {
   FileName: string;
   created_at: string | null;
   updated_at: string | null;
+}
+
+
+type ITypeRoom = {
+  id:string,
+  HotelId:string,
+  Name:string,
+  ConvenientRoom?:[],
+  ConvenientBathRoom?:[],
+  FloorArea?:number,
+  MaxQuantityMember:number,
+  Price:string,
+  Voi_Tam_Dung:number,
+  Ban_Cong_San_Hien:number,
+  Khu_Vuc_Cho:number,
+	May_Lanh:number,
+  Nuoc_Nong:number,
+  Bon_Tam:number,
+  created_at?:string,
+  updated_at?:string,
+  TenLoaiGiuong:string,
+  SoLuongGiuong:number,
+  Lo_Vi_Song:number,
+  Tu_Lanh:number,
+  May_Giat:number,
+  No_Moking:number,	
 }

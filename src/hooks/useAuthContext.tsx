@@ -8,12 +8,13 @@ import {
   useEffect,
   useState,
 } from 'react';
-import { getMe, login as SignIn } from '@/service/auth.service';
+import { getMe, loginWithAdministrator, login as SignIn } from '@/service/auth.service';
 import { useToast } from '@/components/ui/use-toast';
 
 interface IAuthContext {
   user: IUser | null;
   login: (username: string, password: string, type: string) => void;
+  loginAdministrator: (email: string, password: string) => void;
   logout: () => void;
 }
 
@@ -21,6 +22,7 @@ const AuthContext = createContext<IAuthContext>({
   user: null,
   login: () => {},
   logout: () => {},
+  loginAdministrator: () => {}
 });
 
 type Props = {
@@ -29,6 +31,7 @@ type Props = {
 
 export function AuthProvider({ children }: Props) {
   const [user, setUser] = useState<IUser | null>(null);
+  const [admin, setAdmin] = useState<IAdministratorHotel | undefined>();
   const pathname = usePathname();
   const router = useRouter();
   const { toast } = useToast();
@@ -60,6 +63,21 @@ export function AuthProvider({ children }: Props) {
 
     fetchUserInfo();
   }, []);
+
+  const loginAdministrator = async(
+    email:string,password:string
+  ) => {
+    const res = await loginWithAdministrator({email:email,password:password})
+
+    if(res?.id_hotel === 'underfine') {
+      setAdmin(res)
+      router.push("/partner/register-hotel")
+    }
+    else {
+      setAdmin(res)
+      router.push("/dashbroad")
+    }
+  }
 
   const login = async (
     emailOrPhone: string,
@@ -114,6 +132,7 @@ export function AuthProvider({ children }: Props) {
     user,
     login,
     logout,
+    loginAdministrator
   };
 
   return (
