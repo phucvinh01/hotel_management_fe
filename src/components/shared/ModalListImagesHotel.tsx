@@ -17,12 +17,12 @@ const ModallistImagessHotel = (props: IProps) => {
     const { listImages, modalState, currentImage, setModalState } = props;
     const [listImagesTemp, setListImagesTemp] = useState<IHotelImage[]>(listImages);
     const [indexImageModal, setIndexImageModal] = useState<number>(currentImage);
-    const [imageModalCurrent, setImageModalCurrent] = useState<string>(URL_Enum.BaseURL_Image + listImagesTemp[indexImageModal]?.FileName);
+    const [imageModalCurrent, setImageModalCurrent] = useState<string>(URL_Enum.BaseURL_Image + (listImagesTemp && listImagesTemp[indexImageModal]?.FileName));
     const getListTypeImage = (): TypeImage[] => {
         var listTypes: TypeImage[] = [];
-        listTypes.push({ TypeName: 'Tất cả', Total: listImages.length });
-        listImages.map((item) => {
-            var listType = { TypeName: item.TypeRoom?.split(';')[1], Total: 0 };
+        listTypes.push({ TypeName: 'Tất cả', Total: listImages?.length, FirstImage: null });
+        listImages?.map((item) => {
+            var listType = { TypeName: item.TypeRoom?.split(';')[1], Total: 0, FirstImage: null };
             listImages.map((jItem) => {
                 if (jItem.TypeRoom?.split(';')[1] === listType.TypeName) {
                     listType.Total += 1;
@@ -119,7 +119,7 @@ const ModallistImagessHotel = (props: IProps) => {
 
                     <p className="font-bold text-xl text-white absolute
                             left-49 bottom-0 m-5 p-2 rounded-lg bg-black opacity-50">
-                        {listImagesTemp[indexImageModal].TypeRoom?.split(';')[1]}
+                        {listImagesTemp && listImagesTemp[indexImageModal].TypeRoom?.split(';')[1]}
                     </p>
 
                 </div>
@@ -143,7 +143,7 @@ const ModallistImagessHotel = (props: IProps) => {
                 <div className="flex flex-col px-3 w-full justify-center items-center mt-4">
                     <Carousel className="w-full" id='slider'>
                         <CarouselContent className="">
-                            {listImagesTemp.map((item, index) => (
+                            {listImagesTemp?.map((item, index) => (
                                 <CarouselItem key={item.id} className="basis-1/5">
                                     <img src={`${URL_Enum.BaseURL_Image}${item.FileName}`}
                                         alt={item.FileName} className={`w-full

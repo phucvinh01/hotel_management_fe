@@ -11,6 +11,7 @@ interface IHotel {
   created_at: string;
   updated_at: string;
   Type: string;
+  Province_Id: string;
   StarRate: number;// | null;
 
   images: IHotelImage[];
@@ -102,7 +103,21 @@ interface IRoom {
   created_at: string | null;
   updated_at: string | null;
 }
+
+interface IDiaDiemLanCan {
+  id: string;
+  HotelId: string;
+  Name: string;
+  Category: string;
+  IsPopular: boolean;
+  ImageIcon: string;
+  Distance: string;
+  created_at?: string;
+  updated_at?: string;
+}
+
 interface TypeImage {
   TypeName: string;
   Total: number;
+  FirstImage: string | null | undefined;
 }
