@@ -8,12 +8,22 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrig
 import { TabsContent } from '@/components/ui/tabs'
 import axios from 'axios'
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import ImageUploader, { FileData } from './upload-image'
+import ImageUpLoaderHotel from './upload-image-temp'
 
-const FormHotelInfo = ({setFormData, data}:{setFormData: Dispatch<SetStateAction<IHotel | undefined>>, data:IHotel | undefined}) => {
+type formHotelInfoProps = {
+  setFormData:Dispatch<SetStateAction<IHotel | undefined>>,
+  data:IHotel | undefined,
+  files:FileData[],
+  setFiles: (files: FileData[]) => void;
+}
+
+const FormHotelInfo = ({setFormData, data, files, setFiles}:formHotelInfoProps) => {
 const [provinces, setProvinces] = useState([]);
   const [selectedProvince, setSelectedProvince] = useState<any>();
   const [districts, setDistricts] = useState([]);
   const [selectedDistrict, setSelectedDistrict] = useState<any>();
+
 
   useEffect(() => {
     // Gọi API để lấy danh sách tỉnh/thành phố
@@ -158,6 +168,7 @@ const [provinces, setProvinces] = useState([]);
               />
             </div>
           </CardContent>
+          
         </Card>
 
           {/* <Card className='w-1/2'>

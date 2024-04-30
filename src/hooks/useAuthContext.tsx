@@ -13,6 +13,7 @@ import { useToast } from '@/components/ui/use-toast';
 
 interface IAuthContext {
   user: IUser | null;
+  admin:IAdministratorHotel | undefined;
   login: (username: string, password: string, type: string) => void;
   loginAdministrator: (email: string, password: string) => void;
   logout: () => void;
@@ -20,6 +21,7 @@ interface IAuthContext {
 
 const AuthContext = createContext<IAuthContext>({
   user: null,
+  admin:undefined,
   login: () => {},
   logout: () => {},
   loginAdministrator: () => {}
@@ -130,6 +132,7 @@ export function AuthProvider({ children }: Props) {
 
   const authContextValue: IAuthContext = {
     user,
+    admin,
     login,
     logout,
     loginAdministrator

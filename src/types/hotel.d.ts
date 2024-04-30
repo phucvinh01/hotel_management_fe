@@ -77,23 +77,25 @@ interface Rate {
   // Define your rate properties here
 }
 
-interface Room {
-  id: string;
-  HotelId: string;
-  Name: string;
-  ConvenientRoom: string;
-  ConvenientBathRoom: string;
-  FloorArea: number;
-  MaxQuantityMember: number;
-  Price: number;
-  Voi_Tam_Dung: number;
-  Ban_Cong_San_Hien: number;
-  Khu_Vuc_Cho: number;
-  May_Lanh: number;
-  Nuoc_Nong: number;
-  Bon_Tam: number;
-  created_at: string;
-  updated_at: string;
+interface IRoom {
+  id?: string;
+  TypeRoomId?	: string;
+  State?: string;
+  TimeRecive?: string;
+  TimeLeave?: string;
+  Gift?: string;
+  Discount?: number;
+  Breakfast?: number;
+  Wifi?: number;
+  NoSmoking?: number;
+  Cancel?: number;
+  ChangeTimeRecive?: number;
+  created_at?: string;
+  updated_at?: string;
+  Hinh_Thuc_Thanh_Toan?: number;
+  RoomName?: string;
+  Bao_Gom_Thue_Va_Phi?: number;
+  quannity?: number
 }
 
 interface IHotelImage {

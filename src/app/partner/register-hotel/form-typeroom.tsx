@@ -1,3 +1,5 @@
+'use client';
+
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -21,29 +23,32 @@ import { Dispatch, SetStateAction, useState } from 'react';
 import { MultiSelect } from 'react-multi-select-component';
 import { Checkbox } from '@/components/ui/checkbox';
 import { PlusCircle, XCircleIcon } from 'lucide-react';
-import Uploader from './upload-image';
+import Uploader, { FileData } from './upload-image';
+import ImageUploader from './upload-image';
+
+type formTypeRoomProps = {
+  setFormData: Dispatch<SetStateAction<ITypeRoom[]>>;
+  data: ITypeRoom[] | undefined;
+  files: FileData[];
+  setFiles: (files: FileData[]) => void;
+};
+
 const FormTypeRoom = ({
   setFormData,
   data,
-}: {
-  setFormData: Dispatch<SetStateAction<ITypeRoom[] | undefined>>;
-  data: ITypeRoom[] | undefined;
-}) => {
-  const [selected, setSelected] = useState([]);
-  const options = [
-    { label: 'Máy lạnh', value: 'Máy lạnh' },
-    { label: 'Quầy bar mini', value: 'Quầy bar mini' },
-    { label: 'TV', value: 'TV' },
-    { label: 'Bàn làm việc', value: 'Bàn làm việc' },
-    { label: 'Rèm cửa / màn che', value: 'Rèm cửa / màn che' },
-  ];
-
+  files,
+  setFiles,
+}: formTypeRoomProps) => {
   const RoomTypeCard = ({
     index,
     removeRoomType,
+    files,
+    setFiles,
   }: {
     index: number;
     removeRoomType: (indexToRemove: number) => void;
+    files: FileData[];
+    setFiles: (files: FileData[]) => void;
   }) => {
     return (
       <Card>
@@ -68,6 +73,7 @@ const FormTypeRoom = ({
               <div className='space-y-1'>
                 <Label htmlFor='typeroom-name'>Tên loại phòng</Label>
                 <Input
+                  value={data && data[index]?.Name}
                   type='text'
                   id='typeroom-name'
                   onChange={(e) =>
@@ -85,6 +91,7 @@ const FormTypeRoom = ({
               <div className='space-y-1'>
                 <Label htmlFor='typeroom-floor'>Số sảnh</Label>
                 <Input
+                  value={data && data[index]?.FloorArea}
                   onChange={(e) =>
                     setFormData((prev) => {
                       const updatedFormData = [...(prev ?? [])];
@@ -103,6 +110,7 @@ const FormTypeRoom = ({
               <div className='space-y-1'>
                 <Label htmlFor='typeroom-max-person'>Số người tối đa</Label>
                 <Input
+                  value={data && data[index]?.MaxQuantityMember}
                   type='number'
                   min={1}
                   id='typeroom-max-person'
@@ -121,6 +129,7 @@ const FormTypeRoom = ({
               <div className='space-y-1'>
                 <Label htmlFor='typeroom-price'>Giá của loại phòng này</Label>
                 <Input
+                  value={data && data[index]?.Price}
                   type='text'
                   id='typeroom-price'
                   onChange={(e) =>
@@ -136,14 +145,13 @@ const FormTypeRoom = ({
                 />
               </div>
             </div>
-
-            <Uploader />
           </div>
 
           <div className='flex flex-row gap-3 items-center'>
             <div>
               <Label htmlFor='typeroom-bed'>Giường</Label>
               <Select
+                value={data && data[index]?.TenLoaiGiuong}
                 name='typeroom-bed'
                 onValueChange={(e) =>
                   setFormData((prev) => {
@@ -169,6 +177,7 @@ const FormTypeRoom = ({
             <div className='space-y-1'>
               <Label htmlFor='typeroom-beb-quanity'>Số lượng</Label>
               <Input
+                value={data && data[index]?.SoLuongGiuong}
                 onChange={(e) =>
                   setFormData((prev) => {
                     const updatedFormData = [...(prev ?? [])];
@@ -185,54 +194,13 @@ const FormTypeRoom = ({
               />
             </div>
           </div>
-          {/* <div className='grid grid-cols-2 gap-3'>
-            <div className='space-y-1'>
-              <Label htmlFor='typeroom-price'>
-                Loại phòng này có những tiện nghi gì?
-              </Label>
-              <MultiSelect
-                options={options}
-                value={selected}
-                onChange={(e: any) =>{
-                  setSelected(e),
-                  setFormData((prev) => {
-                    const updatedFormData = [...(prev ?? [])];
-                    updatedFormData[index] = {
-                      ...updatedFormData[index],
-                      ConvenientRoom: selected as [],
-                    };
-                    return updatedFormData;
-                  })}
-                }
-                labelledBy='Select'
-              />
-            </div>
-            <div className='space-y-1'>
-              <Label htmlFor='typeroom-price'>
-                Phòng tắm của loại phòng này có những tiện nghi gì?
-              </Label>
-              <MultiSelect
-                options={options}
-                value={selected}
-                onChange={(e: any) =>
-                  setFormData((prev) => {
-                    const updatedFormData = [...(prev ?? [])];
-                    updatedFormData[index] = {
-                      ...updatedFormData[index],
-                      Name: e,
-                    };
-                    return updatedFormData;
-                  })
-                }
-                labelledBy='Select'
-              />
-            </div>
-          </div> */}
           <div className='flex flex-row gap-4 py-4'>
             <Label htmlFor='typeroom-price'>Những tiện nghi khác như:</Label>
             <div className='grid grid-cols-5 gap-5'>
               <div className='flex items-center space-x-2'>
                 <Checkbox
+                  value={data && data[index]?.Voi_Tam_Dung}
+                  defaultChecked = {data && data[index]?.Voi_Tam_Dung === 1 && true}
                   id='shower'
                   onCheckedChange={(e) =>
                     setFormData((prev) => {
@@ -253,7 +221,10 @@ const FormTypeRoom = ({
               </div>
               <div className='flex items-center space-x-2'>
                 <Checkbox
+                  value={data && data[index]?.Ban_Cong_San_Hien}
                   id='bacon'
+                  defaultChecked = {data && data[index]?.Ban_Cong_San_Hien ===1 && true}
+
                   onCheckedChange={(e) =>
                     setFormData((prev) => {
                       const updatedFormData = [...(prev ?? [])];
@@ -273,6 +244,9 @@ const FormTypeRoom = ({
               </div>
               <div className='flex items-center space-x-2'>
                 <Checkbox
+                  value={data && data[index]?.Khu_Vuc_Cho}
+                  defaultChecked = {data && data[index]?.Khu_Vuc_Cho ===1 && true}
+
                   id='wating'
                   onCheckedChange={(e) =>
                     setFormData((prev) => {
@@ -293,7 +267,10 @@ const FormTypeRoom = ({
               </div>
               <div className='flex items-center space-x-2'>
                 <Checkbox
+                  value={data && data[index]?.May_Lanh}
                   id='air-conditioner'
+                  defaultChecked = {data && data[index]?.May_Lanh ===1 && true}
+
                   onCheckedChange={(e) =>
                     setFormData((prev) => {
                       const updatedFormData = [...(prev ?? [])];
@@ -314,6 +291,9 @@ const FormTypeRoom = ({
               <div className='flex items-center space-x-2'>
                 <Checkbox
                   id='fridge'
+                  value={data && data[index]?.Tu_Lanh}
+                  defaultChecked = {data && data[index]?.Tu_Lanh ===1 && true}
+
                   onCheckedChange={(e) =>
                     setFormData((prev) => {
                       const updatedFormData = [...(prev ?? [])];
@@ -333,6 +313,9 @@ const FormTypeRoom = ({
               </div>
               <div className='flex items-center space-x-2'>
                 <Checkbox
+                  value={data && data[index]?.Lo_Vi_Song}
+                  defaultChecked = {data && data[index]?.Lo_Vi_Song === 1 && true}
+
                   id='microway'
                   onCheckedChange={(e) =>
                     setFormData((prev) => {
@@ -353,6 +336,9 @@ const FormTypeRoom = ({
               </div>
               <div className='flex items-center space-x-2'>
                 <Checkbox
+                  defaultChecked = {data && data[index]?.Tu_Lanh === 1&& true}
+
+                  value={data && data[index]?.Tu_Lanh}
                   id='fridge'
                   onCheckedChange={(e) =>
                     setFormData((prev) => {
@@ -374,6 +360,9 @@ const FormTypeRoom = ({
               <div className='flex items-center space-x-2'>
                 <Checkbox
                   id='wash-machine'
+                  value={data && data[index]?.May_Giat}
+                  defaultChecked = {data && data[index]?.May_Giat ===1 && true}
+
                   onCheckedChange={(e) =>
                     setFormData((prev) => {
                       const updatedFormData = [...(prev ?? [])];
@@ -394,6 +383,9 @@ const FormTypeRoom = ({
               <div className='flex items-center space-x-2'>
                 <Checkbox
                   id='isMorking'
+                  value={data && data[index]?.No_Moking}
+                  defaultChecked = {data && data[index]?.No_Moking ===1 && true}
+
                   onCheckedChange={(e) =>
                     setFormData((prev) => {
                       const updatedFormData = [...(prev ?? [])];
@@ -414,6 +406,8 @@ const FormTypeRoom = ({
               <div className='flex items-center space-x-2'>
                 <Checkbox
                   id='bathtub'
+                  defaultChecked = {data && data[index]?.Bon_Tam  === 1 && true}
+                  value={data && data[index]?.Bon_Tam}
                   onCheckedChange={(e) =>
                     setFormData((prev) => {
                       const updatedFormData = [...(prev ?? [])];
@@ -438,6 +432,8 @@ const FormTypeRoom = ({
     );
   };
 
+  const [len, setLen] = useState<number>(0);
+
   const removeRoomType = (indexToRemove: number) => {
     setRoomTypes((prevRoomTypes) =>
       prevRoomTypes.filter((_, index) => index !== indexToRemove)
@@ -453,8 +449,10 @@ const FormTypeRoom = ({
   const [roomTypes, setRoomTypes] = useState<React.ReactNode[]>([
     <RoomTypeCard
       key={Math.random()}
-      index={0}
+      index={len}
       removeRoomType={removeRoomType}
+      files={files}
+      setFiles={setFiles}
     />,
   ]);
 
@@ -465,8 +463,11 @@ const FormTypeRoom = ({
         key={Math.random()}
         index={prevRoomTypes.length}
         removeRoomType={removeRoomType}
+        files={files}
+        setFiles={setFiles}
       />,
     ]);
+    setLen((prevLen) => prevLen + 1);
   };
 
   return (

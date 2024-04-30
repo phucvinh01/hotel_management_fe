@@ -47,7 +47,7 @@ type InfoUser = {
     DateOfBirth: string;
 };
 
-type IAdministratorHotel = Pick<InfoUser, 'id' | 'Email' | 'Name' | 'Type'> & { id_hotel: string };
+type IAdministratorHotel = Pick<InfoUser, 'id' | 'Email' | 'Name' | 'Type'> & { id_hotel: string ,id_staff :string};
 
 
 type DateParts = {
