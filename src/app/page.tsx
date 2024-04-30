@@ -1,3 +1,7 @@
+<<<<<<< HEAD:src/app/page.tsx
+=======
+//'use client'
+>>>>>>> VNDT082:src/app/root/page.tsx
 import TabHero from '@/components/shared/TabHero';
 import { CarouselTrustBy } from '@/components/shared/CarouselTrustBy';
 import BannerSection from '@/components/shared/BannerSection';
@@ -6,7 +10,11 @@ import DiscoveryHotel from '@/components/shared/DiscoveryHotel';
 import ContactEmail from '@/components/shared/ContactEmail';
 import CarouselVoucher from '@/components/shared/CarouselVoucher';
 import TabsCarouselHotel from '@/components/shared/TabsCarouselHotel';
+<<<<<<< HEAD:src/app/page.tsx
 import { getHotelPage } from '@/service/hotel.service';
+=======
+
+>>>>>>> VNDT082:src/app/root/page.tsx
 export default async function Home() {
   const dataLocationList = [
     {

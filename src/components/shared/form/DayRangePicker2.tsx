@@ -13,14 +13,14 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 
-type PropsDatePickerWithRange = {
+type PropsDatePickerWithRange2 = {
   className?: React.HTMLAttributes<HTMLDivElement>,
   setRangeDay: React.Dispatch<React.SetStateAction<DateRange | undefined>>
 }
 
-export function DatePickerWithRange({
+export function DatePickerWithRange2({
   className, setRangeDay
-}: PropsDatePickerWithRange) {
+}: PropsDatePickerWithRange2) {
 
   const currentDate = new Date();
   currentDate.setDate(currentDate.getDate() + 1);
@@ -47,14 +47,14 @@ export function DatePickerWithRange({
 
 
   return (
-    <div className={cn('grid gap-2 bg-gray-50 border border-gray-300 h-12', className)}>
+    <div className={cn('grid gap-2 bg-gray-50 border border-gray-300 h-12 rounded-lg', className)}>
       <Popover>
         <PopoverTrigger asChild>
           <Button
             id='date'
             variant={'outline'}
             className={cn(
-              ' justify-start text-left font-normal rounded-none h-full',
+              ' justify-start text-left h-12 bg-blue-200 border border-blue-200 text-white text-lg rounded-lg w-full font-bold pl-6 ',
               !date && 'text-muted-foreground'
             )}>
             <CalendarIcon className='mr-2 h-4 w-4' />
