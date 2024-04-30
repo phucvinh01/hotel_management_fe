@@ -9,6 +9,7 @@ import {
     CarouselNext,
     CarouselPrevious,
 } from "@/components/ui/carousel"
+import Link from "next/link";
 
 interface IProps {
     typeRoom: ITypeRoom;
@@ -323,7 +324,9 @@ const DetailRoom = (props: IProps) => {
                                             <p className="text-2xl text-red-500"><b>{typeRoom.Price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</b></p>
 
                                         </div>
-                                        <button className="text-xl font-bold bg-red-500 text-white py-2 px-10 my-3 rounded-xl">Chọn</button>
+                                        <Link className="text-xl font-bold bg-red-500 text-white py-2 px-10 my-3 rounded-xl"
+                                            href={`/hotel/booking/?id=${item.id}`}>Chọn
+                                        </Link>
                                     </div>
                                     <hr />
                                     {item.Discount ? <div>Sale lễ</div> : null}
@@ -346,8 +349,8 @@ const DetailRoom = (props: IProps) => {
             </div>
             {/* //modal chi tiet phong */}
 
-            <div className={`w-full ${modalState ? 'block' : 'hidden'} h-full flex
-            z-50 fixed inset-0 justify-center items-center`} style={{ background: 'rgb(0 0 0 / 85%)' }}>
+            <div className={`w-full ${modalState ? 'block' : 'hidden'} h-full flex z-999999
+          fixed inset-0 justify-center items-center`} style={{ background: 'rgb(0 0 0 / 85%)' }}>
                 <div className="w-9/12 h-[90%] flex flex-row rounded-2xl
                 bg-black opacity-100">
                     {/* danh sach hinh anh */}

@@ -13,7 +13,7 @@ const RateShortModal = (props: IProps) => {
     return (
         rateItem ? <>
             <div className={`w-full ${rateShortModaState ? 'block' : 'hidden'} h-full flex
-        z-50 fixed inset-0 justify-center items-center`} style={{ background: 'rgb(0 0 0 / 55%)' }}>
+        z-9999 fixed inset-0 justify-center items-center`} style={{ background: 'rgb(0 0 0 / 55%)' }}>
                 <div className="w-9/12 h-[45%] flex flex-col rounded-2xl justify-start items-center
                 bg-white shadow-10 shadow-blue-400 opacity-100 relative">
                     <div className="flex flex-row w-full p-3 mb-3 pb-5 justify-start items-start relative border-b

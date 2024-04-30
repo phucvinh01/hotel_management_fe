@@ -174,7 +174,7 @@ export default function HotelDetail() {
             else {
                 setCurrentScreen('TongQuan')
             }
-            console.log('currentScreen', currentScreen);
+            console.log('roooo');
         };
         window.addEventListener('scroll', handleScroll);
         // Clean up
@@ -182,7 +182,7 @@ export default function HotelDetail() {
             window.removeEventListener('scroll', handleScroll);
         };
 
-    }, [scrollY]);
+    }, []);
     return (
         <>
             <Loading modalState={loadingState} />
