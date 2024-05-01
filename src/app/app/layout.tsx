@@ -1,7 +1,11 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
+import Footer from '@/components/shared/Layout/Footer';
+import Header from '@/components/shared/Layout/Header';
 import { AuthProvider } from '@/hooks/useAuthContext';
+import { usePathname } from 'next/navigation';
+import Background from '@/components/shared/Background';
 
 export const metadata: Metadata = {
   title: 'Traveloka - Nền tảng du lịch hàng đầu Đông Nam Á',
@@ -14,15 +18,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
+    <main
       lang='en'
       suppressHydrationWarning={true}>
-        <body>
+      <Background>
         <AuthProvider>
+          <Header />
           {children}
+          <Footer />
           <Toaster />
         </AuthProvider>
-        </body>
-    </html>
+      </Background>
+    </main>
   );
 }

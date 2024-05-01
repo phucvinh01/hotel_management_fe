@@ -24,7 +24,7 @@ const Header = () => {
     const handleScroll = () => {
       setScrollY(window.scrollY);
     };
-    if (pathname === '/') {
+    if (pathname === '/app') {
       window.addEventListener('scroll', handleScroll);
       if (scrollY > 20) {
         setScroll(true);
@@ -50,7 +50,7 @@ const Header = () => {
   return (
     <header
       className={`container sticky flex gap-3 flex-col py-2 top-0 left-0 w-full z-50 h-32
-       ${pathname !== "/" ? 'bg-white text-gray-900' :
+       ${pathname !== "/app" ? 'bg-white text-gray-900' :
           (scrollY > 20 ? 'bg-slate-100' : 'bg-transparent border-gray-200 ')
         } transition-all duration-300 ease-in-out`}>
 
