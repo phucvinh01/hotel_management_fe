@@ -17,11 +17,12 @@ export default function RootLayout({
       lang='en'
       suppressHydrationWarning={true}>
       <body>
+
         <AuthProvider>
           {children}
           <Toaster />
         </AuthProvider>
-      </body>
+        </body>
     </html>
   );
 }

@@ -4,6 +4,8 @@ import { Toaster } from '@/components/ui/toaster';
 import Footer from '@/components/shared/Layout/Footer';
 import Header from '@/components/shared/Layout/Header';
 import { AuthProvider } from '@/hooks/useAuthContext';
+
+import { usePathname } from 'next/navigation';
 import Background from '@/components/shared/Background';
 
 export const metadata: Metadata = {
@@ -17,7 +19,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div
+
+    <main
       lang='en'
       suppressHydrationWarning={true}>
       <Background>
@@ -28,6 +31,7 @@ export default function RootLayout({
           <Toaster />
         </AuthProvider>
       </Background>
-    </div>
+
+    </main>
   );
 }

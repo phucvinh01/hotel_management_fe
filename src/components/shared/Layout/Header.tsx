@@ -56,6 +56,7 @@ const Header = () => {
            ? 'bg-slate-100'
            : 'bg-transparent border-gray-200 '
        } transition-all duration-300 ease-in-out ${pathname.includes("/register") && 'hidden'} ${pathname.includes("/login") && 'hidden'} ${pathname.includes("/forgotpassword")  && 'hidden' } ${pathname.includes("/dashbroad") && 'hidden'}`} >
+
       <div className='w-full flex-center '>
         <div className='flex flex-1'>
           <Logo />

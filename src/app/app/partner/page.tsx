@@ -14,6 +14,7 @@ const Page = () => {
         <Button className='bg-orange-500 text-white'><Link href={'/app/partner/register'}> Đăng ký ngay </Link></Button>
       </div>
        </main>
+
   )
 }
 

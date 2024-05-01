@@ -1,8 +1,12 @@
 'use client';
 
+
+import Link from 'next/link';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
+import { useFieldArray, useForm } from 'react-hook-form';
 import { z } from 'zod';
+
+import { cn } from '@/lib/utils';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -22,17 +26,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { toast } from '@/components/ui/use-toast';
-import { getMonths, getThirtyOneDays, getYears } from '@/lib/dateNow';
+
 import { useAuth } from '@/hooks/useAuthContext';
 import { getUserInfo, updateUserInfo } from '@/service/auth.service';
 import { useEffect, useState } from 'react';
 import splitDate from '@/lib/splitDate';
 
+
 const profileFormSchema = z.object({
   username: z
     .string()
     .min(2, {
+
       message: 'Tên phải dài hơn hai ký tự',
     })
     .max(30, {
@@ -56,6 +61,13 @@ const profileFormSchema = z.object({
     })
     .min(12)
     .max(12),
+
+      message: 'Username must be at least 2 characters.',
+    })
+    .max(30, {
+      message: 'Username must not be longer than 30 characters.',
+    }),
+
 });
 
 type ProfileFormValues = z.infer<typeof profileFormSchema>;
@@ -64,6 +76,7 @@ type ProfileFormValues = z.infer<typeof profileFormSchema>;
 
 export function ProfileForm() {
   const { user } = useAuth();
+
 
   const [userInfo, setUserInfo] = useState<InfoUser | null | undefined>();
   const [splitDay, setSpitDay] = useState<DateParts | null>()
@@ -96,7 +109,9 @@ export function ProfileForm() {
     },
   });
 
-  async function onSubmit(data: ProfileFormValues) {
+
+  function onSubmit(data: ProfileFormValues) {
+
     toast({
       title: 'You submitted the following values:',
       description: (
@@ -105,6 +120,7 @@ export function ProfileForm() {
         </pre>
       ),
     });
+
 
     let gender = 0;
     if (data.sex === 'Nam') {
@@ -142,6 +158,7 @@ export function ProfileForm() {
         title: 'Failed',
       });
     }
+
   }
 
   const thirtyOneDays = getThirtyOneDays();
@@ -160,8 +177,9 @@ export function ProfileForm() {
             <FormItem>
               <FormLabel>Tên đầy đủ</FormLabel>
               <FormControl>
-                <Input
+
                 defaultValue={user?.name}
+
                   placeholder='shadcn'
                   {...field}
                 />
@@ -175,6 +193,7 @@ export function ProfileForm() {
         />
 
         <div className='flex gap-4 justify-between'>
+
           <FormField
             control={form.control}
             name='sex'
@@ -307,16 +326,118 @@ export function ProfileForm() {
                 />
               </FormControl>
               <FormDescription>Căn cước công dân gắn chíp</FormDescription>
+
+        <FormField
+          control={form.control}
+          name='sex'
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Giới tính</FormLabel>
+              <Select
+                onValueChange={field.onChange}
+                defaultValue={field.value}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder='Giới tính' />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  <SelectItem value={`Nam`}>Nam</SelectItem>
+                  <SelectItem value={`Nữ`}>Nữ</SelectItem>
+                </SelectContent>
+              </Select>
               <FormMessage />
             </FormItem>
           )}
         />
-        <Button
-          type='submit'
-          variant={'secondary'}
-          className='button-primary'>
-          Cập nhật
-        </Button>
+        <div className='flex gap-3'>
+        <FormField
+          control={form.control}
+          name='day'
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Ngày sinh</FormLabel>
+              <Select
+                onValueChange={field.onChange}
+                defaultValue={field.value}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder='Ngày' />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {thirtyOneDays.map((item: string) => (
+                    <SelectItem
+                      key={item}
+                      value={`${item}`}>
+                      Ngày {item}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name='month'
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Tháng sinh</FormLabel>
+              <Select
+                onValueChange={field.onChange}
+                defaultValue={field.value}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder='Tháng' />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {months.map((item: any) => (
+                    <SelectItem
+                      key={item}
+                      value={`${item}`}>
+                      Tháng {item}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name='year'
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Năm sinh</FormLabel>
+              <Select
+                onValueChange={field.onChange}
+                defaultValue={field.value}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder='Năm' />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {years.map((item: any) => (
+                    <SelectItem
+                      key={item}
+                      value={`${item}`}>
+                      {item}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        </div>
+        <Button type='submit' variant={'secondary'} className='button-primary'>Cập nhật</Button>
       </form>
     </Form>
   );

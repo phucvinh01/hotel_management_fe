@@ -1,3 +1,5 @@
+
+//'use client'
 import TabHero from '@/components/shared/TabHero';
 import { CarouselTrustBy } from '@/components/shared/CarouselTrustBy';
 import BannerSection from '@/components/shared/BannerSection';
@@ -6,6 +8,9 @@ import DiscoveryHotel from '@/components/shared/DiscoveryHotel';
 import ContactEmail from '@/components/shared/ContactEmail';
 import CarouselVoucher from '@/components/shared/CarouselVoucher';
 import TabsCarouselHotel from '@/components/shared/TabsCarouselHotel';
+
+import { getHotelPage } from '@/service/hotel.service';
+
 export default async function Home() {
   const dataLocationList = [
     {
