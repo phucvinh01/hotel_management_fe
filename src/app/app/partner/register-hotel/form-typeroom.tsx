@@ -27,8 +27,8 @@ import Uploader, { FileData } from './upload-image';
 import ImageUploader from './upload-image';
 
 type formTypeRoomProps = {
-  setFormData: Dispatch<SetStateAction<ITypeRoom[]>>;
-  data: ITypeRoom[] | undefined;
+  setFormData: Dispatch<SetStateAction<TypeRoom[]>>;
+  data: TypeRoom[] | undefined;
   files: FileData[];
   setFiles: (files: FileData[]) => void;
 };

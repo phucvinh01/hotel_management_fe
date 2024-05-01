@@ -8,8 +8,8 @@ import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { FileData } from './upload-image';
 
 type formHotelInfoProps = {
-  setFormData:Dispatch<SetStateAction<IHotel | undefined>>,
-  data:IHotel | undefined,
+  setFormData:Dispatch<SetStateAction<Hotel | undefined>>,
+  data:Hotel | undefined,
   files:FileData[],
   setFiles: (files: FileData[]) => void;
 }

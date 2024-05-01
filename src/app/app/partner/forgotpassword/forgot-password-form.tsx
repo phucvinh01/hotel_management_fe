@@ -70,7 +70,7 @@ export function ForgotPasswordPartnerForm({
             <p>
               Bạn chưa là partner?{' '}
               <Link
-                href={'/partner/register'}
+                href={'/app/partner/register'}
                 className='text-cyan-500 font-bold'>
                 Đăng Ký ngay
               </Link>

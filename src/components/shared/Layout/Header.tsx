@@ -46,7 +46,7 @@ const Header = () => {
 
 
 
-  return pathname !== '/partner' ? (
+  return pathname !== '/app/partner' ? (
     <header
       className={`container sticky flex gap-3 flex-col py-2 top-0 left-0 w-full z-50 h-32
        ${
@@ -74,7 +74,7 @@ const Header = () => {
             className={`${
               scroll ? 'text-black' : 'text-white'
             } transition-colors hover:bg-[rgba(0,0,0,0.25)] hover:text-white`}>
-            <Link href={'/partner'}>Hợp tác với chúng tôi</Link>
+            <Link href={'/app/partner'}>Hợp tác với chúng tôi</Link>
           </Button>
           {user ? (
             <UserNav />
@@ -99,7 +99,7 @@ const Header = () => {
           className={`transition-colors ${
             scroll ? 'text-black' : 'text-white'
           }`}>
-          <Link href={'/hotel'}>Khách sạn</Link>
+          <Link href={'/app/hotel'}>Khách sạn</Link>
         </Button>
         <Button
           variant={'ghost'}
@@ -150,7 +150,7 @@ const Header = () => {
       <div className='flex justify-between'>
         <h1>Partner</h1>
         <div className='flex gap-4'>
-          <Button className='button-outline text-cyan-500'><Link href={'/partner/login'}>Đăng nhập</Link> </Button>
+          <Button className='button-outline text-cyan-500'><Link href={'/app/partner/login'}>Đăng nhập</Link> </Button>
           <Button className='bg-orange-500 text-white'>
             Đăng ký hợp tác với chúng tôi
           </Button>

@@ -65,7 +65,7 @@ export function LoginFormPartnert({ className, ...props }: UserAuthFormProps) {
             />
           </div>
           <Link
-            href={'/partner/forgotpassword'}
+            href={'/app/partner/forgotpassword'}
             className='text-cyan-500 font-bold'>
             Quên mật khẩu?
           </Link>
@@ -81,7 +81,7 @@ export function LoginFormPartnert({ className, ...props }: UserAuthFormProps) {
         <p>
           Bạn chưa là partner?{' '}
           <Link
-            href={'/partner/register'}
+            href={'/app/partner/register'}
             className='text-cyan-500 font-bold'>
             Đăng Ký ngay
           </Link>

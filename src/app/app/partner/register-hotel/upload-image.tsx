@@ -11,7 +11,7 @@ interface Props {
   files: FileData[];
   setFiles: (files: FileData[]) => void;
   type?: boolean;
-  dataRender?: ITypeRoom[];
+  dataRender?: TypeRoom[];
 }
 
 import { Button } from '@/components/ui/button';

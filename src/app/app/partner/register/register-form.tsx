@@ -38,7 +38,7 @@ export function RegisterFormPartnert({
         toast({
           title:"Bạn đã có tài khoản, xin hãy đăng nhập"
         })
-        router.replace("/partner/login")
+        router.replace("/app/partner/login")
     }
     else {
       setIsRegister(true)
@@ -107,7 +107,7 @@ export function RegisterFormPartnert({
         title: 'Đăng ký thành công',
         description: 'Hãy đăng nhập tài khoản của bạn',
       });
-      router.replace("/partner/login")
+      router.replace("/app/partner/login")
       setIsRegister(false);
     }
     setIsLoading(false)
@@ -202,7 +202,7 @@ export function RegisterFormPartnert({
           <p className='bg-background px-2 text-muted-foreground'>
             Bạn đã có tài khoản ?  
 
-          <Link href={'/partner/login'} className='text-cyan-500 cursor-pointer'>Đăng nhập</Link>
+          <Link href={'/app/partner/login'} className='text-cyan-500 cursor-pointer'>Đăng nhập</Link>
           </p>
         </div>
       </div>{' '}

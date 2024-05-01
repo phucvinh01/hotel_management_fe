@@ -22,11 +22,11 @@ import { useRouter } from 'next/navigation';
 
 export function RegisterNewHotelForm() {
   const [currentStep, setCurrentStep] = useState<string>('main');
-  const [dataHotel, setDataHotel] = useState<IHotel>();
+  const [dataHotel, setDataHotel] = useState<Hotel>();
   const [filesImageHotel, setfilesImageHotel] = useState<FileData[]>([]);
   const [filesImageTyperoom, setfilesImageTyperoom] = useState<FileData[]>([]);
-  const [dataTypeRoom, setDataTypeRoom] = useState<ITypeRoom[]>([]);
-  const [dataRooms, setDataRooms] = useState<IRoom[]>([]);
+  const [dataTypeRoom, setDataTypeRoom] = useState<TypeRoom[]>([]);
+  const [dataRooms, setDataRooms] = useState<Room[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const { admin } = useAuth();
@@ -93,7 +93,7 @@ export function RegisterNewHotelForm() {
           toast({
             title: 'Đăng ký thành công vui lòng đăng nhập lại',
           });
-          router.replace('/partner/login');
+          router.replace('/app/partner/login');
         } else {
           toast({
             variant: 'destructive',

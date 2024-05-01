@@ -46,7 +46,7 @@ export type InsertResult = {
 }
 
 
-export const insertHotel = async (body:IHotel | undefined): Promise<string | false | undefined> => {
+export const insertHotel = async (body:Hotel | undefined): Promise<string | false | undefined> => {
   try {
     console.log("insertHotel");
     const response = await axios.post<InsertResult>(`/hotel/insert-hotel`,body);
@@ -59,7 +59,7 @@ export const insertHotel = async (body:IHotel | undefined): Promise<string | fal
   }
 };
 
-export const insertTyperoom = async (body:ITypeRoom | undefined,id:string): Promise<InsertResult | false | undefined> => {
+export const insertTyperoom = async (body:TypeRoom | undefined,id:string): Promise<InsertResult | false | undefined> => {
   try {
     
     const response = await axios.post<InsertResult>(`/hotel/insert-typeroom`,{...body,"HotelId":id});
@@ -93,7 +93,7 @@ export async function uploadImage(image: File, typeRoom: InsertResult,region:str
   }
 }
 
-export const insertRoom = async (body:IRoom | undefined, id:string,index:number): Promise<InsertResult | false | undefined> => {
+export const insertRoom = async (body:Room | undefined, id:string,index:number): Promise<InsertResult | false | undefined> => {
   try {
     const response = await axios.post<InsertResult>(`/room/insert-room`,{...body,  "typeRoom_id":id, "name_room":`${body?.RoomName} ${index} ` });
     if (response.status === 200) {

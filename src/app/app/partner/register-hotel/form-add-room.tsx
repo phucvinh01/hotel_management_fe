@@ -25,9 +25,9 @@ import { PlusCircle, XCircleIcon } from 'lucide-react';
 type RoomCardProps = {
   index: number;
   removeRoom: (indexToRemove: number) => void;
-  dataRender: ITypeRoom[] | undefined;
-  dataRooms: IRoom[] | undefined;
-  setDataRooms: Dispatch<SetStateAction<IRoom[]>>;
+  dataRender: TypeRoom[] | undefined;
+  dataRooms: Room[] | undefined;
+  setDataRooms: Dispatch<SetStateAction<Room[]>>;
 };
 
 const RoomCard = ({
@@ -227,9 +227,9 @@ const RoomCard = ({
 };
 
 type IFormAddNewRoomProps = {
-  dataRender: ITypeRoom[] | undefined;
-  dataRooms: IRoom[] | undefined;
-  setDataRooms: Dispatch<SetStateAction<IRoom[]>>;
+  dataRender: TypeRoom[] | undefined;
+  dataRooms: Room[] | undefined;
+  setDataRooms: Dispatch<SetStateAction<Room[]>>;
 };
 
 const FormAddNewRoom = ({

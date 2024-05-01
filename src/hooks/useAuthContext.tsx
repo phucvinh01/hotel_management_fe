@@ -73,7 +73,7 @@ export function AuthProvider({ children }: Props) {
 
     if(res?.id_hotel === 'underfine') {
       setAdmin(res)
-      router.push("/partner/register-hotel")
+      router.push("/app/partner/register-hotel")
     }
     else {
       setAdmin(res)

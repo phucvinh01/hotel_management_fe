@@ -12,7 +12,7 @@ const Footer = () => {
 
   return (
    
-!pathname.includes("/partner") && 
+!pathname.includes("/app/partner") && 
 <footer className="bg-[#1c2930] dark:bg-gray-900 mt-[-20px]" hidden={pathname.includes("/dashbroad")}>
     <div className="mx-auto w-full max-w-screen-xl p-4 py-6 lg:py-8">
         <div className="md:flex md:justify-between">

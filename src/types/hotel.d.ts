@@ -1,7 +1,7 @@
 interface ApiGetPageResponse {
   result: {
     current_page: number;
-    data: IHotel[]; // Đây là một mảng các đối tượng, không thể biết trước cấu trúc của chúng từ mô tả.
+    data: Hotel[]; // Đây là một mảng các đối tượng, không thể biết trước cấu trúc của chúng từ mô tả.
     first_page_url: string;
     from: number;
     next_page_url: string | null;
@@ -18,7 +18,7 @@ interface ApiGetOneHotelRespone {
 
 }
 
-interface IHotel {
+interface Hotel {
   id: string;
   Name: string;
   Address: string;
@@ -32,7 +32,7 @@ interface IHotel {
   updated_at?: string;
   Type: string;
   StarRate?: number | null;
-  images?: IHotelImage[];
+  images?: HotelImage[];
 }
 
 
@@ -52,14 +52,14 @@ interface ICardHotel {
 }
 
 
-interface IOneHotel extends IHotel {
-  convenients: Convenient[];
+interface IOneHotel extends Hotel {
+  Convenient_s: Convenient_[];
   policies: Policy[];
   type_rooms: Room[];
   rates: Rate[];
 }
 
-interface Convenient {
+interface Convenient_ {
   id: string;
   HotelId: string;
   Title: string;
@@ -77,7 +77,7 @@ interface Rate {
   // Define your rate properties here
 }
 
-interface IRoom {
+interface Room {
   id?: string;
   TypeRoomId?	: string;
   State?: string;
@@ -98,7 +98,7 @@ interface IRoom {
   quannity?: number
 }
 
-interface IHotelImage {
+interface HotelImage {
   id: string;
   HotelId: string;
   TypeRoom: string;
@@ -108,7 +108,7 @@ interface IHotelImage {
 }
 
 
-type ITypeRoom = {
+type TypeRoom = {
   id:string,
   HotelId:string,
   Name:string,
