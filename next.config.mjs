@@ -13,10 +13,19 @@ const nextConfig = {
             },
         ],
     },
-<<<<<<< HEAD
+
+    async redirects() {
+        return [
+            {
+                source: '/',
+                destination: '/app',
+                permanent: true,
+            },
+        ];
+    },
 
 
-=======
+
     async rewrites() {
         return [
             {
@@ -25,10 +34,7 @@ const nextConfig = {
             },
         ]
     },
-    images: {
-        domains: ['127.0.0.1'],
-    },
->>>>>>> VNDT082
+
 };
 
 

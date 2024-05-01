@@ -189,15 +189,26 @@ export default function Hotel() {
                   </p>
                   <p className="w-11/12 text-2xl text-gray-200  ">
                     Khám phá ngay những ưu đãi tốt nhất dành cho bạn tại Traveloka!
+
                   </p>
                 </div>
               </CarouselItem>
               {listContryImg.map((item) => (
-                <CarouselItem key={item.id} className="basis-1/4">
-                  <Image src={item.url} alt={item.url} width={300} height={120} className="rounded-xl object-cover" />
+
+                <CarouselItem
+                  key={item.id}
+                  className='basis-1/4'>
+                  <Image
+                    src={item.url}
+                    alt={item.url}
+                    width={300}
+                    height={120}
+                    className='rounded-xl object-cover'
+                  />
                 </CarouselItem>
               ))}
-            </CarouselContent >
+            </CarouselContent>
+
             {/* <CarouselPrevious className="ml-10 " />
                         <CarouselNext className="mr-10" /> */}
           </Carousel>
@@ -241,6 +252,7 @@ export default function Hotel() {
       </div>
 
       {/* form tim kiem khach san  */}
+
       <div className="w-9/12 bg-white -mt-16 mx-auto rounded-2xl shadow-md shadow-gray-400">
         <div className="bg-gray-100 w-full flex flex-row rounded-t-xl h-16 items-center">
           <p className="pl-3 text-blue-500 text-lg font-semibold"><b>Khách sạn xem gần đây</b></p>

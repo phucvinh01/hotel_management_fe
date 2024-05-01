@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 import { AuthProvider } from '@/hooks/useAuthContext';
 
@@ -17,7 +16,8 @@ export default function RootLayout({
     <html
       lang='en'
       suppressHydrationWarning={true}>
-        <body>
+      <body>
+
         <AuthProvider>
           {children}
           <Toaster />

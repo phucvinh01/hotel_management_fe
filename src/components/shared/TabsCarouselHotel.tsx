@@ -24,7 +24,7 @@ const TabsCarouselHotel = ({ title, data }: TabsCarouselHotelProps) => {
   }, [province]);
 
   return (
-    <>
+    <div>
       <p className='text-2xl font-extrabold text-black'>{title}</p>
       <Tabs
         defaultValue={data[0].name}
@@ -48,7 +48,7 @@ const TabsCarouselHotel = ({ title, data }: TabsCarouselHotelProps) => {
           </TabsContent>
         ))}
       </Tabs>
-    </>
+    </div>
   );
 };
 

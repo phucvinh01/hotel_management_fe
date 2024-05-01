@@ -19,7 +19,7 @@ import MultiSelect from './MultiSelect'
 
 const FormElements = () => {
   return (
-    <>
+    <div>
       <Breadcrumb pageName="FormElements" />
 
       <div className="grid grid-cols-1 gap-9 sm:grid-cols-2">
@@ -202,7 +202,7 @@ const FormElements = () => {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

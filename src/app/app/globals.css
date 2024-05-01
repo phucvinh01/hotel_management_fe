@@ -103,6 +103,7 @@
     @apply text-cyan-500 border-cyan-500 border rounded-3xl text-center 
   }
 
+
 .display-none{
   @apply hidden
 }
@@ -134,5 +135,6 @@
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
+
  
 }
