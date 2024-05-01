@@ -624,8 +624,8 @@ export default function HotelDetail() {
                                 <hr />
                                 {hotel.policies && hotel.policies.length > 0 ?
                                     <ul>
-                                        {hotel.policies.map((item) => (
-                                            <li>
+                                        {hotel.policies.map((item:any, index:number) => (
+                                            <li key={index}>
                                                 <div className='flex flex-row justify-start items-center'>
                                                     <img src={`/icon/${item.ImageIcon}`} className='w-8 h-8' />
                                                     <p className='text-gray-900 text-lg font-bold'><b>{item.Name}</b></p>
@@ -639,7 +639,7 @@ export default function HotelDetail() {
                                 <p className='text-xl font-bold text-gray-900 mt-5'><b>Thông tin chung</b></p>
                                 <div className='flex flex-row bg-slate-50 py-1 font-semibold overflow-hidden'>
                                     <p className='w-4/12'>Tiện ích chung:</p>
-                                    <p className='w-8/12'>{hotel.convenients?.slice(0, 4).map((item) => (<span>{item.Description[0]}, </span>))}</p>
+                                    <p className='w-8/12'>{hotel.convenients?.slice(0, 4).map((item:any,index:number) => (<span key={index}>{item.Description[0]}, </span>))}</p>
                                 </div>
 
                                 <div className='flex flex-rowpy-1 font-semibold overflow-hidden py-1'>
@@ -651,7 +651,7 @@ export default function HotelDetail() {
                                     <p className='w-4/12'>Điểm đến phổ biến:</p>
                                     <p className='w-8/12'>{diadiemlancan?.filter((item) => {
                                         return item.IsPopular == true;
-                                    }).map((jitem) => (<span>{jitem.Name}</span>))}</p>
+                                    }).map((jitem) => (<span key={jitem.id}>{jitem.Name}</span>))}</p>
                                 </div>
 
                                 <div className='flex flex-rowpy-1 font-semibold  overflow-hidden py-1'>

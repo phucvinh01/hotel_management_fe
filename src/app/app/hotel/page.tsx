@@ -1,4 +1,6 @@
+"use client"
 import Image from 'next/image';
+
 import {
   Carousel,
   CarouselContent,
@@ -509,10 +511,9 @@ export default function Hotel() {
           Khách sạn gần đây</b></h5>
         <div className=' flex flex-row my-4'>
           {provinces.map((item) => (
-            <span className={`${selectedProvinceOption === item.id
+            <span key={item.id} className={`${selectedProvinceOption === item.id
               ? 'bg-blue-700 text-white' : 'text-blue-700 bg-gray-200'
-              }
-                             p-3 rounded-xl font-bold mx-1 cursor-pointer`}
+              } p-3 rounded-xl font-bold mx-1 cursor-pointer`}
               onClick={() => handleProvinceOptionChange(item.id)}
             >{item.DisplayName}</span>
           ))}
