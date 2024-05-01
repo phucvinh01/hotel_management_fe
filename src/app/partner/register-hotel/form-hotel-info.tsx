@@ -1,15 +1,11 @@
-'use client'
-
-import { Button } from '@/components/ui/button'
+'use client';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { TabsContent } from '@/components/ui/tabs'
 import axios from 'axios'
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
-import ImageUploader, { FileData } from './upload-image'
-import ImageUpLoaderHotel from './upload-image-temp'
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { FileData } from './upload-image';
 
 type formHotelInfoProps = {
   setFormData:Dispatch<SetStateAction<IHotel | undefined>>,
