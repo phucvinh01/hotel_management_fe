@@ -28,11 +28,11 @@ const Background = ({
    
 
 
-    <body
+    <div
       style={pathname === '/app' ? bgImage : bgNotImage}
       className={cn(' bg-background font-sans antialiased', fontSans.variable)}>
       {children}
-    </body>
+    </div>
   );
 };
 
