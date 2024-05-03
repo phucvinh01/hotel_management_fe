@@ -4,7 +4,7 @@ import DefaultLayout from "@/components/admin/Layouts/DefaultLayout";
 
 export const metadata: Metadata = {
   title:
-    "Partner",
+    "TERA Partner",
   description: "This is Next.js Home for TailAdmin Dashboard Template",
 };
 
