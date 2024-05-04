@@ -173,7 +173,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               {/* Room*/}
               <SidebarLinkGroup
                 activeCondition={
-                  pathname === '/room' || pathname.includes('room')
+                  pathname === '/rooms' || pathname.includes('room')
                 }>
                 {(handleClick, open) => {
                   return (
@@ -181,7 +181,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                       <Link
                         href='/dashbroad#'
                         className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-black duration-300 ease-in-out hover:bg-graydark dark:text-white dark:hover:bg-gray-900 hover:rounded-xl ${
-                          (pathname === '/room' ||
+                          (pathname === '/rooms' ||
                             pathname.includes('room')) &&
                           'bg-graydark dark:bg-meta-4'
                         }`}
@@ -207,9 +207,9 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                         <ul className='mb-5.5 mt-4 flex flex-col gap-2.5 pl-6'>
                           <li>
                             <Link
-                              href='/dashbroad/room/all-rooms'
+                              href='/dashbroad/rooms'
                               className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
-                                pathname === '/room/all-rooms' &&
+                                pathname === '/rooms' &&
                                 'text-white'
                               }`}>
                               All Room
@@ -217,9 +217,9 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                           </li>
                           <li>
                             <Link
-                              href='/dashbroad/room/type-rooms'
+                              href='/dashbroad/rooms/type-rooms'
                               className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
-                                pathname === '/room/type-rooms' &&
+                                pathname === '/rooms/type-rooms' &&
                                 'text-white'
                               } `}>
                               Typerooms
