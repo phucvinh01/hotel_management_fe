@@ -1,9 +1,9 @@
 import { Separator } from "@/components/ui/separator";
-import { ProfileHotelForm } from "./profile-hotel-form";
+import { AccountForm } from "./account-form";
 import DefaultLayout from "@/components/admin/Layouts/DefaultLayout";
-import SettingsLayout from "./setting-layout";
+import SettingsLayout from "../setting-layout";
 
-export default function SettingsProfilePage() {
+export default function SettingsAccountPage() {
   return (
     <DefaultLayout>
     <SettingsLayout>
@@ -15,7 +15,7 @@ export default function SettingsProfilePage() {
         </p>
       </div>
       <Separator />
-      <ProfileHotelForm />
+      <AccountForm />
       </div>
     </SettingsLayout>
     </DefaultLayout>

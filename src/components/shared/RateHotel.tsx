@@ -257,7 +257,7 @@ const RateHotel = (props: IProps) => {
                                 <div className={`bg-white shadow-1 shadow-gray-500 p-3 rounded-md absolute z-10
                             top-[25px] ${dsFilterRateState ? 'block' : 'hidden'}`}>
                                     {arrFilterRate.map((item) => (
-                                        <p className={`text-lg font-bold ${item === hienFilterRate ? 'text-cyan-600'
+                                        <p key={item} className={`text-lg font-bold ${item === hienFilterRate ? 'text-cyan-600'
                                             : 'text-gray-900'} my-2 cursor-pointer select-none`}
                                             onClick={() => {
                                                 setHienFilterRate(item);
@@ -285,8 +285,8 @@ const RateHotel = (props: IProps) => {
                     {/* form them danh gia */}
 
                     {/* list danh gia */}
-                    {listRateTemp.map((item) => (
-                        <div className="flex flex-row w-full p-3 bg-white rounded-lg
+                    {listRateTemp.map((item,index) => (
+                        <div key={index} className="flex flex-row w-full p-3 bg-white rounded-lg
                         border-2 border-gray-300 mb-3">
                             <div className="w-4/12 flex flex-col justify-start items-center">
                                 <img src={`${URL_Enum.BaseURL_Avarta}${item.guest?.Avarta}`}

@@ -22,7 +22,8 @@
     "axe/text-alternatives": [
       "default",
       {
-        "frame-title": "off"
+        "frame-title": "off",
+        "image-alt": "off"
       }
     ],
     "axe/name-role-value": [
@@ -41,6 +42,13 @@
       "default",
       {
         "aria-valid-attr-value": "off"
+      }
+    ],
+    "axe/parsing": [
+      "default",
+      {
+        "duplicate-id": "off",
+        "duplicate-id-aria": "off"
       }
     ]
   }

@@ -31,6 +31,8 @@ import { useAuth } from '@/hooks/useAuthContext';
 import { getUserInfo, updateUserInfo } from '@/service/auth.service';
 import { useEffect, useState } from 'react';
 import splitDate from '@/lib/splitDate';
+import { toast } from '@/components/ui/use-toast';
+import { getMonths, getThirtyOneDays, getYears } from '@/lib/dateNow';
 
 
 const profileFormSchema = z.object({
@@ -60,15 +62,9 @@ const profileFormSchema = z.object({
       required_error: 'Căn cước công dân phải là 12 ký tự.',
     })
     .min(12)
-    .max(12),
+    .max(12)
+  })
 
-      message: 'Username must be at least 2 characters.',
-    })
-    .max(30, {
-      message: 'Username must not be longer than 30 characters.',
-    }),
-
-});
 
 type ProfileFormValues = z.infer<typeof profileFormSchema>;
 
@@ -110,7 +106,7 @@ export function ProfileForm() {
   });
 
 
-  function onSubmit(data: ProfileFormValues) {
+  async function onSubmit(data: ProfileFormValues) {
 
     toast({
       title: 'You submitted the following values:',
@@ -177,10 +173,9 @@ export function ProfileForm() {
             <FormItem>
               <FormLabel>Tên đầy đủ</FormLabel>
               <FormControl>
-
+                <Input
                 defaultValue={user?.name}
 
-                  placeholder='shadcn'
                   {...field}
                 />
               </FormControl>
@@ -193,7 +188,6 @@ export function ProfileForm() {
         />
 
         <div className='flex gap-4 justify-between'>
-
           <FormField
             control={form.control}
             name='sex'
@@ -326,6 +320,9 @@ export function ProfileForm() {
                 />
               </FormControl>
               <FormDescription>Căn cước công dân gắn chíp</FormDescription>
+              </FormItem>
+          )
+        }/>
 
         <FormField
           control={form.control}

@@ -139,8 +139,10 @@ export default function HotelDetail() {
         DanhGia: useRef<HTMLDivElement>(null),
     };
 
+   
+
     const handleGoToElement = (elementKey: string) => {
-        const targetElementRef = targetElementRefs[elementKey];
+        const targetElementRef = targetElementRefs[elementKey] ;
         if (targetElementRef.current) {
             targetElementRef.current.scrollIntoView({ behavior: 'smooth' });
         }
@@ -253,7 +255,7 @@ export default function HotelDetail() {
                                                 onClick={() => handleStateModalListImagesChange(true, index)}
                                                 className='w-1/2 rounded-lg h-[137px] p-1' />
                                             : null
-                                        : <div className='w-1/2 scale-[0.95] hover:scale-100 rounded-lg h-[137px] relative'
+                                        : <div key={item.id} className='w-1/2 scale-[0.95] hover:scale-100 rounded-lg h-[137px] relative'
                                             onClick={() => handleStateModalListImagesChange(true, index)}>
                                             <div className='w-full rounded-lg h-[137px] absolute z-1
                                      bg-black opacity-70 flex justify-center items-center'>
@@ -266,7 +268,7 @@ export default function HotelDetail() {
                                 ))
                                     : hotel?.images?.map((item, index) => (
                                         item.FileName && item.TypeRoom != 'None;Ảnh bìa' ?
-                                            <img loading='lazy' src={` ${URL_Enum.BaseURL_Image}/${item.FileName}`}
+                                            <img key={index} loading='lazy' src={` ${URL_Enum.BaseURL_Image}/${item.FileName}`}
                                                 onClick={() => handleStateModalListImagesChange(true, index)}
                                                 className='w-1/2 rounded-lg h-[137px] p-1' />
                                             : null))}
@@ -295,7 +297,7 @@ export default function HotelDetail() {
                                 {/* them dia chi lan can */}
                                 <ul className='w-full grid lg:grid-cols-2'>
                                     {diadiemlancan.slice(0, 6).map((item) => (
-                                        <li className='w-full flex flex-row items-center p-1 overflow-hidden text-gray-900
+                                        <li key={item.id} className='w-full flex flex-row items-center p-1 overflow-hidden text-gray-900
                                         font-semibold'>
                                             <div className='w-9/12 flex flex-row items-center justify-start'>
                                                 <img src={`/icon/${item.ImageIcon}`} className='w-7 h-7 mr-2' />
@@ -317,7 +319,7 @@ export default function HotelDetail() {
                     cursor-pointer'>Xem thêm ⟩</span>
                             <ul>
                                 {hotel?.convenients?.slice(0, 6).map((item) => (
-                                    <li className='font-semibold text-gray-900 my-2'><p className='flex 
+                                    <li key={item.id} className='font-semibold text-gray-900 my-2'><p className='flex 
                             justify-start items-center'>
                                         <span>
                                             <img loading='lazy' className='w-5 h-5 rounded-sm mr-3' src={`/icon/${item.ImageIcon}`} />
@@ -432,7 +434,7 @@ export default function HotelDetail() {
                                     <div className={`bg-white shadow-1 shadow-gray-500 p-3 rounded-md absolute z-10
                             top-[50px] ${dsHienThiGiaState ? 'block' : 'hidden'}`}>
                                         {arrHienThiGia.map((item) => (
-                                            <p className={`text-lg font-bold ${item === hienThiGia ? 'text-cyan-600'
+                                            <p key={item} className={`text-lg font-bold ${item === hienThiGia ? 'text-cyan-600'
                                                 : 'text-gray-900'} my-2 cursor-pointer select-none`}
                                                 onClick={() => {
                                                     setHienThiGia(item);
@@ -490,7 +492,7 @@ export default function HotelDetail() {
                                 {diadiemlancan.filter((item) => {
                                     return item.IsPopular == false;
                                 }).map((jitem) => (
-                                    <li className='py-2'>
+                                    <li key={jitem.id} className='py-2'>
                                         <div className='flex felx-row justify-start items-center  cursor-pointer'>
                                             <img src={`/icon/${jitem.ImageIcon}`} className='w-8 h-8 mr-2' />
                                             <p className='font-semibold'>{jitem.Name}</p>
@@ -506,7 +508,7 @@ export default function HotelDetail() {
                                 {diadiemlancan.filter((item) => {
                                     return item.IsPopular == true;
                                 }).map((jitem) => (
-                                    <li className='py-2'>
+                                    <li key={jitem.id} className='py-2'>
                                         <div className='flex felx-row justify-start items-center  cursor-pointer'>
                                             <img src={`/icon/${jitem.ImageIcon}`} className='w-8 h-8 mr-2' />
                                             <p className='font-semibold'>{jitem.Name}</p>
@@ -565,7 +567,7 @@ export default function HotelDetail() {
                         <p className='text-xl text-gray-900'><b>Tất cả tiện ích</b></p>
                         <div className='w-full flex flex-row flex-wrap'>
                             {getListTypeImage().slice(0, 5).map((item) => (
-                                <div className='w-1/2 lg:w-1/5 rounded-md p-2'>
+                                <div key={item.FirstImage} className='w-1/2 lg:w-1/5 rounded-md p-2'>
                                     <div className='w-full relative cursor-pointer'
                                         onClick={() => handleStateModalListImagesChange(true, 0)} >
                                         <img src={`${URL_Enum.BaseURL_Image}${item.FirstImage}`}
@@ -581,7 +583,7 @@ export default function HotelDetail() {
                             <ul className='text-lg font-semibold text-gray-900 ml-5
                             grid grid-cols-2 gap-1 lg:grid-cols-3 w-full'>
                                 {hotel.convenients?.map((item) => (
-                                    <li>
+                                    <li key={item.id}>
                                         <div className='w-full flex flex-col'>
                                             <div className='flex flex-row w-full justify-start items-center'>
                                                 <img src={`/icon/${item.ImageIcon}`} className='w-8 h-8' />
@@ -589,7 +591,7 @@ export default function HotelDetail() {
                                             </div>
                                             <ul className='list-disc pl-5'>
                                                 {item.Description?.map((jitem) => (
-                                                    <li>{jitem}</li>
+                                                    <li key={jitem}>{jitem}</li>
                                                 ))}
                                             </ul>
                                         </div>

@@ -1,4 +1,3 @@
-import Hotel from "@/app/hotel/page";
 import URL_Enum from "@/axios/URL_Enum";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -84,7 +83,7 @@ const DetailRoom = (props: IProps) => {
                         </div>
                         <div className="flex flex-row">
                             {listImage.slice(1, 4).map((item, index) => (
-                                <img src={`${URL_Enum.BaseURL_Image}${item.FileName}`}
+                                <img key={index} src={`${URL_Enum.BaseURL_Image}${item.FileName}`}
                                     onClick={() => handleShowModal()}
                                     className={`w-4/12 h-20 ${index == 1 ? 'mx-2' : ''} my-2 cursor-pointer`} />))}
                         </div>
@@ -195,7 +194,7 @@ const DetailRoom = (props: IProps) => {
                             </div>
                             <hr />
                             {rooms ? rooms.slice(0, 2).map((item) => (
-                                <div className="flex flex-row flex-wrap my-3">
+                                <div key={item.id} className="flex flex-row flex-wrap my-3">
                                     <div className="w-1/2 lg:w-4/12  flex flex-col justify-start items-start">
                                         <div className="flex flex-row">
                                             <img src={`/icon/buaansang.webp`} className={`${item.NoMoking ? 'opacity-100' : 'opacity-50'} w-6 h-6 text-gray-300`} />
@@ -349,7 +348,7 @@ const DetailRoom = (props: IProps) => {
             </div>
             {/* //modal chi tiet phong */}
 
-            <div className={`w-full ${modalState ? 'block' : 'hidden'} h-full flex z-999999
+            <div className={`w-full ${modalState ? 'block' : 'hidden'} h-full flex z-[999999]
           fixed inset-0 justify-center items-center`} style={{ background: 'rgb(0 0 0 / 85%)' }}>
                 <div className="w-9/12 h-[90%] flex flex-row rounded-2xl
                 bg-black opacity-100">
@@ -491,7 +490,7 @@ const DetailRoom = (props: IProps) => {
                             <ul className="text-lg font-semibold text-gray-900 ml-5
                             grid grid-cols-2 gap-1">
                                 {convenientBathRoom.map((item) =>
-                                    (<li className="list-disc">{item}</li>))}
+                                    (<li key={item} className="list-disc">{item}</li>))}
                             </ul>
                             <hr />
                             {/* tien nghi phong */}
@@ -499,7 +498,7 @@ const DetailRoom = (props: IProps) => {
                             <ul className="text-lg font-semibold text-gray-900 ml-5
                             grid grid-cols-2 gap-1">
                                 {convenientRoom.map((item) =>
-                                    (<li className="list-disc">{item}</li>))}
+                                    (<li key={item} className="list-disc">{item}</li>))}
                             </ul>
                             <hr />
                             {/* ve phong nay */}

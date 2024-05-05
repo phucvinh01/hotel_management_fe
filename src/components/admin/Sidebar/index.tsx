@@ -68,22 +68,12 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
   return (
     <aside
       ref={sidebar}
-      className={`absolute left-0 top-0 z-9999 flex h-screen flex-col overflow-y-hidden
+      className={`absolute left-0 top-0 z-[999]9 flex h-screen flex-col overflow-y-hidden
        bg-white duration-300 ease-linear dark:bg-black lg:static lg:translate-x-0 
        ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
        ${showTitle ? 'w-72.5' : 'w-24'}`}>
       {/* <!-- SIDEBAR HEADER --> */}
-      <div className='flex items-center justify-between gap-2 px-3 py-5.5 lg:py-6.5'>
-        <Link href='/dashbroad/'>
-          <Image
-            width={176}
-            height={32}
-            src={'/images/logo/logo.svg'}
-            alt='Logo'
-            priority
-          />
-        </Link>
-
+      <div className='flex items-center justify-between gap-2 px-3 py-5.5 lg:py-6.5 overflow-hidden  '>
         <Button
           ref={trigger}
           onClick={() => setSidebarOpen(!sidebarOpen)}
@@ -106,13 +96,13 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
       </div>
       {/* <!-- SIDEBAR HEADER --> */}
 
-      <div className='no-scrollbar flex flex-col  overflow-y-auto duration-300 ease-linear'>
+      <div className=' flex flex-col   duration-300 ease-linear'>
         {/* <!-- Sidebar Menu --> */}
         <nav className='mt-5 px-4 py-4 lg:mt-9 lg:px-3'>
           {/* <!-- Menu Group --> */}
           <div>
             <div
-              className='flex hover:cursor-pointer'
+              className='flex hover:cursor-pointer mb-6'
               onClick={() => handleShowTile()}>
               <h3
                 className='w-full mb-4 ml-4 text-sm font-semibold text-bodydark2
@@ -250,7 +240,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 <Link
                   href='/dashbroad/customer'
                   className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-black duration-300 ease-in-out hover:bg-graydark dark:text-white dark:hover:bg-gray-900 hover:rounded-xl ${
-                    pathname.includes('settings') &&
+                    pathname.includes('customer') &&
                     'bg-graydark dark:bg-meta-4'
                   }`}>
                 <Users2Icon />
@@ -275,9 +265,9 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               </li>
               <li>
                 <Link
-                  href='/dashbroad/setting'
+                  href='/dashbroad/settings'
                   className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-black duration-300 ease-in-out hover:bg-graydark dark:text-white dark:hover:bg-gray-900 hover:rounded-xl ${
-                    pathname.includes('setting') && 'bg-graydark dark:bg-meta-4'
+                    pathname.includes('settings') && 'bg-graydark dark:bg-meta-4'
                   }`}>
                  <SettingsIcon />
                   <span className={`${showTitle ? 'block' : 'hidden'}`}>

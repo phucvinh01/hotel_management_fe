@@ -1,3 +1,4 @@
+import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { ApexOptions } from "apexcharts";
 import React, { useState } from "react";
 import ReactApexChart from "react-apexcharts";
@@ -63,13 +64,12 @@ const ChartThree: React.FC = () => {
   handleReset;
 
   return (
-    <div className="rounded-sm border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 ">
+    <Card >
+      <CardContent className="p-4">
       <div className="mb-3 justify-between gap-4 sm:flex">
-        <div>
-          <h5 className="text-xl font-semibold text-black dark:text-white">
+          <CardTitle >
             Room Booking Chart
-          </h5>
-        </div>
+          </CardTitle>
         <div>
           <div className="relative z-20 inline-block">
             <select
@@ -77,10 +77,10 @@ const ChartThree: React.FC = () => {
               id=""
               className="relative z-20 inline-flex appearance-none bg-transparent py-1 pl-3 pr-8 text-sm font-medium outline-none"
             >
-              <option value="" className="dark:bg-boxdark">
+              <option value="" className="dark:bg-black">
                 Monthly
               </option>
-              <option value="" className="dark:bg-boxdark">
+              <option value="" className="dark:bg-black">
                 Yearly
               </option>
             </select>
@@ -156,7 +156,9 @@ const ChartThree: React.FC = () => {
           </div>
         </div>
       </div>
-    </div>
+      </CardContent>
+
+    </Card>
   );
 };
 

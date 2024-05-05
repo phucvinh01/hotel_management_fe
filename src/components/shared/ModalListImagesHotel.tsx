@@ -83,7 +83,7 @@ const ModallistImagessHotel = (props: IProps) => {
     }
     return (
         <div className={`w-full ${modalState ? 'block' : 'hidden'} h-full flex
-        z-99999 fixed inset-0 justify-center items-center`} style={{ background: 'rgb(0 0 0 / 85%)' }}>
+        z-[99999] fixed inset-0 justify-center items-center`} style={{ background: 'rgb(0 0 0 / 85%)' }}>
             <div className="w-9/12 h-[95%] flex flex-col rounded-2xl
                 bg-black opacity-100">
                 <div className="flex flex-row w-full relative p-3">
