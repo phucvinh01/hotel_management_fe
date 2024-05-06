@@ -273,3 +273,24 @@ interface IHotelImage {
   created_at: string | null;
   updated_at: string | null;
 }
+
+
+type HotelResponse = {
+  id: string;
+  Name: string;
+  Address: string;
+  Telephone: string;
+  Description: string;
+  LocationDetail: string;
+  IsActive: number;
+  TimeCheckIn: string;
+  TimeCheckOut: string;
+  created_at: string | null;
+  updated_at: string | null;
+  Type: string;
+  StarRate: number;
+  Province_Id: string | null;
+  number_of_room_types: string;
+  total_rooms_state_0: string
+};
+

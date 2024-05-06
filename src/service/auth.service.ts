@@ -87,6 +87,16 @@ export const getMe = async (id: string): Promise<IUser | undefined> => {
     console.log(error);
   }
 };
+export const getAdmin = async (id: string): Promise<IAdministratorHotel | undefined> => {
+  try {
+    const data = await axios.get(`/me?id=${id}`);
+    if (data.status === 200) {
+      return data.data;
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 export const getUserInfo = async (id: string ): Promise<InfoUser | undefined | null> =>{
 try {

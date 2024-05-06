@@ -8,12 +8,17 @@ import {
   useEffect,
   useState,
 } from 'react';
-import { getMe, loginWithAdministrator, login as SignIn } from '@/service/auth.service';
+import {
+  getAdmin,
+  getMe,
+  loginWithAdministrator,
+  login as SignIn,
+} from '@/service/auth.service';
 import { useToast } from '@/components/ui/use-toast';
 
 interface IAuthContext {
   user: IUser | null;
-  admin:IAdministratorHotel | undefined;
+  admin: IAdministratorHotel | undefined;
   login: (username: string, password: string, type: string) => void;
   loginAdministrator: (email: string, password: string) => void;
   logout: () => void;
@@ -21,10 +26,10 @@ interface IAuthContext {
 
 const AuthContext = createContext<IAuthContext>({
   user: null,
-  admin:undefined,
+  admin: undefined,
   login: () => {},
   logout: () => {},
-  loginAdministrator: () => {}
+  loginAdministrator: () => {},
 });
 
 type Props = {
@@ -42,20 +47,38 @@ export function AuthProvider({ children }: Props) {
     return res;
   };
 
+  const getAdminInfo = async (id:string) => {
+    const res = await getAdmin(id);
+    return res;
+  }
+
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const isUser = localStorage.getItem('isUser');
+    const isAdmin = localStorage.getItem('isAdmin');
     const fetchUserInfo = async () => {
-      if (token) {
-        const res = await getMeInfo(token as string);
+      if (isUser) {
+        const res = await getMeInfo(isUser as string);
         if (res) {
           console.log('setItem');
-          localStorage.setItem('token', res.id);
-          setUser(res)
+          localStorage.setItem('isUser', res.id);
+          setUser(res);
         }
       } else {
         setUser(null);
         console.log('removeItem');
-        localStorage.removeItem('token');
+        localStorage.removeItem('isUser');
+      }
+
+        if (isAdmin) {
+        const res = await getAdminInfo(isAdmin as string);
+        if (res) {
+          console.log('setItem');
+          localStorage.setItem('isAdmin', res.id);
+          setAdmin(res);
+        }
+      } else {
+        setAdmin(undefined);
+        localStorage.removeItem('isAdmin');
       }
     };
 
@@ -66,20 +89,22 @@ export function AuthProvider({ children }: Props) {
     fetchUserInfo();
   }, []);
 
-  const loginAdministrator = async(
-    email:string,password:string
-  ) => {
-    const res = await loginWithAdministrator({email:email,password:password})
+  const loginAdministrator = async (email: string, password: string) => {
+    const res = await loginWithAdministrator({
+      email: email,
+      password: password,
+    });
 
-    if(res?.id_hotel === 'underfine') {
-      setAdmin(res)
-      router.push("/app/partner/register-hotel")
+    if (res?.id_hotel === 'underfine') {
+      setAdmin(res);
+      router.push('/app/partner/register-hotel');
+      localStorage.setItem('isAdmin', res.id);
+    } else {
+      setAdmin(res);
+      router.push('/dashbroad');
+      localStorage.setItem('isAdmin', res?.id as string);
     }
-    else {
-      setAdmin(res)
-      router.push("/dashbroad")
-    }
-  }
+  };
 
   const login = async (
     emailOrPhone: string,
@@ -114,7 +139,7 @@ export function AuthProvider({ children }: Props) {
           title: 'Đăng nhập thành công',
         });
         setUser(respone);
-        localStorage.setItem('token', respone.id);
+        localStorage.setItem('isUser', respone.id);
       }
     } else {
       toast({
@@ -125,9 +150,18 @@ export function AuthProvider({ children }: Props) {
   };
 
   const logout = () => {
-     router.replace("/")
-    localStorage.removeItem('token');
-    setUser(null)
+    const isUser = localStorage.getItem('isUser');
+    const isAdmin = localStorage.getItem('isAdmin');
+    if (isUser) {
+      router.replace('/');
+      localStorage.removeItem('isUser');
+      setUser(null);
+    }
+    if (isAdmin) {
+      router.replace('/app/partner');
+      localStorage.removeItem('isAdmin');
+      setAdmin(undefined);
+    }
   };
 
   const authContextValue: IAuthContext = {
@@ -135,7 +169,7 @@ export function AuthProvider({ children }: Props) {
     admin,
     login,
     logout,
-    loginAdministrator
+    loginAdministrator,
   };
 
   return (

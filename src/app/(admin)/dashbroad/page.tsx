@@ -1,6 +1,8 @@
 import ECommerce from "@/components/admin/Dashboard/E-commerce";
 import { Metadata } from "next";
 import DefaultLayout from "@/components/admin/Layouts/DefaultLayout";
+import { getHotel } from "@/service/hotel.service";
+import { useAuth } from "@/hooks/useAuthContext";
 
 export const metadata: Metadata = {
   title:
@@ -10,7 +12,8 @@ export const metadata: Metadata = {
 
 
 
-export default function Home() {
+export default async function Home() {
+
   return (
     <div>
       <DefaultLayout>

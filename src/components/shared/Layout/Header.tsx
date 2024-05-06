@@ -15,6 +15,7 @@ const Header = () => {
   const [scrollY, setScrollY] = useState<number>(0);
   const [scroll, setScroll] = useState<boolean>(false);
   const pathname = usePathname();
+  const {user, logout} = useAuth()
   //neu usingScrollEvent=true thi moi co su dung event sroll
   //de check sroll y de set background
   //neu usingScrollEvent=flase thi mac dinh background=mau trang
@@ -38,13 +39,6 @@ const Header = () => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, [scrollY, pathname]);
-
-
-  const { user } = useAuth();
-
-  console.log(pathname);
-
-
 
   return pathname !== '/app/partner' ? (
     <header
@@ -78,7 +72,7 @@ const Header = () => {
             <Link href={'/app/partner'}>Hợp tác với chúng tôi</Link>
           </Button>
           {user ? (
-            <UserNav />
+            <UserNav user={user} logout={logout} />
           ) : (
             <div className='flex gap-1'>
               <DialogSignIn

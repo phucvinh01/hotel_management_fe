@@ -12,14 +12,15 @@ import {
   DropdownMenuTrigger,
 } from '../ui/dropdown-menu';
 import { Button } from '../ui/button';
-import { useAuth } from '@/hooks/useAuthContext';
 import Link from 'next/link';
 
-export function UserNav() {
-  const { user, logout } = useAuth();
 
-  
+type UserNavProps = {
+  user: any,
+  logout: () => void ;
+}
 
+export function UserNav({user,logout}:UserNavProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -36,7 +37,7 @@ export function UserNav() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent
-        className='w-56'
+        className='w-56 dark:bg-black dark:text-white text-black bg-white z-[9999999]'
         align='end'
         forceMount>
         <DropdownMenuLabel className='font-normal'>

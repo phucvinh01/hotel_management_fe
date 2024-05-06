@@ -118,6 +118,18 @@ export const insertStaff = async (HotelId:string, StaffId:string): Promise<Inser
 };
 
 
+export const getHotel = async (id:string):Promise<HotelResponse | undefined> => {
+  try {
+    const response = await axios.get<HotelResponse>(`/hotel/get-hotel?id=${id}`);
+    if (response.status === 200) {
+      return response.data;
+    }
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+
 
 
 
