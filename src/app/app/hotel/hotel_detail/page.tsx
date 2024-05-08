@@ -705,7 +705,7 @@ export default function HotelDetail() {
                         <p className='text-2xl font-semibold text-gray-900'>
                             <b>Không tìm thấy những gì bạn cần?</b></p>
                         <button className='px-3 py-4 text-2xl font-bold text-white
-                            bg-blue-400 rounded-lg my-3'>Tìm cơ sở lưu trú khác tại {hotel.province.DisplayName}</button>
+                            bg-blue-400 rounded-lg my-3'>Tìm cơ sở lưu trú khác tại {hotel.province?.DisplayName}</button>
                     </div>
 
 

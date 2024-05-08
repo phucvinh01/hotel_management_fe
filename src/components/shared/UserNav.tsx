@@ -53,7 +53,7 @@ export function UserNav({user,logout}:UserNavProps) {
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem>
-            <Link href={'/me'}>Profile</Link>
+            <Link href={'/app/me'}>Profile</Link>
             <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
           </DropdownMenuItem>
           <DropdownMenuItem>

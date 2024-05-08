@@ -164,14 +164,13 @@ const DialogSignIn = ({ scroll, title }: DialogSignInProps) => {
     <Dialog onOpenChange={setClosed}>
       <DialogTrigger onClick={() => setOpen(true)}>
         <div
-          className={`h-10 px-4 py-2 inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 button-outline ${
-            scroll ? 'text-black' : 'text-white'
-          } ${title === 'Đăng ký' && 'button-primary'}`}>
+          className={`text-black h-10 px-4 py-2 inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 button-outline 
+           ${title === 'Đăng ký' && 'button-primary'}`}>
           {title === 'Đăng nhập' && <User className='mr-2 h-4 w-4' />}
           {title}
         </div>
       </DialogTrigger>
-      <DialogContent className='w-[400px]'>
+      <DialogContent className='w-[400px] bg-white'>
         <DialogHeader>
           <DialogTitle>Đăng nhập / Đăng ký</DialogTitle>
           <DialogDescription className='flex flex-col gap-4 py-4 px-1 justify-center'>

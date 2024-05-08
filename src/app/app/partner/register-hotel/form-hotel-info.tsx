@@ -22,7 +22,6 @@ const [provinces, setProvinces] = useState([]);
 
 
   useEffect(() => {
-    // Gọi API để lấy danh sách tỉnh/thành phố
     axios.get('https://vnprovinces.pythonanywhere.com/api/provinces/?is_border=false&is_coastal=false&basic=true&limit=100')
       .then(response => {
         setProvinces(response.data.results);
@@ -33,7 +32,6 @@ const [provinces, setProvinces] = useState([]);
   }, []);
 
   useEffect(() => {
-    // Nếu tỉnh được chọn, gọi API để lấy danh sách huyện/quận
     if (selectedProvince) {
       axios.get(`https://vnprovinces.pythonanywhere.com/api/provinces/${selectedProvince}/?basic=true
 `)
@@ -124,7 +122,7 @@ const [provinces, setProvinces] = useState([]);
                     id='strees'
                     type='text'
                     value={data?.Address}
-                 onChange={(e) => setFormData((prev) => ({ ...prev!, Address:`${e.target.value}, ${selectedDistrict}, ${selectedProvince}` }))}
+                  onChange={(e) => setFormData((prev) => ({ ...prev!, Address:`${e.target.value}` }))}
                   />
                 </div>
               </div>

@@ -6,7 +6,7 @@ const style = {
   }
 const page = () => {
   return (
-    <div style={style} className="min-h-screen flex justify-center items-center px-10">
+    <div  className="min-h-screen flex justify-center items-center px-10">
       <RegisterNewHotelForm/>
 
       </div>
