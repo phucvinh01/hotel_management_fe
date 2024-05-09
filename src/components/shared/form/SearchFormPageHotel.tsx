@@ -163,7 +163,7 @@ const SearchFormPageHotel = () => {
               {/* modal hien thi danh sach tinh thanh */}
               <div
                 id='dsTinh'
-                className={`${dsTinhState} bg-white rounded-lg w-full absolute z-10 shadow-md shadow-cyan-700`}>
+                className={`${dsTinhState} bg-white rounded-3xl w-full absolute z-10 shadow-md shadow-cyan-700`}>
                 {/* lich su tim kiem */}
                 <div className='bg-gray-100 w-full flex flex-row rounded-t-xl h-16 items-center'>
                   <p className='pl-3 text-blue-500 text-lg font-semibold'>
@@ -274,7 +274,7 @@ const SearchFormPageHotel = () => {
                 {/* modal hien thi danh sach so dem thue phong */}
                 <div
                   id='dsSoDem'
-                  className={`${dsDemState} bg-white rounded-lg w-11/12 mx-auto absolute z-10 shadow-md shadow-cyan-700`}>
+                  className={`${dsDemState} bg-white rounded-3xl w-11/12 mx-auto absolute z-10 shadow-md shadow-cyan-700`}>
                   {/* chonj dem - do du lieu vao day*/}
                   <div
                     className='row-modal-ds-tinh'
@@ -363,84 +363,84 @@ const SearchFormPageHotel = () => {
                 {/* modal hien thi chon so luong thanh vien */}
                 <div
                   id='soThanhVien'
-                  className={`${dsThanhVienState} bg-white rounded-lg w-11/12 mx-auto absolute z-10 shadow-md shadow-cyan-700`}>
+                  className={`${dsThanhVienState} bg-white rounded-3xl w-11/12 mx-auto absolute z-10 shadow-md shadow-cyan-700`}>
                   {/* chonj dem - do du lieu vao day*/}
-                  <div className='bg-white w-full flex flex-row h-16 rounded-lg items-center'>
+                  <div className='bg-white w-full flex flex-row h-16 rounded-3xl items-center'>
                     <div className='flex flex-row w-full justify-center items-center'>
                       <p className='pl-3 w-9/12 text-gray-500 text-lg font-semibold'>
                         <b>Người lớn</b>
                       </p>
                       <button
-                        className='border-2 border-gray-400 bg-cyan-50 h-12 w-12 rounded-lg mx-1'
+                        className='border-2 border-gray-400 bg-cyan-50 h-12 w-12 rounded-3xl mx-1'
                         onClick={() => handleSubstractNguoiLon(event)}>
                         -
                       </button>
                       <input
-                        className='border-2 border-gray-400 bg-white h-12 w-12 rounded-lg mx-1 
+                        className='border-2 border-gray-400 bg-white h-12 w-12 rounded-3xl mx-1 
                                             text-center focus:outline-gray-400'
                         readOnly
                         type='text'
                         defaultValue={valueSoNguoiLon}
                       />
                       <button
-                        className='border-2 border-gray-400 bg-cyan-50 h-12 w-12 rounded-lg mx-1'
+                        className='border-2 border-gray-400 bg-cyan-50 h-12 w-12 rounded-3xl mx-1'
                         onClick={() => handleAddNguoiLon(event)}>
                         +
                       </button>
                     </div>
                   </div>
 
-                  <div className='bg-white w-full flex flex-row h-16 rounded-lg items-center'>
+                  <div className='bg-white w-full flex flex-row h-16 rounded-3xl items-center'>
                     <div className='flex flex-row w-full justify-center items-center'>
                       <p className='pl-3 w-9/12 text-gray-500 text-lg font-semibold'>
                         <b>Trẻ em</b>
                       </p>
                       <button
-                        className='border-2 border-gray-400 bg-cyan-50 h-12 w-12 rounded-lg mx-1'
+                        className='border-2 border-gray-400 bg-cyan-50 h-12 w-12 rounded-3xl mx-1'
                         onClick={() => handleSubstractTreEm(event)}>
                         -
                       </button>
                       <input
-                        className='border-2 border-gray-400 bg-white h-12 w-12 rounded-lg mx-1 
+                        className='border-2 border-gray-400 bg-white h-12 w-12 rounded-3xl mx-1 
                                             text-center focus:outline-gray-400'
                         readOnly
                         type='text'
                         defaultValue={valueSoTreEm}
                       />
                       <button
-                        className='border-2 border-gray-400 bg-cyan-50 h-12 w-12 rounded-lg mx-1'
+                        className='border-2 border-gray-400 bg-cyan-50 h-12 w-12 rounded-3xl mx-1'
                         onClick={() => handleAddTreEm(event)}>
                         +
                       </button>
                     </div>
                   </div>
 
-                  <div className='bg-white w-full flex flex-row h-16 rounded-lg items-center'>
+                  <div className='bg-white w-full flex flex-row h-16 rounded-3xl items-center'>
                     <div className='flex flex-row w-full justify-center items-center'>
                       <p className='pl-3 w-9/12 text-gray-500 text-lg font-semibold'>
                         <b>Số phòng</b>
                       </p>
                       <button
-                        className='border-2 border-gray-400 bg-cyan-50 h-12 w-12 rounded-lg mx-1'
+                        className='border-2 border-gray-400 bg-cyan-50 h-12 w-12 rounded-3xl mx-1'
                         onClick={() => handleSubstractPhong(event)}>
                         -
                       </button>
                       <input
-                        className='border-2 border-gray-400 bg-white h-12 w-12 rounded-lg mx-1 
+                        className='border-2 border-gray-400 bg-white h-12 w-12 rounded-3xl mx-1 
                                             text-center focus:outline-gray-400'
                         readOnly
                         type='text'
                         defaultValue={valueSoPhong}
                       />
                       <button
-                        className='border-2 border-gray-400 bg-cyan-50 h-12 w-12 rounded-lg mx-1'
+                        className='border-2 border-gray-400 bg-cyan-50 h-12 w-12 rounded-3xl mx-1'
                         onClick={() => handleAddPhong(event)}>
                         +
                       </button>
                     </div>
                   </div>
                   <div
-                    className='bg-white w-full flex flex-row h-16 rounded-lg justify-end items-center
+                    className='bg-white w-full flex flex-row h-16 rounded-3xl justify-end items-center
                                     pr-6'>
                     <button
                       className='font-bold text-cyan-500 text-lg'
@@ -458,7 +458,7 @@ const SearchFormPageHotel = () => {
                 </h1>
                 <button
                   className='w-full bg-gradient-to-r from-blue-600 via-blue-500 to-sky-600 
-                                flex justify-center items-center h-12 rounded-lg'>
+                                flex justify-center items-center h-12 rounded-3xl'>
                   <svg
                     xmlns='http://www.w3.org/2000/svg'
                     fill='none'

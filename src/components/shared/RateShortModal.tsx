@@ -19,7 +19,7 @@ const RateShortModal = (props: IProps) => {
                     <div className="flex flex-row w-full p-3 mb-3 pb-5 justify-start items-start relative border-b
                      border-gray-500 bg-slate-100 rounded-t-lg">
                         <p className="font-bold text-xl text-gray-900">Đánh giá từ người dùng</p>
-                        <button className="absolute right-5 top-5 bg-red-400 rounded-sm" onClick={() => {
+                        <button className="absolute right-5 top-5 bg-red-400 rounded-3xl" onClick={() => {
                             setRateShortModaState(false);
                         }}>
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="text-gray-900 w-8 h-8">
@@ -44,7 +44,7 @@ const RateShortModal = (props: IProps) => {
                             <p className="font-semibold text-lg w-full">{rateItem.Description}</p>
                         </div>
                     </div>
-                    <button className="absolute bottom-3 right-3 p-3 font-bold text-white bg-cyan-500 rounded-md"
+                    <button className="absolute bottom-3 right-3 p-3 font-bold text-white bg-cyan-500 rounded-3xl"
                         onClick={() => { setRateShortModaState(!rateShortModaState) }}>Xem tất cả đánh giá</button>
                 </div>
             </div>

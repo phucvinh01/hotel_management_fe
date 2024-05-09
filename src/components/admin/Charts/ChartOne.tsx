@@ -153,7 +153,7 @@ const ChartOne: React.FC = () => {
           </div>      
         </div>
         <div className="flex w-full max-w-45 justify-end">
-          <div className="inline-flex items-center rounded-md bg-whiter p-1.5 dark:bg-meta-4">
+          <div className="inline-flex items-center rounded-3xl bg-whiter p-1.5 dark:bg-meta-4">
             <Button >
               Day
             </Button>

@@ -13,12 +13,14 @@ import {
   DialogClose,
 } from '@/components/ui/dialog';
 import { Button } from '../ui/button';
-import { FacebookIcon, User } from 'lucide-react';
+import { FacebookIcon, LoaderIcon, User } from 'lucide-react';
 import validateInputSignIn from '@/lib/validateInputSignIn';
 import { checkExistEmail, checkExistPhone } from '@/service/auth.service';
 import { useToast } from '../ui/use-toast';
 import { register as Register, login as SignIn } from '@/service/auth.service';
 import { useAuth } from '@/hooks/useAuthContext';
+import validateEmail from '@/lib/validateEmail';
+import validatePhoneNumberVN from '@/lib/validatePhoneNumberVN';
 
 type DialogSignInProps = {
   scroll: boolean;
@@ -30,7 +32,9 @@ const DialogSignIn = ({ scroll, title }: DialogSignInProps) => {
   const [register, setRegister] = useState<boolean>(false);
   const [login, setLogin] = useState<boolean>(false);
 
-  const { login : SignIn, user } = useAuth();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const { login: SignIn, user } = useAuth();
 
   const [open, setOpen] = useState<boolean>(false);
 
@@ -45,12 +49,14 @@ const DialogSignIn = ({ scroll, title }: DialogSignInProps) => {
   const handleClicked = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
+    setIsLoading(true);
     const check = validateInputSignIn(inputField);
     if (check === 'Not') {
       toast({
         variant: 'destructive',
         title: 'Vui lòng nhập đúng email hoặc số điện thoại',
       });
+      setIsLoading(false);
       return;
     }
     if (check === 'Email') {
@@ -61,6 +67,7 @@ const DialogSignIn = ({ scroll, title }: DialogSignInProps) => {
       } else {
         setLogin(true);
       }
+      setIsLoading(false);
     }
     if (check === 'Phone') {
       setMethod('Phone');
@@ -72,48 +79,59 @@ const DialogSignIn = ({ scroll, title }: DialogSignInProps) => {
       } else {
         setLogin(true);
       }
+      setIsLoading(false);
     }
   };
 
   const hanldeRegister = async () => {
-    if (!inputField) {
+    setIsLoading(true);
+    if (!inputField || !validateEmail(inputField)) {
       toast({
         variant: 'destructive',
-        title: 'Thiếu thông tin',
-        description: 'Vui lòng nhập email',
+        title: inputField ? 'Sai định dạng' : 'Thiếu thông tin',
+        description: inputField
+          ? 'Vui lòng nhập email hợp lệ'
+          : 'Vui lòng nhập email',
       });
+      setIsLoading(false);
       return;
     }
+
     if (!name) {
       toast({
         variant: 'destructive',
-        title: 'Thiếu thông tin',
-        description: 'Vui lòng nhập tên của bạn',
+        title: 'Vui lòng nhập tên của bạn!',
       });
+      setIsLoading(false);
       return;
     }
-    if (!phone || phone.length < 10) {
+    if (!phone || !validatePhoneNumberVN(phone)) {
       toast({
         variant: 'destructive',
-        title: 'Thiếu thông tin',
-        description: 'Vui lòng nhập số điện thoại',
+        title: phone ? 'Sai định dạng' : 'Thiếu thông tin',
+        description: phone
+          ? 'Vui lòng nhập số điện thoại hợp lệ'
+          : 'Vui lòng nhập số điện thoại',
       });
+      setIsLoading(false);
       return;
     }
     if (!password) {
       toast({
         variant: 'destructive',
-        title: 'Thiếu thông tin',
-        description: 'Vui lòng nhập password',
+        title: 'Mật khẩu là không thể thiếu',
+        description: 'Vui lòng nhập mật khẩu',
       });
+      setIsLoading(false);
       return;
     }
-    if (password.trim != comfrim.trim) {
+    if (password.trim != comfrim.trim || !comfrim) {
       toast({
         variant: 'destructive',
         title: 'Mật khẩu không chính xác',
-        description: 'Vui lòng nhập mật khẩu',
+        description: 'Vui lòng xác nhận lại mật khẩu',
       });
+      setIsLoading(false);
       return;
     }
 
@@ -121,50 +139,61 @@ const DialogSignIn = ({ scroll, title }: DialogSignInProps) => {
       email: inputField,
       name: name,
       password: password,
-      Type: 'user',
+      Type: 'Guest',
       Telephone: phone,
     };
 
     const respone = await Register(formData);
 
-    if (respone && respone) {
+    if (respone && respone.success) {
       toast({
-        title: 'Đăng ký thành công',
-        description: 'Hãy đăng nhập tài khoản của bạn',
+        title: respone.message,
       });
       setRegister(false);
+      setIsLoading(false);
+    }
+    else {
+       toast({
+        variant: "destructive",
+        title: respone?.message,
+        description: respone?.message,
+      });
+      setIsLoading(false);
     }
   };
 
   const handleLogin = async () => {
     let respone = null;
-
+    setIsLoading(true);
     if (!inputField || !password) {
       toast({
         title: 'Bạn cần nhập đủ thông tin đăng nhập',
       });
+      setIsLoading(false);
     }
     if (method === 'Email') {
-      SignIn(inputField,password,method)
+      SignIn(inputField, password, method);
+      setIsLoading(false);
     }
 
     if (method === 'Phone') {
-       SignIn(inputField,password,method)
+      SignIn(inputField, password, method);
+      setIsLoading(false);
     }
-    
   };
 
   const setClosed = () => {
     setRegister(false);
     setLogin(false);
     setInputField('');
+    setIsLoading(false);
   };
 
   return (
     <Dialog onOpenChange={setClosed}>
       <DialogTrigger onClick={() => setOpen(true)}>
         <div
-          className={`text-black h-10 px-4 py-2 inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 button-outline 
+          className={`text-black h-10 px-4  py-2 inline-flex items-center justify-center whitespace-nowrap rounded-3xl text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 button-outline 
            ${title === 'Đăng ký' && 'button-primary'}`}>
           {title === 'Đăng nhập' && <User className='mr-2 h-4 w-4' />}
           {title}
@@ -186,7 +215,7 @@ const DialogSignIn = ({ scroll, title }: DialogSignInProps) => {
                 />
               </span>
               {register && (
-                <div>
+                <div className='space-y-3'>
                   <span className='grid w-full items-center gap-1.5'>
                     <Label htmlFor='text'>Tên của bạn là ?</Label>
                     <Input
@@ -241,28 +270,24 @@ const DialogSignIn = ({ scroll, title }: DialogSignInProps) => {
                   onClick={(e) => handleClicked(e)}
                   disabled={!Boolean(inputField) ? true : false}
                   className='w-full bg-cyan-500 text-white'>
-                  Tiếp tục
+                  {isLoading ? <LoaderIcon /> : 'Tiếp tục'}
                 </Button>
               )}
 
               {login && (
-                <DialogClose asChild>
-                  <Button
-                    className='w-full bg-cyan-500 text-white'
-                    onClick={() => handleLogin()}>
-                    Đăng nhập
-                  </Button>
-                </DialogClose>
+                <Button
+                  className='w-full bg-cyan-500 text-white'
+                  onClick={() => handleLogin()}>
+                  {isLoading ? <LoaderIcon /> : 'Đăng nhập'}
+                </Button>
               )}
 
               {register && (
-                <DialogClose asChild >
-                  <Button
-                    onClick={() => hanldeRegister()}
-                    className='w-full bg-cyan-500 text-white'>
-                    Đăng ký
-                  </Button>
-                </DialogClose>
+                <Button
+                  onClick={() => hanldeRegister()}
+                  className='w-full bg-cyan-500 text-white'>
+                  {isLoading ? <LoaderIcon /> : 'Đăng ký'}
+                </Button>
               )}
             </span>
             {/* <Separator
@@ -271,7 +296,7 @@ const DialogSignIn = ({ scroll, title }: DialogSignInProps) => {
               content='hoặc đăng nhập/đăng ký với'
             /> */}
 
-            <Button
+            {/* <Button
               variant={'outline'}
               className='w-full border-cyan-500 text-cyan-500'>
               Đăng ký/ Đăng nhập với Facebook
@@ -280,7 +305,7 @@ const DialogSignIn = ({ scroll, title }: DialogSignInProps) => {
               variant={'outline'}
               className='w-full border-cyan-500 text-cyan-500'>
               Đăng ký/ Đăng nhập với Google
-            </Button>
+            </Button> */}
             <span className='text-black text-balance text-center  mx-auto'>
               Bằng cách đăng ký, bạn đồng ý với Điều khoản & Điều kiện của chúng
               tôi và bạn đã đọc Chính Sách Quyền Riêng Tư Của của chúng tôi.

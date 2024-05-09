@@ -83,7 +83,7 @@
     text-lg rounded-xl  block w-full p-2.5 font-medium focus:outline-dotted focus:outline-cyan-500;
   }
   .row-modal-ds-tinh {
-    @apply bg-white w-full flex flex-row h-16 rounded-lg items-center hover:bg-cyan-50;
+    @apply bg-white w-full flex flex-row h-16 rounded-3xl items-center hover:bg-cyan-50;
   }
 
   

@@ -66,7 +66,7 @@ const ImageUploader: React.FC<Props> = (props) => {
 
   const renderImageTable = () => {
     return (
-      <table className='w-full bg-slate-200 mt-3 rounded-lg px-5'>
+      <table className='w-full bg-slate-200 mt-3 rounded-3xl px-5'>
         <thead>
           <tr>
             <th className='px-2 py-1 text-md'>File</th>
@@ -85,7 +85,7 @@ const ImageUploader: React.FC<Props> = (props) => {
                   loading='lazy'
                   width={70}
                   height={70}
-                  className='object-cover rounded-lg min-h-[70px]'
+                  className='object-cover rounded-3xl min-h-[70px]'
                   src={URL.createObjectURL(file.file)}
                   alt={file.filename}
                 />
@@ -171,11 +171,11 @@ const ImageUploader: React.FC<Props> = (props) => {
   };
 
   return (
-    <div className='m-4 p-4 border border-gray-300 rounded-lg'>
+    <div className='m-4 p-4 border border-gray-300 rounded-3xl'>
       <div className='flex items-center justify-center w-full'>
         <label
           htmlFor='dropzone-file'
-          className='flex flex-col items-center justify-center w-full h-30 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600'>
+          className='flex flex-col items-center justify-center w-full h-30 border-2 border-gray-300 border-dashed rounded-3xl cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600'>
           <div className='flex flex-col items-center justify-center pt-5 pb-6'>
             <svg
               className='w-8 h-8 mb-4 text-gray-500 dark:text-gray-400'

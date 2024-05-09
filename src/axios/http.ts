@@ -1,7 +1,7 @@
-import axios, { AxiosInstance } from 'axios'
+import axios, { AxiosInstance ,AxiosError } from 'axios'
 
 class Http {
-  instance: AxiosInstance
+  instance: AxiosInstance 
   constructor() {
     this.instance = axios.create({
       baseURL: 'http://localhost:8000/api/',

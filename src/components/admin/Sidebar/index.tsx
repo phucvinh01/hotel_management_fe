@@ -122,7 +122,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                     <React.Fragment>
                       <Link
                         href='/dashbroad#'
-                        className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 
+                        className={`group relative flex items-center gap-2.5 rounded-3xl px-4 py-2 
                         font-medium text-black duration-300 ease-in-out hover:bg-graydark dark:text-white
                          dark:hover:bg-gray-900 hover:rounded-xl ${
                            (pathname === '/' ||
@@ -148,7 +148,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               <li>
                 <Link
                   href='/dashbroad/booking'
-                  className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-black duration-300 ease-in-out hover:bg-graydark dark:text-white dark:hover:bg-gray-900 hover:rounded-xl ${
+                  className={`group relative flex items-center gap-2.5 rounded-3xl px-4 py-2 font-medium text-black duration-300 ease-in-out hover:bg-graydark dark:text-white dark:hover:bg-gray-900 hover:rounded-xl ${
                     pathname.includes('Booking') &&
                     'bg-graydark dark:bg-meta-4'
                   }`}>
@@ -170,7 +170,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                     <React.Fragment>
                       <Link
                         href='/dashbroad#'
-                        className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-black duration-300 ease-in-out hover:bg-graydark dark:text-white dark:hover:bg-gray-900 hover:rounded-xl ${
+                        className={`group relative flex items-center gap-2.5 rounded-3xl px-4 py-2 font-medium text-black duration-300 ease-in-out hover:bg-graydark dark:text-white dark:hover:bg-gray-900 hover:rounded-xl ${
                           (pathname === '/rooms' ||
                             pathname.includes('room')) &&
                           'bg-graydark dark:bg-meta-4'
@@ -198,7 +198,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                           <li>
                             <Link
                               href='/dashbroad/rooms'
-                              className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
+                              className={`group relative flex items-center gap-2.5 rounded-3xl px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
                                 pathname === '/rooms' &&
                                 'text-white'
                               }`}>
@@ -208,7 +208,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                           <li>
                             <Link
                               href='/dashbroad/rooms/type-rooms'
-                              className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
+                              className={`group relative flex items-center gap-2.5 rounded-3xl px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
                                 pathname === '/rooms/type-rooms' &&
                                 'text-white'
                               } `}>
@@ -226,7 +226,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               <li>
                 <Link
                   href='/dashbroad/report'
-                  className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-black duration-300 ease-in-out hover:bg-graydark dark:text-white dark:hover:bg-gray-900 hover:rounded-xl ${
+                  className={`group relative flex items-center gap-2.5 rounded-3xl px-4 py-2 font-medium text-black duration-300 ease-in-out hover:bg-graydark dark:text-white dark:hover:bg-gray-900 hover:rounded-xl ${
                     pathname.includes('tables') && 'bg-graydark dark:bg-meta-4'
                   }`}>
                  <ClipboardMinusIcon />
@@ -239,7 +239,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               <li>
                 <Link
                   href='/dashbroad/customer'
-                  className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-black duration-300 ease-in-out hover:bg-graydark dark:text-white dark:hover:bg-gray-900 hover:rounded-xl ${
+                  className={`group relative flex items-center gap-2.5 rounded-3xl px-4 py-2 font-medium text-black duration-300 ease-in-out hover:bg-graydark dark:text-white dark:hover:bg-gray-900 hover:rounded-xl ${
                     pathname.includes('customer') &&
                     'bg-graydark dark:bg-meta-4'
                   }`}>
@@ -254,7 +254,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               <li>
                 <Link
                   href='/dashbroad/support'
-                  className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-black duration-300 ease-in-out hover:bg-graydark dark:text-white dark:hover:bg-gray-900 hover:rounded-xl ${
+                  className={`group relative flex items-center gap-2.5 rounded-3xl px-4 py-2 font-medium text-black duration-300 ease-in-out hover:bg-graydark dark:text-white dark:hover:bg-gray-900 hover:rounded-xl ${
                     pathname.includes('support') && 'bg-graydark dark:bg-meta-4'
                   }`}>
                  <MessageCircleIcon />
@@ -266,7 +266,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               <li>
                 <Link
                   href='/dashbroad/settings'
-                  className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-black duration-300 ease-in-out hover:bg-graydark dark:text-white dark:hover:bg-gray-900 hover:rounded-xl ${
+                  className={`group relative flex items-center gap-2.5 rounded-3xl px-4 py-2 font-medium text-black duration-300 ease-in-out hover:bg-graydark dark:text-white dark:hover:bg-gray-900 hover:rounded-xl ${
                     pathname.includes('settings') && 'bg-graydark dark:bg-meta-4'
                   }`}>
                  <SettingsIcon />

@@ -15,6 +15,7 @@ import {
   login as SignIn,
 } from '@/service/auth.service';
 import { useToast } from '@/components/ui/use-toast';
+import { ERORR_SERVER } from '@/constant';
 
 interface IAuthContext {
   user: IUser | null;
@@ -47,10 +48,10 @@ export function AuthProvider({ children }: Props) {
     return res;
   };
 
-  const getAdminInfo = async (id:string) => {
+  const getAdminInfo = async (id: string) => {
     const res = await getAdmin(id);
     return res;
-  }
+  };
 
   useEffect(() => {
     const isUser = localStorage.getItem('isUser');
@@ -69,7 +70,7 @@ export function AuthProvider({ children }: Props) {
         localStorage.removeItem('isUser');
       }
 
-        if (isAdmin) {
+      if (isAdmin) {
         const res = await getAdminInfo(isAdmin as string);
         if (res) {
           console.log('setItem');
@@ -90,19 +91,21 @@ export function AuthProvider({ children }: Props) {
   }, []);
 
   const loginAdministrator = async (email: string, password: string) => {
-    const res = await loginWithAdministrator({
+    const respone = await loginWithAdministrator({
       email: email,
       password: password,
     });
 
-    if (res?.id_hotel === 'underfine') {
-      setAdmin(res);
+    if (respone?.user?.id_hotel === 'underfine') {
+      setAdmin(respone.user);
       router.push('/app/partner/register-hotel');
-      localStorage.setItem('isAdmin', res.id);
+      localStorage.setItem('isAdmin', respone.user.id as string);
     } else {
-      setAdmin(res);
-      router.push('/dashbroad');
-      localStorage.setItem('isAdmin', res?.id as string);
+      if (respone?.user) {
+        setAdmin(respone?.user);
+        router.push('/dashbroad');
+        localStorage.setItem('isAdmin', respone.user.id as string);
+      }
     }
   };
 
@@ -134,17 +137,21 @@ export function AuthProvider({ children }: Props) {
       );
     }
     if (respone) {
-      if (respone.id) {
+      if (respone.success) {
         toast({
-          title: 'Đăng nhập thành công',
+          title: respone.message,
         });
-        setUser(respone);
-        localStorage.setItem('isUser', respone.id);
+        setUser(respone.user);
+        localStorage.setItem('isUser', respone.user?.id as string);
+      } else {
+        toast({
+          title: respone.message,
+        });
       }
     } else {
       toast({
         variant: 'destructive',
-        title: 'Đăng nhập thất bại',
+        title: ERORR_SERVER,
       });
     }
   };

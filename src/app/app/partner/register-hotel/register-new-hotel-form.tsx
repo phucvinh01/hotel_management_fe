@@ -165,7 +165,7 @@ export function RegisterNewHotelForm() {
                 toast({
                   title: 'You submitted the following values:',
                   description: (
-                    <pre className='mt-2 w-[340px] rounded-md bg-slate-950 p-4'>
+                    <pre className='mt-2 w-[340px] rounded-3xl bg-slate-950 p-4'>
                       <code className='text-white'>
                         {JSON.stringify(dataHotel, null, 2)}
                       </code>
@@ -198,7 +198,7 @@ export function RegisterNewHotelForm() {
                 toast({
                   title: 'You submitted the following values:',
                   description: (
-                    <pre className='mt-2 w-[340px] rounded-md bg-slate-950 p-4'>
+                    <pre className='mt-2 w-[340px] rounded-3xl bg-slate-950 p-4'>
                       <code className='text-white'>
                         {JSON.stringify(dataTypeRoom, null, 2)}
                       </code>
@@ -230,7 +230,7 @@ export function RegisterNewHotelForm() {
                 toast({
                   title: 'You submitted the following values:',
                   description: (
-                    <pre className='mt-2 w-[340px] rounded-md bg-slate-950 p-4'>
+                    <pre className='mt-2 w-[340px] rounded-3xl bg-slate-950 p-4'>
                       <code className='text-white'>
                         {JSON.stringify(dataRooms, null, 2)}
                       </code>
@@ -246,8 +246,8 @@ export function RegisterNewHotelForm() {
       <TabsContent
         value='image'
         className='flex flex-col gap-3'>
-        <div className='bg-white px-4 rounded-lg'>
-          <div className='w-full bg-slate-200 mt-3 rounded-lg px-5'>
+        <div className='bg-white px-4 rounded-3xl'>
+          <div className='w-full bg-slate-200 mt-3 rounded-3xl px-5'>
             <ImageUploaderSingle data={filesImageHotel} />
           </div>
 
@@ -265,7 +265,7 @@ export function RegisterNewHotelForm() {
                 toast({
                   title: 'You submitted the following values:',
                   description: (
-                    <pre className='mt-2 w-[340px] rounded-md bg-slate-950 p-4'>
+                    <pre className='mt-2 w-[340px] rounded-3xl bg-slate-950 p-4'>
                       <code className='text-white'>
                         {JSON.stringify(filesImageHotel, null, 2)}
                       </code>
@@ -281,9 +281,9 @@ export function RegisterNewHotelForm() {
       <TabsContent
         value='review'
         className='flex flex-col gap-3'>
-        <div className='bg-white p-4 rounded-md shadow-md flex flex-col gap-4'>
+        <div className='bg-white p-4 rounded-3xl shadow-md flex flex-col gap-4'>
           <p className='text-3xl font-semibold'>Thông tin khách sạn</p>
-          <div className='grid grid-cols-2 p-3 border rounded-lg'>
+          <div className='grid grid-cols-2 p-3 border rounded-3xl'>
             <div>
               <h2 className='text-2xl font-semibold mb-2'>{dataHotel?.Name}</h2>
               <p className='text-gray-600 mb-2'>{dataHotel?.Address}</p>
@@ -295,7 +295,7 @@ export function RegisterNewHotelForm() {
                 loading='lazy'
                 width={200}
                 height={200}
-                className='object-cover rounded-lg min-h-[70px]'
+                className='object-cover rounded-3xl min-h-[70px]'
                 src={URL.createObjectURL(filesImageHotel[0]?.file)}
                 alt={filesImageHotel[0].filename}
               />
@@ -310,7 +310,7 @@ export function RegisterNewHotelForm() {
             {dataTypeRoom?.map((roomType, index) => (
               <div
                 key={index}
-                className='bg-gray-100 p-4 rounded-md shadow-md'>
+                className='bg-gray-100 p-4 rounded-3xl shadow-md'>
                 <h3 className='text-lg font-semibold mb-2'>{roomType.Name}</h3>
                 <p className='text-gray-600 mb-2'>
                   Số lượng phòng:{' '}
@@ -329,7 +329,7 @@ export function RegisterNewHotelForm() {
             {filesImageHotel.slice(1).map((imageUrl, index) => (
               <div
                 key={index}
-                className='rounded-md overflow-hidden shadow-md'>
+                className='rounded-3xl overflow-hidden shadow-md'>
                 <Image
                   width={70}
                   height={70}

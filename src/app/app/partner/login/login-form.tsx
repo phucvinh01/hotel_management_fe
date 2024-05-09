@@ -10,6 +10,7 @@ import { GitGraphIcon, Loader } from 'lucide-react';
 import Link from 'next/link';
 import { loginWithAdministrator } from '@/service/auth.service';
 import { useAuth } from '@/hooks/useAuthContext';
+import Logo from '@/components/shared/Logo';
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -33,7 +34,7 @@ export function LoginFormPartnert({ className, ...props }: UserAuthFormProps) {
     <div
       className={cn('flex flex-col gap-6', className)}
       {...props}>
-      <h2 className='text-center'>Partner</h2>
+      <Logo/>
       <p className='text-xl font-extrabold'>Chào mừng trở lại!</p>
       <p className='line-clamp-2 text-gray-400'>
         Đăng nhập để quản lý chỗ ở của bạn từ kiểm tra đặt phòng đến quản lý
@@ -41,7 +42,7 @@ export function LoginFormPartnert({ className, ...props }: UserAuthFormProps) {
       </p>
       <form onSubmit={onSubmit}>
         <div className='flex flex-col gap-4'>
-          <div className='flex flex-col gap-1'>
+          <div className='flex flex-col gap-2'>
             <Label htmlFor='email'>Địa chỉ email của bạn</Label>
             <Input
               id='email'
@@ -54,7 +55,7 @@ export function LoginFormPartnert({ className, ...props }: UserAuthFormProps) {
               disabled={isLoading}
             />
           </div>
-          <div className='flex flex-col gap-1'>
+          <div className='flex flex-col gap-2'>
             <Label htmlFor='email'>Mật khẩu</Label>
             <Input
               id='password'
@@ -66,23 +67,23 @@ export function LoginFormPartnert({ className, ...props }: UserAuthFormProps) {
           </div>
           <Link
             href={'/app/partner/forgotpassword'}
-            className='text-cyan-500 font-bold'>
+            className='text-cyan-700 font-semibold text-sm'>
             Quên mật khẩu?
           </Link>
           <Button
             disabled={isLoading}
-            className='bg-orange-500 text-white'>
+            className='bg-cyan-500 text-white'>
             {isLoading && <Loader />}Đăng nhập
           </Button>
 
           <div className='h-[1px] border border-dashed'>
         </div>
         </div>
-        <p>
+        <p className='text-sm text-gray-700'>
           Bạn chưa là partner?{' '}
           <Link
             href={'/app/partner/register'}
-            className='text-cyan-500 font-bold'>
+            className='text-cyan-700 font-semibold'>
             Đăng Ký ngay
           </Link>
         </p>

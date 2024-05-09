@@ -3,6 +3,7 @@ import rightImgDemo from  "../../../public/images/BecomeAnAuthorImg.png";
 import Image from "next/image";
 import Logo from "./Logo";
 import { Button } from "../ui/button";
+import Link from "next/link";
 
 export interface SectionBecomeAnAuthorProps {
   className?: string;
@@ -21,15 +22,17 @@ const SectionBecomeAnAuthor: FC<SectionBecomeAnAuthorProps> = ({
       <div className="flex-shrink-0 mb-16 lg:mb-0 lg:mr-10 lg:w-2/5">
         <Logo />
         <h2 className="font-semibold text-3xl sm:text-4xl mt-6 sm:mt-11">
-          Why did you choose us?
+         Tại sao bạn chọn chúng tôi?
         </h2>
         <span className="block mt-6 text-neutral-500 dark:text-neutral-400">
-          Accompanying us, you have a trip full of experiences. With Chisfis,
-          booking accommodation, resort villas, hotels, private houses,
-          apartments... becomes fast, convenient and easy.
+          Đồng hành cùng chúng tôi, bạn sẽ có một chuyến đi đầy trải nghiệm. Với VietNam Venture,
+           đặt chỗ ở, biệt thự nghỉ dưỡng, khách sạn, nhà riêng,
+           căn hộ...trở nên nhanh chóng, thuận tiện và dễ dàng.
         </span>
-        <Button className="bg-cyan-500 mt-6 sm:mt-11">
-          Become an author
+        <Button asChild className="bg-cyan-500 px-4 py-3 font-semibold rounded-3xl mt-6 sm:mt-11">
+        <Link href={'/app/partner'} >
+          Hợp tác với chúng tôi
+        </Link>
         </Button>
       </div>
       <div className="flex-grow">

@@ -1,7 +1,6 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import LangAndCur from '../LangAndCur';
 import Logo from '../Logo';
 import { User } from 'lucide-react';
 import { useEffect, useState } from 'react';
@@ -44,7 +43,7 @@ const Header = () => {
          pathname !== '/app'
            ? 'bg-white text-gray-900'
            : scrollY > 20
-           ? 'bg-slate-200 shadow-lg'
+           ? 'bg-white shadow-lg'
            : 'bg-transparent border-gray-200 '
        } transition-all duration-300 ease-in-out ${pathname.includes("/register") && 'hidden'} ${pathname.includes("/login") && 'hidden'} ${pathname.includes("/forgotpassword")  && 'hidden' } ${pathname.includes("/dashbroad") && 'hidden'}`} >
 
@@ -55,7 +54,7 @@ const Header = () => {
         <div className='flex-center gap-3'>
           <Button
             className={`
-              transition-colors hover:bg-cyan-400`}>
+              transition-colors rounded-3xl hover:bg-cyan-400`}>
             <Link href={'/app/partner'}>Hợp tác với chúng tôi</Link>
           </Button>
           {user ? (
@@ -80,8 +79,8 @@ const Header = () => {
       <div className='flex justify-between'>
         <Logo />
         <div className='flex gap-4'>
-          <Button className='button-outline text-cyan-500'><Link href={'/app/partner/login'}>Đăng nhập</Link> </Button>
-          <Button className='bg-cyan-200 text-white'>
+          <Button variant={"secondary"}><Link href={'/app/partner/login'}>Đăng nhập</Link> </Button>
+          <Button className='bg-cyan-500'>
             Đăng ký hợp tác với chúng tôi
           </Button>
         </div>

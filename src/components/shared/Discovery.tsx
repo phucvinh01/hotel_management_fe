@@ -50,7 +50,7 @@ const Discovery = () => {
             {
                 data.map((item) => 
                 <div className='relative hover:cursor-pointer' key={item.id}>
-                    <Image className='col-span-1 rounded-lg  '  src={item.image} height={210} width={384} alt={item.image} />
+                    <Image className='col-span-1 rounded-3xl  '  src={item.image} height={210} width={384} alt={item.image} />
                     <div className='absolute p-6 top-0'>
                         <p className='text-white font-extrabold text-xl'>{item.name}</p>
                         <p className='text-white text-sm font-semibold'>{item.accommodation} accommadation</p>

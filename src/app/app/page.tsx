@@ -64,11 +64,13 @@ export default async function Home() {
 
         <SectionOurFeatures />
 
-        <TabsCarouselHotel title='Popular places to stay that Chisfis recommends for you'
+        <TabsCarouselHotel title='Nơi lưu trú nổi bật'
           data={dataLocationList}
         />
 
-        <SectionBecomeAnAuthor/>
+         <div className="relative py-16">
+          <SectionBecomeAnAuthor />
+        </div>
 
         {/* <TabsCarouselHotel title='Popular places to stay that Chisfis recommends for you'  data={[]} /> */}
 

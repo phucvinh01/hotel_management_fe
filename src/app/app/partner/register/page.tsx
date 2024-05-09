@@ -1,13 +1,79 @@
-import React from 'react'
-import { RegisterFormPartnert } from './register-form'
+import { Metadata } from "next"
+import Image from "next/image"
+import Link from "next/link"
 
-const RegisterPartnerPage = () => {
-  return (
-    <main className='bg-cyan-950 min-h-screen flex flex-col justify-center items-center'>
-     
-        <RegisterFormPartnert className='w-1/3 border p-4 bg-white rounded-xl h-[600px]'/>
-        </main>
-  )
+import { cn } from "@/lib/utils"
+import { buttonVariants } from "@/components/ui/button"
+import { RegisterFormPartnert } from "./register-form"
+import Logo from "@/components/shared/Logo"
+import image from '../../../../../public/images/hero-right-2.png'
+
+export const metadata: Metadata = {
+  title: "Authentication",
+  description: "Authentication forms built using the components.",
 }
 
-export default RegisterPartnerPage
+export default function AuthenticationPage() {
+  return (
+    <>
+      <div className="md:hidden">
+        <Image
+          src="/examples/authentication-light.png"
+          width={1280}
+          height={843}
+          alt="Authentication"
+          className="block dark:hidden"
+        />
+        <Image
+          src="/examples/authentication-dark.png"
+          width={1280}
+          height={843}
+          alt="Authentication"
+          className="hidden dark:block"
+        />
+      </div>
+      <div className="container relative hidden flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
+        <Link
+          href="/examples/authentication"
+          className={cn(
+            buttonVariants({ variant: "ghost" }),
+            "absolute right-4 top-4 md:right-8 md:top-8"
+          )}
+        >
+          Login
+        </Link>
+        <div className="relative hidden h-full flex-col bg-muted p-10 text-white lg:flex dark:border-r">
+          <div className="absolute inset-0" />
+          <div className="relative z-20 flex items-center text-lg font-medium">
+            <Logo/>
+          </div>
+          <div className="relative z-20 mt-auto">
+            <Image src={image} alt="image" width={800} height={800} className="w-full" />
+          </div>
+        </div>
+        <div className="lg:p-8">
+          <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
+            <RegisterFormPartnert />
+            <p className="px-8 text-center text-sm text-muted-foreground">
+             Bằng cách nhấp vào tiếp tục, bạn đồng ý với chúng tôi{" "}
+              <Link
+                href="/terms"
+                className="underline underline-offset-4 hover:text-primary"
+              >
+               Điều khoản dịch vụ
+              </Link>{" "}
+              và{" "}
+              <Link
+                href="/privacy"
+                className="underline underline-offset-4 hover:text-primary"
+              >
+              Chính sách bảo mật
+              </Link>
+              .
+            </p>
+          </div>
+        </div>
+      </div>
+    </>
+  )
+}

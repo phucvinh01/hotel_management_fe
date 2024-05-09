@@ -9,9 +9,10 @@ import {
 } from '@/components/ui/carousel';
 import Image from 'next/image';
 import Rate from '@/components/shared/Rate'
-import { CloudFog, Dot } from 'lucide-react';
+import { CloudFog, Dot, LassoIcon, Locate, LocateFixedIcon, MapPin, Star, StarIcon, StarOffIcon, StarsIcon } from 'lucide-react';
 import { formatCurrency } from '@/lib/formatCurrency';
 import extractProvinceCity from '@/lib/extractProvinceCity';
+import { Card, CardContent, CardHeader } from '../ui/card';
 /* HTML: <div class="ribbon">Your text content</div> */
 
 const ribbonStyle = {
@@ -112,41 +113,33 @@ const CarouselHotelVietNam = ({listData}: CarouselHotelProps) => {
         {listData && listData.length > 0 && listData.map((item) => (
           <CarouselItem
             key={item.id}
-            className='basis-1/5'>
-            <div className='rounded-lg shadow-md border'>
+            className='basis-1/4'>
+            <Card className='border-none p-0 space-y-2'>
               <div className='relative'>
                 <Image
-                  className='rounded-lg object-contain'
+                  className='rounded-3xl object-contain w-full'
                   src={`http://localhost:8000/images/${ item.FileName}`}
                   alt={`http://localhost:8000/images/${ item.FileName}`}
-                  width={240}
-                  height={60}
+                  width={288}
+                  height={264}
                 />
-                <span className='absolute top-0 px-2 py-1 bg-cyan-700 text-white font-bold text-md rounded-md'>
-                  {extractProvinceCity(item.Address)}
-                </span>
-                <span
-                  style={ribbonStyle}
-                  className='absolute bottom-0'>
-                  {10}
-                </span>
               </div>
-              <div className='flex flex-col gap-1 px-3 py-1 max-h-52'>
+              <CardContent className='flex flex-col gap-4 py-1 max-h-52 p-0'>
                 <p className='font-bold text-sm text-black line-clamp-2'>{item.Name}</p>
-                <div className='w-full flex gap-1 items-center'>
-                  <Rate  count={item.average_rating === null ? 0 : item.average_rating} value={item.average_rating === null ? 0 : item.average_rating} />
-                  <Dot />
-                  <p className='text-cyan-400 text-sm font-bold'>{item.total_reviews}</p>
-                </div>
+                <p className='text-gray-400 text-sm flex gap-3 items-center'><MapPin  size={18}/> <span>140 Lê Trọng Tấn</span></p>
                 {/* <p className='text-xs text-gray-500 font-bold line-through'>{formatCurrency(item.minPrice)}</p> */}
-                <p className='text-lg text-orange-600 font-bold'>{formatCurrency(item.min_price)}</p>
-              </div>
-            </div>
+                <div className='flex flex-row justify-between items-center text-sm'>
+                <p className=' text-orange-400'>{formatCurrency(item.min_price)} /Đêm</p>
+                <p className='flex items-center gap-1'> <span><StarIcon size={18} color='yellow' fill='yellow'/></span> <span className='font-semibold'>{item.average_rating === null ? 0 : item.average_rating}</span> </p>
+                </div>
+
+              </CardContent>
+            </Card>
           </CarouselItem>
         ))}
       </CarouselContent>
-      <CarouselPrevious className="ml-10"/>
-      <CarouselNext className="mr-10"/>
+      <CarouselPrevious className="ml-10 bg-slate-400 text-black"/>
+      <CarouselNext className="mr-10 bg-slate-400 text-black"/>
     </Carousel>
     </Fragment>
   );

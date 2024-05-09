@@ -87,7 +87,7 @@ const ModalImageRate = (props: IProps) => {
                                 <CarouselItem key={item} className="basis-1/5">
                                     <img src={`${URL_Enum.BaseURL_Rate}${item}`}
                                         alt={item}
-                                        className={`w-full h-[90px] rounded-lg object-cover cursor-pointer
+                                        className={`w-full h-[90px] rounded-3xl object-cover cursor-pointer
                                                 ${indexImageRateModal === index ? 'border border-b-2 border-blue-700' : ''}`}
                                         onClick={() => {
                                             setIndexImageRateModal(index);

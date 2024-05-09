@@ -99,7 +99,7 @@ const ModallistImagessHotel = (props: IProps) => {
                 </div>
                 <div className="flex flex-col justify-center items-center relative">
                     <img src={imageModalCurrent}
-                        className="w-8/12 rounded-lg max-h-[380px]" />
+                        className="w-8/12 rounded-3xl max-h-[380px]" />
                     <button className="bg-black opacity-50 w-9 h-9 absolute text-center
                             justify-center items-center flex text-white left-2 ml-3 rounded-full"
                         onClick={() => handlePreviousImage()}>
@@ -118,7 +118,7 @@ const ModallistImagessHotel = (props: IProps) => {
                     </button>
 
                     <p className="font-bold text-xl text-white absolute
-                            left-49 bottom-0 m-5 p-2 rounded-lg bg-black opacity-50">
+                            left-49 bottom-0 m-5 p-2 rounded-3xl bg-black opacity-50">
                         {listImagesTemp && listImagesTemp[indexImageModal].TypeRoom?.split(';')[1]}
                     </p>
 
@@ -130,7 +130,7 @@ const ModallistImagessHotel = (props: IProps) => {
                             {getListTypeImage().map((item, index) => (
                                 <CarouselItem key={index} className="basis-1/5">
                                     <p className="text-white font-bold bg-slate-600 text-center
-                                    py-2 rounded-md cursor-pointer"
+                                    py-2 rounded-3xl cursor-pointer"
                                         onClick={() => { handleFillterList(item.TypeName) }}>{item.TypeName + ' (' + item.Total + ')'} </p>
                                 </CarouselItem>
                             ))}
@@ -147,7 +147,7 @@ const ModallistImagessHotel = (props: IProps) => {
                                 <CarouselItem key={item.id} className="basis-1/5">
                                     <img src={`${URL_Enum.BaseURL_Image}${item.FileName}`}
                                         alt={item.FileName} className={`w-full
-                                                h-[70px] rounded-lg object-cover cursor-pointer
+                                                h-[70px] rounded-3xl object-cover cursor-pointer
                                                 ${indexImageModal === index ? 'border border-b-2 border-blue-700' : ''}`}
                                         onClick={() => {
                                             setIndexImageModal(index);
