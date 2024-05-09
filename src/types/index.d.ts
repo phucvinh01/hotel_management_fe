@@ -64,7 +64,7 @@ export interface AuthorType {
 
 export interface StayDataType {
   id: string | number;
-  author: AuthorType;
+  author?: AuthorType;
   date: string;
   href: string;
   title: string;

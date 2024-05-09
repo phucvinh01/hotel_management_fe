@@ -1,4 +1,6 @@
-export const data = [
+import { StayDataType } from "@/types";
+
+export const data:StayDataType[] = [
   {
     "id": "da39f21a-8af8-401a-93dd-4371c518f9cf",
     "authorId": 4,

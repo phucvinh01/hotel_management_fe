@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import CarouselHotelVietNam from './CarouselHotelVietNam';
 import {  getHotelsByProvince } from '@/service/hotel.service';
+import { Temp } from '@/types';
 
 type TabsCarouselHotelProps = {
   title: string;
