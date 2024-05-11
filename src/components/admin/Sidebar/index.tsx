@@ -3,7 +3,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
-import Image from 'next/image';
 import SidebarLinkGroup from './SidebarLinkGroup';
 import { Button } from '@/components/ui/button';
 import { CalendarDaysIcon, ChevronDown, ClipboardMinusIcon, HomeIcon, LayoutDashboardIcon, MenuSquareIcon, MessageCircleIcon, SettingsIcon, Users2Icon } from 'lucide-react';
@@ -25,6 +24,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
   const [sidebarExpanded, setSidebarExpanded] = useState(
     storedSidebarExpanded === null ? false : storedSidebarExpanded === 'true'
   );
+
 
   // close on click outside
   useEffect(() => {
@@ -65,10 +65,13 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
     setShowTitel(!showTitle);
   };
 
+
+  const id = window.localStorage.getItem('Hotel')
+
   return (
     <aside
       ref={sidebar}
-      className={`absolute left-0 top-0 z-[999]9 flex h-screen flex-col overflow-y-hidden
+      className={`absolute left-0 top-0 z-30 flex h-screen flex-col overflow-y-hidden
        bg-white duration-300 ease-linear dark:bg-black lg:static lg:translate-x-0 
        ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
        ${showTitle ? 'w-72.5' : 'w-24'}`}>
@@ -113,44 +116,30 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
             </div>
 
             <ul className='mb-6 flex flex-col gap-8'>
-              <SidebarLinkGroup
-                activeCondition={
-                  pathname === '/' || pathname.includes('dashboard')
-                }>
-                {(handleClick, open) => {
-                  return (
-                    <React.Fragment>
-                      <Link
-                        href='/dashbroad#'
-                        className={`group relative flex items-center gap-2.5 rounded-3xl px-4 py-2 
-                        font-medium text-black duration-300 ease-in-out hover:bg-graydark dark:text-white
+              <li                >
+               <Link
+                        href='/dashbroad'
+                        className={`group relative text-sm flex items-center gap-2.5 rounded-3xl px-4 py-2 
+                        font-medium text-black duration-300 ease-in-out hover:bg-cyan-400 dark:text-white
                          dark:hover:bg-gray-900 hover:rounded-xl ${
                            (pathname === '/' ||
                              pathname.includes('dashboard')) &&
-                           'bg-graydark dark:bg-meta-4'
-                         }`}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          sidebarExpanded
-                            ? handleClick()
-                            : setSidebarExpanded(true);
-                        }}>
+                           'bg-cyan-400 dark:bg-cyan-700'
+                         }`}>
+                       
                        <LayoutDashboardIcon />
                         <span className={`${showTitle ? 'block' : 'hidden'}`}>
                           Dashboard
                         </span>
                         
-                      </Link>
-                    </React.Fragment>
-                  );
-                }}
-              </SidebarLinkGroup>
+                      </Link>                
+              </li>
               <li>
                 <Link
                   href='/dashbroad/booking'
-                  className={`group relative flex items-center gap-2.5 rounded-3xl px-4 py-2 font-medium text-black duration-300 ease-in-out hover:bg-graydark dark:text-white dark:hover:bg-gray-900 hover:rounded-xl ${
+                  className={`group relative text-sm flex items-center gap-2.5 rounded-3xl px-4 py-2 font-medium text-black duration-300 ease-in-out hover:bg-cyan-400 dark:text-white dark:hover:bg-gray-900 hover:rounded-xl ${
                     pathname.includes('Booking') &&
-                    'bg-graydark dark:bg-meta-4'
+                    'bg-cyan-400 dark:bg-cyan-700'
                   }`}>
                  <CalendarDaysIcon />
                   <span className={`${showTitle ? 'block' : 'hidden'}`}>
@@ -170,10 +159,10 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                     <React.Fragment>
                       <Link
                         href='/dashbroad#'
-                        className={`group relative flex items-center gap-2.5 rounded-3xl px-4 py-2 font-medium text-black duration-300 ease-in-out hover:bg-graydark dark:text-white dark:hover:bg-gray-900 hover:rounded-xl ${
+                        className={`group relative text-sm flex items-center gap-2.5 rounded-3xl px-4 py-2 font-medium text-black duration-300 ease-in-out hover:bg-cyan-400 dark:text-white dark:hover:bg-gray-900 hover:rounded-xl ${
                           (pathname === '/rooms' ||
                             pathname.includes('room')) &&
-                          'bg-graydark dark:bg-meta-4'
+                          'bg-cyan-400 dark:bg-cyan-700'
                         }`}
                         onClick={(e) => {
                           e.preventDefault();
@@ -197,8 +186,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                         <ul className='mb-5.5 mt-4 flex flex-col gap-2.5 pl-6'>
                           <li>
                             <Link
-                              href='/dashbroad/rooms'
-                              className={`group relative flex items-center gap-2.5 rounded-3xl px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
+                              href={`/dashbroad/rooms/${id}`}
+                              className={`group relative text-sm flex items-center gap-2.5 rounded-3xl px-4 font-medium text-bodydark2 duration-300 ease-in-out ${
                                 pathname === '/rooms' &&
                                 'text-white'
                               }`}>
@@ -207,8 +196,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                           </li>
                           <li>
                             <Link
-                              href='/dashbroad/rooms/type-rooms'
-                              className={`group relative flex items-center gap-2.5 rounded-3xl px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
+                              href={`/dashbroad/rooms/typeroom/${id}`}
+                              className={`group relative text-sm flex items-center gap-2.5 rounded-3xl px-4 font-medium text-bodydark2 duration-300 ease-in-out ${
                                 pathname === '/rooms/type-rooms' &&
                                 'text-white'
                               } `}>
@@ -226,8 +215,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               <li>
                 <Link
                   href='/dashbroad/report'
-                  className={`group relative flex items-center gap-2.5 rounded-3xl px-4 py-2 font-medium text-black duration-300 ease-in-out hover:bg-graydark dark:text-white dark:hover:bg-gray-900 hover:rounded-xl ${
-                    pathname.includes('tables') && 'bg-graydark dark:bg-meta-4'
+                  className={`group relative text-sm flex items-center gap-2.5 rounded-3xl px-4 py-2 font-medium text-black duration-300 ease-in-out hover:bg-cyan-400 dark:text-white dark:hover:bg-gray-900 hover:rounded-xl ${
+                    pathname.includes('tables') && 'bg-cyan-400 dark:bg-cyan-700'
                   }`}>
                  <ClipboardMinusIcon />
                   <span className={`${showTitle ? 'block' : 'hidden'}`}>
@@ -239,9 +228,9 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               <li>
                 <Link
                   href='/dashbroad/customer'
-                  className={`group relative flex items-center gap-2.5 rounded-3xl px-4 py-2 font-medium text-black duration-300 ease-in-out hover:bg-graydark dark:text-white dark:hover:bg-gray-900 hover:rounded-xl ${
+                  className={`group relative text-sm flex items-center gap-2.5 rounded-3xl px-4 py-2 font-medium text-black duration-300 ease-in-out hover:bg-cyan-400 dark:text-white dark:hover:bg-gray-900 hover:rounded-xl ${
                     pathname.includes('customer') &&
-                    'bg-graydark dark:bg-meta-4'
+                    'bg-cyan-400 dark:bg-cyan-700'
                   }`}>
                 <Users2Icon />
                   <span className={`${showTitle ? 'block' : 'hidden'}`}>
@@ -254,8 +243,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               <li>
                 <Link
                   href='/dashbroad/support'
-                  className={`group relative flex items-center gap-2.5 rounded-3xl px-4 py-2 font-medium text-black duration-300 ease-in-out hover:bg-graydark dark:text-white dark:hover:bg-gray-900 hover:rounded-xl ${
-                    pathname.includes('support') && 'bg-graydark dark:bg-meta-4'
+                  className={`group relative text-sm flex items-center gap-2.5 rounded-3xl px-4 py-2 font-medium text-black duration-300 ease-in-out hover:bg-cyan-400 dark:text-white dark:hover:bg-gray-900 hover:rounded-xl ${
+                    pathname.includes('support') && 'bg-cyan-400 dark:bg-cyan-700'
                   }`}>
                  <MessageCircleIcon />
                   <span className={`${showTitle ? 'block' : 'hidden'}`}>
@@ -266,8 +255,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               <li>
                 <Link
                   href='/dashbroad/settings'
-                  className={`group relative flex items-center gap-2.5 rounded-3xl px-4 py-2 font-medium text-black duration-300 ease-in-out hover:bg-graydark dark:text-white dark:hover:bg-gray-900 hover:rounded-xl ${
-                    pathname.includes('settings') && 'bg-graydark dark:bg-meta-4'
+                  className={`group relative text-sm flex items-center gap-2.5 rounded-3xl px-4 py-2 font-medium text-black duration-300 ease-in-out hover:bg-cyan-400 dark:text-white dark:hover:bg-gray-900 hover:rounded-xl ${
+                    pathname.includes('settings') && 'bg-cyan-400 dark:bg-cyan-700'
                   }`}>
                  <SettingsIcon />
                   <span className={`${showTitle ? 'block' : 'hidden'}`}>

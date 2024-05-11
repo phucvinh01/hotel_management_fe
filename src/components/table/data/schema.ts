@@ -10,4 +10,3 @@ export const taskSchema = z.object({
   priority: z.string(),
 })
 
-export type Task = z.infer<typeof taskSchema>

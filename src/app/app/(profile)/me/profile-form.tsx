@@ -86,7 +86,6 @@ export function ProfileForm() {
         setUserInfo(res);
         const daySplited = splitDate(res.DateOfBirth as string)
         setSpitDay(daySplited)
-        console.log(typeof(splitDay?.day));
       }
     };
     fetchUserInfo();

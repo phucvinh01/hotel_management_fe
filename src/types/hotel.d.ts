@@ -46,7 +46,7 @@ interface ICardHotel {
     Address: string;
     FileName: string;
     IsActive:number
-    min_price: number;
+    min_price: string;
     total_reviews: number;
     average_rating?: number | undefined;
 }
@@ -293,4 +293,65 @@ type HotelResponse = {
   number_of_room_types: string;
   total_rooms_state_0: string
 };
+
+interface SelectRoomsResult {
+  type_name: string;
+  type_price: string;
+  hotel_name: string;
+  id: string;
+  TypeRoomId: string;
+  State: string;
+  TimeRecive: string | null;
+  TimeLeave: string | null;
+  Gift: string;
+  Discount: number;
+  Breakfast: number;
+  Wifi: number;
+  NoSmoking: number;
+  Cancel: number;
+  ChangeTimeRecive: number;
+  created_at: string | null;
+  updated_at: string | null;
+  RoomName: string;
+  Hinh_Thuc_Thanh_Toan: number;
+  Bao_Gom_Thue_Va_Phi: number;
+}
+
+interface SelectTypeRoomResulet {
+  id: string;
+  HotelId: string;
+  Name: string;
+  ConvenientRoom: string;
+  ConvenientBathRoom: string;
+  FloorArea: string;
+  MaxQuantityMember: string;
+  Price: string;
+  Voi_Tam_Dung: string;
+  Ban_Cong_San_Hien: string;
+  Khu_Vuc_Cho: string;
+  May_Lanh: string;
+  Nuoc_Nong: string;
+  Bon_Tam: string;
+  created_at: string | null;
+  updated_at: string | null;
+  TenLoaiGiuong: string;
+  SoLuongGiuong: string;
+  Lo_Vi_Song: string;
+  Tu_Lanh: string;
+  May_Giat: string;
+  No_Moking: string;
+  total_rooms: string;
+  state_room: string;
+ RoomName: string,
+}
+
+
+interface RoomsTableResult {
+  data : SelectRoomsResult
+}
+
+interface TypeRoomsTableResult {
+  data : SelectTypeRoomResulet
+}
+
 

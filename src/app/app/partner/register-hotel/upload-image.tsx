@@ -77,7 +77,7 @@ const ImageUploader: React.FC<Props> = (props) => {
           </tr>
         </thead>
         <tbody>
-          {files.slice(1).map((file) => (
+          {files.map((file,index) => (
             <tr key={file.filename}>
               <td className='border px-2 py-1 text-[11px]'> {file.filename}</td>
               <td className='border px-2 py-1 text-[11px]'>
@@ -92,6 +92,7 @@ const ImageUploader: React.FC<Props> = (props) => {
               </td>
               <td>
                 <Select
+                disabled={index === 0 ? true : false}
                   value={file.typeroom}
                   onValueChange={(e) => {
                     setFiles(
@@ -103,7 +104,9 @@ const ImageUploader: React.FC<Props> = (props) => {
                     );
                   }}>
                  <SelectTrigger className='w-[180px]'>
-                    <SelectValue placeholder='Loại phòng' />
+                  {
+                    index === 0 ? <SelectValue placeholder='None' /> : <SelectValue placeholder='Loại phòng' />
+                  }
                   </SelectTrigger>
                   <SelectContent>
                     <SelectGroup>
@@ -118,8 +121,9 @@ const ImageUploader: React.FC<Props> = (props) => {
                   </SelectContent>
                 </Select>
                 </td>
-                <td>
+                <td className={ index === 0 ? `invisible` : ""}>
                 <Select
+                  
                   value={file.regions}
                   onValueChange={(e) => {
                     setFiles(
@@ -167,7 +171,6 @@ const ImageUploader: React.FC<Props> = (props) => {
         regions: file.regions,
       })),
     };
-    console.log('Submit data:', formData);
   };
 
   return (

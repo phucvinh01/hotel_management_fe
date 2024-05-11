@@ -35,7 +35,7 @@ export const ModalDeleteRoom = ({data}:{data:any}) => {
       <DialogTrigger asChild>
        <TrashIcon className="hover:cursor-pointer" onClick={() => setIsOpen(true)}/>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[625px] bg-black dark:text-white">
+      <DialogContent className="sm:max-w-[625px] ">
         <DialogHeader>
           <DialogTitle>Add Room</DialogTitle>
         </DialogHeader>

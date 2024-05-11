@@ -60,20 +60,18 @@ export function AuthProvider({ children }: Props) {
       if (isUser) {
         const res = await getMeInfo(isUser as string);
         if (res) {
-          console.log('setItem');
           localStorage.setItem('isUser', res.id);
           setUser(res);
         }
       } else {
         setUser(null);
-        console.log('removeItem');
         localStorage.removeItem('isUser');
       }
 
       if (isAdmin) {
         const res = await getAdminInfo(isAdmin as string);
         if (res) {
-          console.log('setItem');
+          localStorage.setItem('Hotel', res.id_hotel as string);
           localStorage.setItem('isAdmin', res.id);
           setAdmin(res);
         }
@@ -96,17 +94,28 @@ export function AuthProvider({ children }: Props) {
       password: password,
     });
 
-    if (respone?.user?.id_hotel === 'underfine') {
-      setAdmin(respone.user);
-      router.push('/app/partner/register-hotel');
-      localStorage.setItem('isAdmin', respone.user.id as string);
-    } else {
-      if (respone?.user) {
-        setAdmin(respone?.user);
-        router.push('/dashbroad');
-        localStorage.setItem('isAdmin', respone.user.id as string);
-      }
+    if(respone?.success) {
+      if (respone?.user?.id_hotel === 'underfine') {
+            setAdmin(respone.user);
+            localStorage.setItem('isAdmin', respone.user.id as string);
+            router.push('/app/partner/register-hotel');
+          } else {
+            if (respone?.user) {
+              setAdmin(respone?.user);
+              localStorage.setItem('Hotel', respone.user.id_hotel as string);
+              localStorage.setItem('isAdmin', respone.user.id as string);
+              router.push('/dashbroad');
+            }
+          }
     }
+    else {
+      toast({
+        variant:"destructive",
+        title: respone?.message
+      })
+    }
+
+    
   };
 
   const login = async (

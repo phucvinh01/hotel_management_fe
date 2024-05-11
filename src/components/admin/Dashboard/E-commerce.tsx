@@ -18,14 +18,14 @@ const ECommerce: React.FC = () => {
 
     const getDataHotel = async () => {
       if (admin?.id_hotel) {
-        const res = await getHotel(admin?.id_hotel as string);
+        const res = await getHotel(admin?.id_hotel);
         if (res) setHotel(res);
       }
     };
 
     getDataHotel()
-    
-  }, []);
+
+  }, [admin]);
 
 
 

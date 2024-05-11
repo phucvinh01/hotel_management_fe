@@ -176,7 +176,6 @@ export default function Hotel() {
     setSelectedProvinceOption(id_province); // Cập nhật giá trị của radio button được chọn
   };
 
-  console.log('url', `${URL_Enum.BaseURL_Poster}poster1.jpg`)
   return (
     <main className="w-full mb-10">
       <div className="w-full radius rounded-3xl

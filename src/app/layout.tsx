@@ -6,6 +6,7 @@ export const metadata: Metadata = {
   title: 'Vietnam Venture',
   description: 'Vietnam Venture',
 };
+import ReactQueryProvider from '../hooks/useQuery';
 
 export default function RootLayout({
   children,
@@ -13,16 +14,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
+    <ReactQueryProvider>
     <html
       lang='en'
       suppressHydrationWarning={true}>
       <body>
-
+        
         <AuthProvider>
           {children}
           <Toaster />
         </AuthProvider>
+      
         </body>
     </html>
+    </ReactQueryProvider>
   );
 }

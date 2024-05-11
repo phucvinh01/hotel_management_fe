@@ -21,7 +21,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useState } from "react";
-import { EditIcon } from "lucide-react"
+import { EditIcon, EyeIcon } from "lucide-react"
 
 export const ModalEditRoom = ({data}:{data:any}) => {
 
@@ -33,9 +33,9 @@ export const ModalEditRoom = ({data}:{data:any}) => {
   return (
     <Dialog open={isOpen} key={'edit'}>
       <DialogTrigger asChild>
-       <EditIcon className="hover:cursor-pointer" onClick={() => setIsOpen(true)}/>
+       <EyeIcon size={16} className="hover:cursor-pointer" onClick={() => setIsOpen(true)}/>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[625px] bg-black dark:text-white">
+      <DialogContent className="sm:max-w-[625px] ">
         <DialogHeader>
           <DialogTitle>Add Room</DialogTitle>
         </DialogHeader>

@@ -23,7 +23,7 @@ export const getOneHotelById = async (id: string): Promise<IOneHotel | false | u
       return response.data;
     }
   } catch (error) {
-    console.error(error);
+   throw(error)
     return false;
   }
 };
@@ -35,7 +35,7 @@ export const getHotelsByProvince = async (province: string): Promise<IResponeCar
       return response.data;
     }
   } catch (error) {
-    console.error(error);
+   throw(error)
     return false;
   }
 };
@@ -54,7 +54,7 @@ export const insertHotel = async (body:Hotel | undefined): Promise<string | fals
       return response.data.id
     }
   } catch (error) {
-    console.error(error);
+   throw(error)
     return false;
   }
 };
@@ -67,7 +67,7 @@ export const insertTyperoom = async (body:TypeRoom | undefined,id:string): Promi
       return response.data;
     }
   } catch (error) {
-    console.error(error);
+   throw(error)
     return false;
   }
 };
@@ -93,15 +93,27 @@ export async function uploadImage(image: File, typeRoom: InsertResult,region:str
   }
 }
 
-export const insertRoom = async (body:Room | undefined, id:string,index:number): Promise<InsertResult | false | undefined> => {
+export const insertRooms = async (body:Room | undefined, id:string,index:number): Promise<InsertResult | false | undefined> => {
   try {
-    const response = await axios.post<InsertResult>(`/room/insert-room`,{...body,  "typeRoom_id":id, "name_room":`${body?.RoomName} ${index} ` });
+    const response = await axios.post<InsertResult>(`/room/insert-room`,{...body,  "TypeRoomId":id, "RoomName":`${body?.RoomName} ${index} ` });
     if (response.status === 200) {
       return response.data;
     }
   } catch (error) {
-    console.error(error);
     return false;
+   throw(error)
+    
+  }
+};
+
+export const insertRoom = async (body:Room): Promise<InsertResult | false | undefined> => {
+  try {
+    const response = await axios.post<InsertResult>(`/room/insert-room`,body);
+    if (response.status === 200) {
+      return response.data;
+    }
+  } catch (error) {
+    return false;    
   }
 };
 
@@ -112,8 +124,9 @@ export const insertStaff = async (HotelId:string, StaffId:string): Promise<Inser
       return response.data;
     }
   } catch (error) {
-    console.error(error);
     return false;
+
+   throw(error)
   }
 };
 
@@ -125,9 +138,41 @@ export const getHotel = async (id:string):Promise<HotelResponse | undefined> => 
       return response.data;
     }
   } catch (error) {
-    console.error(error);
+   throw(error)
   }
 }
+
+export const getRooms = async (id: string): Promise<SelectRoomsResult[] | undefined> => {
+  try {
+    console.log(id);
+    const response = await axios.get<SelectRoomsResult[]>(`/room/select-room?id=${id}`);
+    if (response.status === 200) {
+      return response.data;
+    } else {
+      throw new Error(`Error fetching rooms: Status ${response.status}`);
+    }
+  } catch (error) {
+    console.error("Error fetching rooms:", error);
+    throw error; // Re-throw for handling in useQuery
+  }
+};
+
+
+export const getTypeRooms = async (id: string): Promise<any> => {
+  console.log(id);
+  try {
+    const response = await axios.get<TypeRoomsTableResult>(`/room/select-typeroom?id=${id}`);
+    if (response.status === 200) {
+      console.log(response.data);
+      return response.data;
+    } else {
+      throw new Error(`Error fetching rooms: Status ${response.status}`); 
+    }
+  } catch (error) {
+    console.error("Error fetching rooms:", error);
+    throw error; 
+  }
+};
 
 
 

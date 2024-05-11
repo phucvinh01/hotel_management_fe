@@ -3,14 +3,15 @@
 import { ColumnDef } from "@tanstack/react-table"
 
 
-import { labels, priorities, statuses } from "./data/data"
-import { DataTableColumnHeader } from "./data-table-column-header"
-import { DataTableRowActions } from "./data-table-row-actions"
-import { Checkbox } from "../ui/checkbox"
-import { Badge } from "../ui/badge"
-import { formatCurrency } from "@/lib/formatCurrency"
 
-export const columns: ColumnDef<SelectRoomsResult>[] = [
+import { formatCurrency } from "@/lib/formatCurrency"
+import { Checkbox } from "@/components/ui/checkbox"
+import { DataTableColumnHeader } from "@/components/table/data-table-column-header"
+import { labels } from "@/components/table/data/data"
+import { Badge } from "@/components/ui/badge"
+import { DataTableRowActions } from "@/components/table/data-table-row-actions"
+
+export const columns: ColumnDef<SelectTypeRoomResulet>[] = [
   {
     id: "id",
     header: ({ table }) => (
@@ -38,43 +39,43 @@ export const columns: ColumnDef<SelectRoomsResult>[] = [
   {
     accessorKey: "RoomName",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Tên Phòng" />
+      <DataTableColumnHeader column={column} title="Tên Loại Phòng" />
     ),
     cell: ({ row }) => <div className="w-[80px]">{row.getValue("RoomName")}</div>,
     enableSorting: false,
     enableHiding: false,
   },
   {
-    accessorKey: "type_name",
+    accessorKey: "Price",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Loại Phòng" />
+      <DataTableColumnHeader column={column} title="Giá" />
     ),
     cell: ({ row }) => {
-      const label = labels.find((label) => label.value === row.original.type_name)
+      const label = labels.find((label) => label.value === row.original.Price)
 
       return (
         <div className="flex space-x-2">
           {label && <Badge variant="outline">{label.label}</Badge>}
           <span className="max-w-[500px] truncate font-medium">
-            {row.getValue("type_name")}
+            {formatCurrency(row.getValue("Price"))}
           </span>
         </div>
       )
     },
   },
   {
-    accessorKey: "State",
+    accessorKey: "TenLoaiGiuong",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Trạng thái" />
+      <DataTableColumnHeader column={column} title="Giường" />
     ),
     cell: ({ row }) => {
-      const label = labels.find((label) => label.value === row.original.State)
+      const label = labels.find((label) => label.value === row.original.SoLuongGiuong)
 
       return (
         <div className="flex space-x-2">
           {label && <Badge variant="outline">{label.label}</Badge>}
           <span className="max-w-[500px] truncate font-medium">
-            {row.getValue("State") === 0 ? "Trống" : "Đang được thuê"}
+            {row.original.SoLuongGiuong+"/"+row.getValue("TenLoaiGiuong")}
           </span>
         </div>
       )
@@ -84,18 +85,39 @@ export const columns: ColumnDef<SelectRoomsResult>[] = [
     },
   },
   {
-    accessorKey: "type_price",
+    accessorKey: "total_rooms",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Giá" />
+      <DataTableColumnHeader column={column} title="Số phòng" />
     ),
     cell: ({ row }) => {
-      const label = labels.find((label) => label.value === row.original.type_price)
+      const label = labels.find((label) => label.value === row.original.total_rooms)
 
       return (
         <div className="flex space-x-2">
           {label && <Badge variant="outline">{label.label}</Badge>}
           <span className="max-w-[500px] truncate font-medium">
-            { formatCurrency(row.getValue("type_price"))}
+            { row.getValue("total_rooms")}
+          </span>
+        </div>
+      )
+    },
+    filterFn: (row, id, value) => {
+      return value.includes(row.getValue(id))
+    },
+  },
+  {
+    accessorKey: "state_room",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Trạngt thái" />
+    ),
+    cell: ({ row }) => {
+      const label = labels.find((label) => label.value === row.original.total_rooms)
+
+      return (
+        <div className="flex space-x-2">
+          {label && <Badge variant="outline">{label.label}</Badge>}
+          <span className="max-w-[500px] truncate font-medium">
+            { row.getValue("state_room") + "/" + row.getValue("total_rooms")}
           </span>
         </div>
       )

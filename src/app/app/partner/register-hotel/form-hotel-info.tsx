@@ -54,6 +54,8 @@ const [provinces, setProvinces] = useState([]);
   const handleDistrictChange = (selectedOption:any) => {
     setSelectedDistrict(selectedOption);
   };
+
+  
   return (
         <div className='flex flex-row gap-4 w-full'>
           <Card className='w-2/3'>
@@ -65,8 +67,9 @@ const [provinces, setProvinces] = useState([]);
               <div className='space-y-1'>
                 <Label htmlFor='name'>Tên khách sạn</Label>
                 <Input
-                value={data?.Name}
-                 onChange={(e) => setFormData((prev) => ({ ...prev!, Name: e.target.value }))}
+                  required
+                  value={data?.Name}
+                  onChange={(e) => setFormData((prev) => ({ ...prev!, Name: e.target.value }))}
                   id='name'
                   type='text'
                 />
@@ -133,6 +136,8 @@ const [provinces, setProvinces] = useState([]);
                  onChange={(e) => setFormData((prev) => ({ ...prev!, Telephone: e.target.value }))}
                   id='phone'
                   type='tel'
+                  maxLength={12}
+                  minLength={1}
                 />
               </div>
             </CardContent>

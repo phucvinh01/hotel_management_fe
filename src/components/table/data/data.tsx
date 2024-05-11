@@ -18,28 +18,13 @@ export const labels = [
 
 export const statuses = [
   {
-    value: "backlog",
-    label: "Backlog",
+    value: "Trống",
+    label: "Trống",
     icon: MessageCircleQuestionIcon,
   },
   {
-    value: "todo",
-    label: "Todo",
-    icon: CircleIcon,
-  },
-  {
-    value: "in progress",
-    label: "In Progress",
-    icon: WatchIcon,
-  },
-  {
-    value: "done",
-    label: "Done",
-    icon: CheckCircleIcon,
-  },
-  {
-    value: "canceled",
-    label: "Canceled",
+    value: "Đang được thuê",
+    label: "Đang được thuê",
     icon: CrossIcon,
   },
 ]

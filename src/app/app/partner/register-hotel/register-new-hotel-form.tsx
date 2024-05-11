@@ -8,17 +8,24 @@ import FormAddNewForm from './form-add-room';
 import { toast } from '@/components/ui/use-toast';
 import ImageUploader, { FileData } from './upload-image';
 import ImageUploaderSingle from './upload-single';
+import _ from 'lodash';
 import Image from 'next/image';
 import {
   insertHotel,
   InsertResult,
-  insertRoom,
+  insertRooms,
   insertTyperoom,
   uploadImage,
 } from '@/service/hotel.service';
 import { useAuth } from '@/hooks/useAuthContext';
 import { insertStaffToList } from '@/service/staff.service';
 import { useRouter } from 'next/navigation';
+import Heading from '@/components/shared/Heading';
+import { Card, CardContent, CardTitle } from '@/components/ui/card';
+import { formatCurrency } from '@/lib/formatCurrency';
+import { StarIcon } from 'react-simple-star-rating/dist/components/StarIcon';
+import { HomeIcon, Hotel, Loader2, MapPin, PhoneCallIcon, Timer, TimerOffIcon } from 'lucide-react';
+import { Separator } from '@/components/ui/separator';
 
 export function RegisterNewHotelForm() {
   const [currentStep, setCurrentStep] = useState<string>('main');
@@ -36,6 +43,7 @@ export function RegisterNewHotelForm() {
   const handleSubmit = async () => {
     try {
       setIsLoading(true);
+
       const id_hotel = await insertHotel(dataHotel);
       let id_typeroom: string | false | undefined = '';
       if (id_hotel) {
@@ -45,11 +53,18 @@ export function RegisterNewHotelForm() {
           if (typeId) {
             for (const fileImage of filesImageHotel) {
               if (fileImage.typeroom === typeRoom.Name) {
-                const res = await uploadImage(
-                  fileImage.file,
-                  typeId as InsertResult,
-                  fileImage.regions
-                );
+                if (fileImage.regions === '') {
+                  const res = await uploadImage(
+                    fileImage.file,
+                    typeId as InsertResult,
+                    'None'
+                  );
+                } else{
+                  const res = await uploadImage(
+                    fileImage.file,
+                    typeId as InsertResult,
+                    fileImage.regions
+                  );
                 if (!res) {
                   toast({
                     variant: 'destructive',
@@ -58,12 +73,14 @@ export function RegisterNewHotelForm() {
                   setIsLoading(false);
                 }
               }
+                }
+
             }
             for (const room of dataRooms) {
               if (room.TypeRoomId === typeRoom.Name) {
                 if (room.quannity) {
                   for (let index = 0; index < room.quannity; index++) {
-                    const res = await insertRoom(
+                    const res = await insertRooms(
                       room,
                       id_typeroom as string,
                       index + 1
@@ -87,7 +104,10 @@ export function RegisterNewHotelForm() {
           }
         }
 
-        const res = await insertStaffToList(id_hotel, admin?.id_staff as string);
+        const res = await insertStaffToList(
+          id_hotel,
+          admin?.id_staff as string
+        );
 
         if (res) {
           toast({
@@ -176,7 +196,7 @@ export function RegisterNewHotelForm() {
                   ),
                 });
             }}
-            className='bg-orange-500 text-white w-full'>
+            className='bg-cyan-500 text-white w-full'>
             Lưu và tiếp tục bước tiếp theo
           </Button>
         </div>
@@ -209,7 +229,7 @@ export function RegisterNewHotelForm() {
                   ),
                 });
             }}
-            className='bg-orange-500 text-white w-full'>
+            className='bg-cyan-500 text-white w-full'>
             Lưu và tiếp tục bước tiếp theo
           </Button>
         </div>
@@ -238,8 +258,8 @@ export function RegisterNewHotelForm() {
                   ),
                 });
             }}
-            className='bg-orange-500 text-white'>
-            Xem lại khách sạn của bạn và đồng ý đăng ký
+            className='bg-cyan-500 text-white'>
+            Lưu và tiếp tục bước tiếp theo
           </Button>
         </div>
       </TabsContent>
@@ -247,9 +267,7 @@ export function RegisterNewHotelForm() {
         value='image'
         className='flex flex-col gap-3'>
         <div className='bg-white px-4 rounded-3xl'>
-          <div className='w-full bg-slate-200 mt-3 rounded-3xl px-5'>
-            <ImageUploaderSingle data={filesImageHotel} />
-          </div>
+          {/* <ImageUploaderSingle data={filesImageHotel} /> */}
 
           <ImageUploader
             files={filesImageHotel}
@@ -273,7 +291,7 @@ export function RegisterNewHotelForm() {
                   ),
                 });
             }}
-            className='bg-orange-500 text-white'>
+            className='bg-cyan-500 text-white'>
             Xem lại khách sạn của bạn và đồng ý đăng ký
           </Button>
         </div>
@@ -281,74 +299,108 @@ export function RegisterNewHotelForm() {
       <TabsContent
         value='review'
         className='flex flex-col gap-3'>
-        <div className='bg-white p-4 rounded-3xl shadow-md flex flex-col gap-4'>
-          <p className='text-3xl font-semibold'>Thông tin khách sạn</p>
-          <div className='grid grid-cols-2 p-3 border rounded-3xl'>
-            <div>
-              <h2 className='text-2xl font-semibold mb-2'>{dataHotel?.Name}</h2>
-              <p className='text-gray-600 mb-2'>{dataHotel?.Address}</p>
-              <p className='text-gray-600 mb-4'>{dataHotel?.Telephone}</p>
+        <div className='bg-white p-4  shadow-md flex flex-col gap-4 rounded-3xl'>
+          <Heading desc='Tuyệt vời, chúc mừng bạn đã hoàn thành việc niêm yết, đang chờ duyệt để xuất bản'>
+            Xin chúc mừng 🎉
+          </Heading>
+          <Separator/>
+
+          <div className='grid grid-cols-2 p-4'>
+            <div className=''>
+              <p className='text-gray-500 mb-2 flex gap-4'><HomeIcon/> <span className='text-black text-end'>{dataHotel?.Name}</span></p>
+              <p className='text-gray-500 mb-2 flex gap-4'><MapPin/><span className='text-black text-end'>{dataHotel?.Address}</span></p>
+              <p className='text-gray-500 mb-2 flex gap-4'><PhoneCallIcon/> <span className='text-black text-end'>{dataHotel?.Telephone}</span></p>
+              <p className='text-gray-500 mb-2 flex gap-4'><Timer/><span className='text-black text-end'>{dataHotel?.TimeCheckIn}</span></p>
+              <p className='text-gray-500 mb-2 flex gap-4'><TimerOffIcon/><span className='text-black text-end'>{dataHotel?.TimeCheckOut}</span></p>
             </div>
+            <Card className='border-none p-0 space-y-2'>
+              <div className='relative'>
+                {
+                  filesImageHotel[0] &&
+                <Image
+                  className='rounded-3xl object-contain w-full'
+                  src={URL.createObjectURL(filesImageHotel[0] && filesImageHotel[0]?.file)}
+                  alt={`http://localhost:8000/images/${filesImageHotel[0]?.file}`}
+                  width={288}
+                  height={264}
+                />
+                }
 
-            {filesImageHotel && filesImageHotel[0]?.file && (
-              <Image
-                loading='lazy'
-                width={200}
-                height={200}
-                className='object-cover rounded-3xl min-h-[70px]'
-                src={URL.createObjectURL(filesImageHotel[0]?.file)}
-                alt={filesImageHotel[0].filename}
-              />
-            )}
+              </div>
+              <CardContent className='flex flex-col gap-4 py-1 max-h-52 p-0'>
+                <p className='font-bold text-sm text-black line-clamp-2'>
+                  {dataHotel?.Name}
+                </p>
+                <p className='text-gray-400 text-sm flex gap-3 items-center'>
+                  <MapPin size={18} /> <span>{dataHotel?.Address}</span>
+                </p>
+                {/* <p className='text-xs text-gray-500 font-bold line-through'>{formatCurrency(item.minPrice)}</p> */}
+                <div className='flex flex-row justify-between items-center text-sm'></div>
+              </CardContent>
+            </Card>
           </div>
-          <p className='text-3xl font-semibold'>
-            {' '}
-            Các loại phòng của khách sạn
-          </p>
 
-          <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 border rounded-xl p-2'>
+
+         <Heading desc='Yên tâm bạn có thể thay đổi lại khi đăng ký thành công với chúng tôi'>
+            Khách sạn có bạn đã có 🎉
+          </Heading>
+          <Separator/>
+
+
+          <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-2'>
             {dataTypeRoom?.map((roomType, index) => (
-              <div
+              <Card
+                className='flex flex-col justify-center items-center gap-4'
                 key={index}
-                className='bg-gray-100 p-4 rounded-3xl shadow-md'>
-                <h3 className='text-lg font-semibold mb-2'>{roomType.Name}</h3>
-                <p className='text-gray-600 mb-2'>
-                  Số lượng phòng:{' '}
-                  {
+                >
+                <CardContent className='text-gray-600 space-y-6 mt-5'>
+                <CardTitle className='flex gap-2'><Hotel/> {roomType.Name}</CardTitle>
+                  <p>Số lượng phòng: 
+                  <strong> {
                     dataRooms?.find((room) => room.TypeRoomId === roomType.Name)
                       ?.quannity
-                  }
-                </p>
-              </div>
+                  }</strong>
+                 </p>
+                </CardContent>
+              </Card>
             ))}
           </div>
 
-          <p className='text-3xl font-semibold'> Hình ảnh</p>
+            <Heading desc='Yên tâm bạn có thể thay đổi lại khi đăng ký thành công với chúng tôi'>
+            Danh sách hình ảnh 🎉
+          </Heading>
+          <div className='grid grid-cols-4 gap-4'>
 
-          <div className='mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
             {filesImageHotel.slice(1).map((imageUrl, index) => (
-              <div
-                key={index}
-                className='rounded-3xl overflow-hidden shadow-md'>
+                <Card className='border-none p-0 space-y-2' key={index}>
+              <div className='relative'>
                 <Image
-                  width={70}
-                  height={70}
+                  className='rounded-3xl object-contain w-full'
                   src={URL.createObjectURL(imageUrl.file)}
-                  alt={`Image ${index}`}
-                  className='w-full min-h-17'
+                  alt={`http://localhost:8000/images/$imageUrl`}
+                  width={288}
+                  height={264}
                 />
-                <p>Loại phòng: {imageUrl.typeroom}</p>
-                <p>Khu vực: {imageUrl.regions}</p>
               </div>
+              <CardContent className='flex flex-col gap-4 py-1 max-h-52 p-0'>
+                <p className='font-bold text-sm text-black line-clamp-2'>
+                  {imageUrl.typeroom} - {imageUrl.regions}
+                </p>
+              
+                {/* <p className='text-xs text-gray-500 font-bold line-through'>{formatCurrency(item.minPrice)}</p> */}
+                <div className='flex flex-row justify-between items-center text-sm'></div>
+              </CardContent>
+            </Card>
             ))}
           </div>
+
         </div>
         <div className='flex justify-end items-end'>
           <Button
             disabled={isLoading}
-            className='bg-orange-500 text-white'
+            className='bg-cyan-500 text-white'
             onClick={() => handleSubmit()}>
-            Xác nhận đăng ký
+           { isLoading ? <Loader2/> : 'Xác nhận đăng ký'}
           </Button>
         </div>
       </TabsContent>
