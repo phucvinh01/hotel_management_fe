@@ -15,7 +15,7 @@ export function DataTableRowActions<TData>({
 
   return (
     <div className="flex space-x-2">
-    <ModalEditRoom data={row}/>
+    <ModalEditRoom data={row.original}/>
     </div>
   )
 }

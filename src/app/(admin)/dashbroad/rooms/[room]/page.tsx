@@ -1,13 +1,9 @@
-'use client'
-
-
+'use client';
 import { ModalAddRoom } from '../modal-add-room';
 import { DataTable } from '@/components/table/data-table';
 import { columns } from '@/components/table/columns';
 import DefaultLayout from '@/components/admin/Layouts/DefaultLayout';
 import { useRooms } from '@/service/query';
-import { useQuery } from '@tanstack/react-query';
-import { getRooms } from '@/service/hotel.service';
 import Loader from '@/components/admin/common/Loader';
 
 
@@ -16,14 +12,9 @@ export default  function RoomPage({ params }: { params: { room: string } }) {
 
   const { isLoading, error, data } = useRooms(params.room)
 
-  console.log(data);
   if (isLoading) return <div><Loader/></div>;
   if (error) return <div>Error: {error.message}</div>;
 
-  // Use data here
-  console.log(data); // Now data should be available
-
- 
 
   return (
     <DefaultLayout>

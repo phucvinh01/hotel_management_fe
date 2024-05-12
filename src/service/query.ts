@@ -7,7 +7,7 @@ import {
   useMutation,
 } from "@tanstack/react-query";
 
-import { getRooms, insertRoom } from "./hotel.service";
+import { getRooms, getTypeRooms, insertRoom } from "./hotel.service";
 
 
 
@@ -51,6 +51,14 @@ export function useRooms(id: string) {
   return useQuery({
     queryKey: ["rooms",id],
     queryFn: () => getRooms(id),
+    placeholderData: keepPreviousData,
+  });
+}
+
+export function useGetTypeRooms(id: string) {
+  return useQuery({
+    queryKey: ["getTypeRooms",id],
+    queryFn: () => getTypeRooms(id),
     placeholderData: keepPreviousData,
   });
 }

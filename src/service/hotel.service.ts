@@ -144,7 +144,6 @@ export const getHotel = async (id:string):Promise<HotelResponse | undefined> => 
 
 export const getRooms = async (id: string): Promise<SelectRoomsResult[] | undefined> => {
   try {
-    console.log(id);
     const response = await axios.get<SelectRoomsResult[]>(`/room/select-room?id=${id}`);
     if (response.status === 200) {
       return response.data;
@@ -159,11 +158,9 @@ export const getRooms = async (id: string): Promise<SelectRoomsResult[] | undefi
 
 
 export const getTypeRooms = async (id: string): Promise<any> => {
-  console.log(id);
   try {
     const response = await axios.get<TypeRoomsTableResult>(`/room/select-typeroom?id=${id}`);
     if (response.status === 200) {
-      console.log(response.data);
       return response.data;
     } else {
       throw new Error(`Error fetching rooms: Status ${response.status}`); 

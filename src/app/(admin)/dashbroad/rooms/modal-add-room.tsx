@@ -54,24 +54,6 @@ export function ModalAddRoom() {
       })
       setIsOpen(false)
     }
-
-    // console.table(formData)
-    // const result = await insertRoom(formData)
-    // console.log(result);
-    // if(result) {
-    //   toast({
-    //     title:"Tạo mới thành công"
-    //   })
-    //   setIsOpen(false)
-    // }
-    // else {
-    //   toast({
-    //     title:"Tạo mới thất bại"
-    //   })
-    //   setIsOpen(true)
-    // }
-
-    //setIsOpen(false);
   };
 
   const { admin } = useAuth();
@@ -79,7 +61,6 @@ export function ModalAddRoom() {
   useEffect(() => {
     if (isOpen) {
       const getDataTypeRooms = async (id: string) => {
-        console.log('Id: ', id);
         if (!id) return;
 
         try {
