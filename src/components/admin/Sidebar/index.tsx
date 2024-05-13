@@ -66,7 +66,16 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
   };
 
 
-  const id = window.localStorage.getItem('Hotel')
+  const getHotelId = () => {
+  try {
+    return window.localStorage.getItem('Hotel');
+  } catch (error) {
+    console.error('Error retrieving hotel ID:', error);
+    return null; 
+  }
+};
+
+const id = getHotelId();
 
   return (
     <aside

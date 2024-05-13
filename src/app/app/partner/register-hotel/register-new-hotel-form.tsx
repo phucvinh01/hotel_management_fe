@@ -15,6 +15,7 @@ import {
   InsertResult,
   insertRooms,
   insertTyperoom,
+  insertTyperooms,
   uploadImage,
 } from '@/service/hotel.service';
 import { useAuth } from '@/hooks/useAuthContext';
@@ -48,7 +49,7 @@ export function RegisterNewHotelForm() {
       let id_typeroom: string | false | undefined = '';
       if (id_hotel) {
         for (const typeRoom of dataTypeRoom) {
-          const typeId = await insertTyperoom(typeRoom, id_hotel);
+          const typeId = await insertTyperooms(typeRoom, id_hotel);
           id_typeroom = typeId && typeId.id;
           if (typeId) {
             for (const fileImage of filesImageHotel) {

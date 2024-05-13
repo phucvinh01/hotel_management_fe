@@ -126,8 +126,8 @@ export const columns: ColumnDef<SelectTypeRoomResulet>[] = [
       return value.includes(row.getValue(id))
     },
   },
-  {
-    id: "actions",
-    cell: ({ row }) => <DataTableRowActions row={row} />,
-  },
+  // {
+  //   id: "actions",
+  //   cell: ({ row }) => <DataTableRowActions row={row} />,
+  // },
 ]

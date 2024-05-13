@@ -80,7 +80,7 @@ interface Rate {
 interface Room {
   id?: string;
   TypeRoomId?	: string;
-  State?: string;
+  State?: number;
   TimeRecive?: string;
   TimeLeave?: string;
   Gift?: string;
@@ -166,25 +166,25 @@ interface IRate {
 }
 interface ITypeRoom {
   id: string;
-  HotelId: string;
-  Ban_Cong_San_Hien: boolean;
-  Bon_Tam: boolean;
+  HotelId?: string;
+  Ban_Cong_San_Hien: number;
+  Bon_Tam: number;
   ConvenientBathRoom: string;
   ConvenientRoom: string;
   FloorArea: number;
-  Khu_Vuc_Cho: boolean;
+  Khu_Vuc_Cho: number;
   MaxQuantityMember: number;
-  May_Lanh: boolean;
+  May_Lanh: number;
   Name: string;
-  Nuoc_Nong: boolean;
+  Nuoc_Nong: number;
   Price: number;
-  Voi_Tam_Dung: boolean;
+  Voi_Tam_Dung: number;
   TenLoaiGiuong: string;
   SoLuongGiuong: number;
-  Lo_Vi_Song: boolean;
-  Tu_Lanh: boolean;
-  May_Giat: boolean;
-  No_Moking: boolean;
+  Lo_Vi_Song: number;
+  Tu_Lanh: number;
+  May_Giat: number;
+  No_Moking: number;
   created_at: string | null;
   updated_at: string | null;
 }

@@ -1,6 +1,24 @@
 
 import axios from '../axios/http'
 
+// Staff
+
+export const insertStaff = async (HotelId:string, StaffId:string): Promise<InsertResult | false | undefined> => {
+  try {
+    const response = await axios.post<InsertResult>(``);
+    if (response.status === 200) {
+      return response.data;
+    }
+  } catch (error) {
+    return false;
+
+   throw(error)
+  }
+};
+
+
+// Hotel
+
 
 export const getHotelPage = async (page: number): Promise<ApiGetPageResponse | false> => {
   try {
@@ -14,6 +32,18 @@ export const getHotelPage = async (page: number): Promise<ApiGetPageResponse | f
   }
   return false
 }
+
+export const getHotel = async (id:string):Promise<HotelResponse | undefined> => {
+  try {
+    const response = await axios.get<HotelResponse>(`/hotel/get-hotel?id=${id}`);
+    if (response.status === 200) {
+      return response.data;
+    }
+  } catch (error) {
+   throw(error)
+  }
+}
+
 
 
 export const getOneHotelById = async (id: string): Promise<IOneHotel | false | undefined> => {
@@ -59,7 +89,11 @@ export const insertHotel = async (body:Hotel | undefined): Promise<string | fals
   }
 };
 
-export const insertTyperoom = async (body:TypeRoom | undefined,id:string): Promise<InsertResult | false | undefined> => {
+
+
+//  Typeroom
+
+export const insertTyperooms = async (body:TypeRoom,id:string): Promise<InsertResult | false | undefined> => {
   try {
     
     const response = await axios.post<InsertResult>(`/hotel/insert-typeroom`,{...body,"HotelId":id});
@@ -68,6 +102,18 @@ export const insertTyperoom = async (body:TypeRoom | undefined,id:string): Promi
     }
   } catch (error) {
    throw(error)
+    return false;
+  }
+};
+
+export const insertTyperoom = async (body:ITypeRoom,): Promise<boolean | undefined> => {
+  try {
+    
+    const response = await axios.post<boolean>(`/hotel/insert-typeroom`,body);
+    if (response.status === 200) {
+       return true;
+    }
+  } catch (error) {
     return false;
   }
 };
@@ -93,6 +139,23 @@ export async function uploadImage(image: File, typeRoom: InsertResult,region:str
   }
 }
 
+export const getTypeRooms = async (id: string): Promise<any> => {
+  try {
+    const response = await axios.get<TypeRoomsTableResult>(`/room/select-typeroom?id=${id}`);
+    if (response.status === 200) {
+      return response.data;
+    } else {
+      throw new Error(`Error fetching rooms: Status ${response.status}`); 
+    }
+  } catch (error) {
+    console.error("Error fetching rooms:", error);
+    throw error; 
+  }
+};
+
+
+// Room
+
 export const insertRooms = async (body:Room | undefined, id:string,index:number): Promise<InsertResult | false | undefined> => {
   try {
     const response = await axios.post<InsertResult>(`/room/insert-room`,{...body,  "TypeRoomId":id, "RoomName":`${body?.RoomName} ${index} ` });
@@ -117,30 +180,7 @@ export const insertRoom = async (body:Room): Promise<InsertResult | false | unde
   }
 };
 
-export const insertStaff = async (HotelId:string, StaffId:string): Promise<InsertResult | false | undefined> => {
-  try {
-    const response = await axios.post<InsertResult>(``);
-    if (response.status === 200) {
-      return response.data;
-    }
-  } catch (error) {
-    return false;
 
-   throw(error)
-  }
-};
-
-
-export const getHotel = async (id:string):Promise<HotelResponse | undefined> => {
-  try {
-    const response = await axios.get<HotelResponse>(`/hotel/get-hotel?id=${id}`);
-    if (response.status === 200) {
-      return response.data;
-    }
-  } catch (error) {
-   throw(error)
-  }
-}
 
 export const getRooms = async (id: string): Promise<SelectRoomsResult[] | undefined> => {
   try {
@@ -156,20 +196,24 @@ export const getRooms = async (id: string): Promise<SelectRoomsResult[] | undefi
   }
 };
 
-
-export const getTypeRooms = async (id: string): Promise<any> => {
+export const updateRoom = async (body: Room): Promise<boolean | undefined> => {
   try {
-    const response = await axios.get<TypeRoomsTableResult>(`/room/select-typeroom?id=${id}`);
+    const response = await axios.put<string>(`/room/update-room`, body);
     if (response.status === 200) {
-      return response.data;
+      return true;
+    }else if(response.status === 201) {
+      return false;
     } else {
-      throw new Error(`Error fetching rooms: Status ${response.status}`); 
+      throw new Error(`Error fetching rooms: Status ${response.status}`);
     }
   } catch (error) {
     console.error("Error fetching rooms:", error);
-    throw error; 
+    return false;
   }
 };
+
+
+
 
 
 

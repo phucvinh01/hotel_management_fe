@@ -21,7 +21,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { FormEvent, useEffect, useState } from 'react';
-import { PlusCircleIcon, Wifi } from 'lucide-react';
+import { PlusCircle, PlusCircleIcon, PlusIcon, Wifi, XIcon } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuthContext';
 import { getTypeRooms, insertRoom } from '@/service/hotel.service';
 import { Textarea } from '@/components/ui/textarea';
@@ -86,14 +86,14 @@ export function ModalAddRoom() {
       </DialogTrigger>
       <DialogContent className='sm:max-w-[625px] bg-white dark:bg-black text-black dark:text-white'>
         <DialogHeader>
-          <DialogTitle>Add Room</DialogTitle>
+          <DialogTitle>Thêm phòng</DialogTitle>
         </DialogHeader>
         <form className='grid gap-4 py-4 grid-cols-12 ' onSubmit={(e) => handleSubmit(e)}>
           <div className='flex space-y-2 flex-col col-span-6'>
             <Label
               htmlFor='name'
               className='text-start'>
-              Room Name
+              Tên phòng
             </Label>
             <Input
             required
@@ -105,11 +105,11 @@ export function ModalAddRoom() {
             <Label
               htmlFor='roomtype'
               className='text-start'>
-              Room Type
+              Loại phòng
             </Label>
             <Select name='roomtype' required onValueChange={(e) => setFormData((prev) => ({ ...prev!, TypeRoomId: e }))}>
               <SelectTrigger className=''>
-                <SelectValue placeholder='Select a fruit' />
+                <SelectValue placeholder='Chọn loại phòng' />
               </SelectTrigger>
               <SelectContent className='bg-white text-black dark:bg-black dark:text-white'>
                 <SelectGroup>
@@ -128,11 +128,11 @@ export function ModalAddRoom() {
             <Label
               htmlFor='state'
               className='text-start'>
-              State
+              Trạng thái
             </Label>
-            <Select name='state' required  onValueChange={(e) => setFormData((prev) => ({ ...prev!, State: e }))}>
+            <Select name='state' required  onValueChange={(e) => setFormData((prev) => ({ ...prev!, State: Number(e) }))}>
               <SelectTrigger className=''>
-                <SelectValue placeholder='Select a fruit' />
+                <SelectValue placeholder='Chọn trạng thái' />
               </SelectTrigger>
               <SelectContent className='bg-white text-black dark:bg-black dark:text-white'>
                 <SelectGroup>
@@ -146,7 +146,7 @@ export function ModalAddRoom() {
             <Label
               htmlFor='discount'
               className='text-start'>
-              Discount
+              Giảm giá
             </Label>
             <Input
               min={0}
@@ -161,7 +161,7 @@ export function ModalAddRoom() {
             <Label
               htmlFor='Gift'
               className='text-start'>
-              Gift
+              Quà
             </Label>
             <Textarea
               id='Gift'
@@ -191,7 +191,7 @@ export function ModalAddRoom() {
             <label
               htmlFor='breakfast'
               className='text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'>
-              Breakfast
+             Bữa sáng
             </label>
           </div>
           <div className='flex items-center space-x-2 col-span-4'>
@@ -203,7 +203,7 @@ export function ModalAddRoom() {
             <label
               htmlFor='is_morking'
               className='text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'>
-              Morking
+              Được hút thuốc
             </label>
           </div>
           <div className='flex items-center space-x-2 col-span-4'>
@@ -215,7 +215,7 @@ export function ModalAddRoom() {
             <label
               htmlFor='cancel'
               className='text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'>
-              Cancel
+              Được hủy
             </label>
           </div>
           <div className='flex items-center space-x-2 col-span-4'>
@@ -244,15 +244,16 @@ export function ModalAddRoom() {
           </div>
         <DialogFooter className='col-span-12'>
           <Button
-            className='bg-black text-white dark:border-white hover:text-black'
+            className='bg-black text-white dark:border-white hover:text-black space-x-2'
             onClick={() => setIsOpen(false)}
           >
-            Cancel
+            <XIcon size={16}/> Hủy
           </Button>
           <Button
-            className='bg-cyan-500 dark:bg-cyan-900'
+            className='bg-cyan-500 dark:bg-cyan-900 space-x-2'
             type='submit'>
-            Add
+              <PlusIcon size={16}/>
+            Thêm
           </Button>
         </DialogFooter>
         </form>

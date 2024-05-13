@@ -7,7 +7,7 @@ import {
   useMutation,
 } from "@tanstack/react-query";
 
-import { getRooms, getTypeRooms, insertRoom } from "./hotel.service";
+import { getRooms, getTypeRooms, insertRoom, insertTyperoom, updateRoom } from "./hotel.service";
 
 
 
@@ -47,14 +47,6 @@ import { getRooms, getTypeRooms, insertRoom } from "./hotel.service";
 //   });
 // }
 
-export function useRooms(id: string) {
-  return useQuery({
-    queryKey: ["rooms",id],
-    queryFn: () => getRooms(id),
-    placeholderData: keepPreviousData,
-  });
-}
-
 export function useGetTypeRooms(id: string) {
   return useQuery({
     queryKey: ["getTypeRooms",id],
@@ -63,28 +55,50 @@ export function useGetTypeRooms(id: string) {
   });
 }
 
+export function useCreateTypeRoom() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (data: ITypeRoom) => insertTyperoom(data),
+    onSuccess: async () => {
+        await queryClient.invalidateQueries({ queryKey: ['getTypeRooms'] }); 
+        await queryClient.prefetchQuery({ queryKey: ['getTypeRooms'] });
+    },
+  });
+}
+
 export function useCreateRoom() {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: (data: Room) => insertRoom(data),
-    onMutate: () => {
-      console.log("mutate");
-    },
-
-    onError: () => {
-      console.log("error");
-    },
-
     onSuccess: async () => {
       console.log("success");
         await queryClient.invalidateQueries({ queryKey: ['rooms'] }); // Corrected line
         await queryClient.prefetchQuery({ queryKey: ['rooms'] }); // Manually refetch
     },
+  });
+}
 
-    onSettled: async (_, error) => {
-      console.log("settled");
 
+export function useRooms(id: string) {
+  return useQuery({
+    queryKey: ["rooms",id],
+    queryFn: () => getRooms(id),
+    placeholderData: keepPreviousData,
+    refetchOnWindowFocus: true,
+  });
+}
+
+export function useUpdateRoom() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (data: Room) => updateRoom(data),
+    onSuccess: async () => {
+        await queryClient.invalidateQueries({ queryKey: ['rooms'] }); 
+        await queryClient.prefetchQuery({ queryKey: ['rooms'] }); 
+    },
+    onError: async (error) => {
+      return "Cập nhật phòng thất bại";
     },
   });
 }
