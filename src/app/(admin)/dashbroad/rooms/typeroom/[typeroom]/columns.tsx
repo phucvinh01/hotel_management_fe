@@ -9,7 +9,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { DataTableColumnHeader } from "@/components/table/data-table-column-header"
 import { labels } from "@/components/table/data/data"
 import { Badge } from "@/components/ui/badge"
-import { DataTableRowActions } from "@/components/table/data-table-row-actions"
+import { DataTableRowActions } from "./data-table-row-actions"
 
 export const columns: ColumnDef<SelectTypeRoomResulet>[] = [
   {
@@ -117,7 +117,7 @@ export const columns: ColumnDef<SelectTypeRoomResulet>[] = [
         <div className="flex space-x-2">
           {label && <Badge variant="outline">{label.label}</Badge>}
           <span className="max-w-[500px] truncate font-medium">
-            { row.getValue("state_room") + "/" + row.getValue("total_rooms")}
+            { (row.getValue("state_room") !== null ? row.getValue("state_room"): 0)  + "/" + row.getValue("total_rooms")}
           </span>
         </div>
       )
@@ -126,8 +126,8 @@ export const columns: ColumnDef<SelectTypeRoomResulet>[] = [
       return value.includes(row.getValue(id))
     },
   },
-  // {
-  //   id: "actions",
-  //   cell: ({ row }) => <DataTableRowActions row={row} />,
-  // },
+  {
+    id: "actions",
+    cell: ({ row }) => <DataTableRowActions row={row} />,
+  },
 ]

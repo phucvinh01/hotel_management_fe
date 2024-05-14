@@ -58,8 +58,9 @@ export function useGetTypeRooms(id: string) {
 export function useCreateTypeRoom() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (data: ITypeRoom) => insertTyperoom(data),
+    mutationFn: (data: InsertTyperoomAndImage) => insertTyperoom(data),
     onSuccess: async () => {
+      console.log("onSuccess");
         await queryClient.invalidateQueries({ queryKey: ['getTypeRooms'] }); 
         await queryClient.prefetchQuery({ queryKey: ['getTypeRooms'] });
     },

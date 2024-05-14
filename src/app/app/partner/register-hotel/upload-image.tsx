@@ -10,7 +10,7 @@ export interface FileData {
 interface Props {
   files: FileData[];
   setFiles: (files: FileData[]) => void;
-  type?: boolean;
+  type?: string;
   dataRender?: TypeRoom[];
 }
 
@@ -66,18 +66,18 @@ const ImageUploader: React.FC<Props> = (props) => {
 
   const renderImageTable = () => {
     return (
-      <table className='w-full bg-slate-200 mt-3 rounded-3xl px-5'>
+      <table className='w-full bg-slate-200 mt-3 rounded-3xl px-2'>
         <thead>
           <tr>
-            <th className='px-2 py-1 text-md'>File</th>
-            <th className='px-2 py-1 text-md'>Ảnh</th>
-            <th className='px-2 py-1 text-md'>Loại phòng</th>
-            <th className='px-2 py-1 text-md'>Khu vực</th>
-            <th className='px-2 py-1 text-md'>Hành động</th>
+            <th className='px-2 py-1 text-sm'>File</th>
+            <th className='px-2 py-1 text-sm'>Ảnh</th>
+            {!type && <th className='px-2 py-1 text-sm'>Loại phòng</th>}
+            <th className='px-2 py-1 text-sm'>Khu vực</th>
+            <th className='px-2 py-1 text-sm'>Hành động</th>
           </tr>
         </thead>
         <tbody>
-          {files.map((file,index) => (
+          {files.map((file, index) => (
             <tr key={file.filename}>
               <td className='border px-2 py-1 text-[11px]'> {file.filename}</td>
               <td className='border px-2 py-1 text-[11px]'>
@@ -90,40 +90,51 @@ const ImageUploader: React.FC<Props> = (props) => {
                   alt={file.filename}
                 />
               </td>
-              <td>
-                <Select
-                disabled={index === 0 ? true : false}
-                  value={file.typeroom}
-                  onValueChange={(e) => {
-                    setFiles(
-                      files.map((f) =>
-                        f.filename === file.filename
-                          ? { ...f, typeroom: e }
-                          : f
-                      )
-                    );
-                  }}>
-                 <SelectTrigger className='w-[180px]'>
-                  {
-                    index === 0 ? <SelectValue placeholder='None' /> : <SelectValue placeholder='Loại phòng' />
-                  }
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      {
-                        dataRender?.map((item,index) => {
-                          return(
-                           <SelectItem value={item.Name} key={index}>{item.Name}</SelectItem>
-                          )
-                        })
-                        }
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
+
+              {!type && (
+                <td>
+                  <Select
+                    disabled={type !== 'typeroom' && index === 0}
+                    value={file.typeroom}
+                    onValueChange={(e) => {
+                      setFiles(
+                        files.map((f) =>
+                          f.filename === file.filename
+                            ? { ...f, typeroom: e }
+                            : f
+                        )
+                      );
+                    }}>
+                    {}
+                    <SelectTrigger className='w-[120px]'>
+                      {type !== 'typeroom' && index === 0 ? (
+                        <SelectValue placeholder='None' />
+                      ) : (
+                        <SelectValue placeholder='Loại phòng' />
+                      )}
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        {dataRender?.map((item, index) => {
+                          return (
+                            <SelectItem
+                              value={item.Name}
+                              key={index}>
+                              {item.Name}
+                            </SelectItem>
+                          );
+                        })}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
                 </td>
-                <td className={ index === 0 ? `invisible` : ""}>
+              )}
+
+              <td
+                className={
+                  type !== 'typeroom' && index === 0 ? `invisible` : ''
+                }>
                 <Select
-                  
                   value={file.regions}
                   onValueChange={(e) => {
                     setFiles(
@@ -132,7 +143,7 @@ const ImageUploader: React.FC<Props> = (props) => {
                       )
                     );
                   }}>
-                  <SelectTrigger className='w-[180px]'>
+                  <SelectTrigger className='w-[120px]'>
                     <SelectValue placeholder='Chọn khu vực' />
                   </SelectTrigger>
                   <SelectContent>
@@ -148,9 +159,7 @@ const ImageUploader: React.FC<Props> = (props) => {
                 </Select>
               </td>
               <td>
-                <Button onClick={() => removeFile(file)}>
-                  <XCircle />
-                </Button>
+                <XCircle onClick={() => removeFile(file)} />
               </td>
             </tr>
           ))}

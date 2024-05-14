@@ -106,7 +106,7 @@ export const insertTyperooms = async (body:TypeRoom,id:string): Promise<InsertRe
   }
 };
 
-export const insertTyperoom = async (body:ITypeRoom,): Promise<boolean | undefined> => {
+export const insertTyperoom = async (body:InsertTyperoomAndImage): Promise<boolean | undefined> => {
   try {
     
     const response = await axios.post<boolean>(`/hotel/insert-typeroom`,body);

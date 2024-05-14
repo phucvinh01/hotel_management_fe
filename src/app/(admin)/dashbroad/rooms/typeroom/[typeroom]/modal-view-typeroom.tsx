@@ -14,99 +14,164 @@ import {
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { FormEvent, useEffect, useState } from 'react';
-import { Loader, PlusCircleIcon, PlusIcon, Wifi, XIcon } from 'lucide-react';
+import { Edit2, EyeIcon, MoveLeft, Settings, XCircleIcon } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuthContext';
-import { useCreateTypeRoom, useGetTypeRooms } from '@/service/query';
+import Badge from '@/components/shared/Badge';
+import { useGetTypeRooms, useUpdateRoom } from '@/service/query';
 import { toast } from '@/components/ui/use-toast';
-import ImageUploader, { FileData } from '@/app/app/partner/register-hotel/upload-image';
-import { useWindowSize } from 'react-use';
-import { uploadImage } from '@/service/hotel.service';
-export function ModalAddTypeRoom() {
+import { formatCurrency } from '@/lib/formatCurrency';
+import { Card, CardContent } from '@/components/ui/card';
+import Image from 'next/image';
+
+export const ModelViewTypeRoom = ({ data }: { data: any }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [formData, setFormData] = useState<InsertTyperoomAndImage>();
-  const [file, setFiles] = useState<FileData[]>([])
-
+  const [formData, setFormData] = useState<SelectTypeRoomResulet>();
+  const [isEdit, setIsEdit] = useState<boolean>(false);
   const { admin } = useAuth();
-  const createTypeRoomMutation = useCreateTypeRoom();
-  const { width, height } = useWindowSize();
 
-  const [maxWidth, setMaxWidth] = useState<number>(0)
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log(file);
-    const amenities = {
-      room: {
-        waitingRoom: formData?.Khu_Vuc_Cho === 1 ? 'Khu Vực Chờ' : '',
-        balcony: formData?.Ban_Cong_San_Hien === 1 ? 'Ban công' : '',
-        airConditioner: formData?.May_Lanh === 1 ? 'Máy Lạnh' : '',
-        microwave: formData?.Lo_Vi_Song === 1 ? 'Lò vi sóng' : '',
-        refrigerator: formData?.Tu_Lanh === 1 ? 'Tủ lạnh' : '',
-        washingMachine: formData?.May_Giat === 1 ? 'Máy giặt' : '',
-      },
-      bathroom: {
-        shower: formData?.Voi_Tam_Dung === 1 ? 'Vòi tắm đứng' : '',
-        bathtub: formData?.Bon_Tam === 1 ? 'Bồn tắm' : '',
-      },
-    };
+  const updateRoomMutation = useUpdateRoom();
+  let typedData: SelectRoomsResult[] = [];
 
-    if (formData) {
-      formData.ConvenientRoom = Object.values(amenities.room).join('; ');
-      formData.ConvenientBathRoom = Object.values(amenities.bathroom).join(
-        '; '
-      );
-      formData.HotelId = admin?.id_hotel;
-    } else {
-      console.warn('formData is undefined. Amenities cannot be assigned.');
-    }
+  const { data: dataTyperooms, isLoading } = useGetTypeRooms(
+    admin?.id_hotel as string,
+  );
 
-     if (formData) {
-      formData.file = file.map(fileData => fileData.file);
-      formData.region = file.map(fileData => fileData.regions);
-      formData.HotelId = admin?.id_hotel;
-    } else {
-      console.warn('formData is undefined. Amenities cannot be assigned.');
+  if (!isLoading && dataTyperooms) {
+    typedData = dataTyperooms[0] as SelectRoomsResult[];
+  }
+
+  useEffect(() => {
+    if (isOpen) {
+      setFormData(data as SelectTypeRoomResulet);
     }
-    createTypeRoomMutation.mutate(formData as InsertTyperoomAndImage);
-    if (createTypeRoomMutation.isPending) {
-      toast({
-        title: 'Đang khợi tạo',
-      });
-    } else if (createTypeRoomMutation.isError) {
-      toast({
-        title: 'Tạo mới thất bại',
-      });
-      setIsOpen(true);
-    } else {
-      toast({
-        title: 'Tạo mới thành công',
-      });
-      setIsOpen(false);
-    }
-  };
+  }, [isOpen, data]);
+
+  //   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  //     e.preventDefault();
+  //     updateRoomMutation.mutate(formData);
+
+  //     if (updateRoomMutation.isPending) {
+  //       toast({
+  //         title: 'Đang khợi tạo',
+  //       });
+  //     } else if (updateRoomMutation.isError) {
+  //       const errorMessage = updateRoomMutation.error
+  //         ? updateRoomMutation.error.message
+  //         : 'Có lỗi xảy ra';
+  //       toast({
+  //         title: errorMessage,
+  //       });
+  //       setIsOpen(true);
+  //     } else if(updateRoomMutation.isSuccess) {
+  //       toast({
+  //         title: 'Cập nhật thành công',
+  //       });
+  //       setIsOpen(false);
+  //       setIsEdit(false)
+  //     }
+  //   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={() =>setFiles([])}>
+    <Dialog
+      open={isOpen}
+      key={'edit'}>
       <DialogTrigger asChild>
-        <Button
-          className='bg-cyan-500 dark:bg-cyan-700'
-          onClick={() => setIsOpen(true)}>
-          <PlusCircleIcon />
-        </Button>
+        <EyeIcon
+          size={16}
+          className='hover:cursor-pointer'
+          onClick={() => setIsOpen(true)}
+        />
       </DialogTrigger>
-      <DialogContent className={`sm:max-w-[${maxWidth}px] sm:max-w-[1200px] bg-white dark:bg-black text-black dark:text-white'`}>
-        <DialogHeader className=''>
-          <DialogTitle>Thêm loại phòng </DialogTitle>
-        </DialogHeader>
-        <form
-          className='grid gap-2 py-2 grid-cols-12 border-t'
-          onSubmit={(e) => handleSubmit(e)}>
+      <DialogContent className='sm:max-w-[825px] bg-white dark:bg-black dark:text-white'>
+        <form>
+          <DialogHeader className='flex flex-row justify-between items-center mb-3'>
+            <DialogTitle>
+              {isEdit === true
+                ? `Chỉnh sửa thông tin loại phòng ${formData?.Name}`
+                : `Thông tin loại phòng ${formData?.Name}`}
+            </DialogTitle>
+            {isEdit === true ? (
+              <MoveLeft onClick={() => setIsEdit(false)} />
+            ) : (
+              <Settings onClick={() => setIsEdit(true)} />
+            )}
+          </DialogHeader>
+          {isEdit !== true ? (
+            <div className='grid gird-col-12  p-4 border-t'>
+              <div className='col-span-12 flex justify-end items-center'>
+                <Badge
+                  name={formData?.state_room + '/' + formData?.total_rooms}
+                  color={'green'}
+                />
+              </div>
+              <div className='mt-4 col-span-6 space-y-3'>
+                <h3 className='text-sm font-bold'>Thông tin loại phòng</h3>
+                <dl className='grid grid-cols-2 gap-4'>
+                  <dt className='text-gray-600'>Loại:</dt>
+                  <dd className='font-bold text-[14px]'>{formData?.Name}</dd>
+                  <dt className='text-gray-600'>Số sảnh:</dt>
+                  <dd className='font-bold text-[14px]'>
+                    {formData?.FloorArea}
+                  </dd>
+                  <dt className='text-gray-600'>Giá:</dt>
+                  <dd className='font-bold text-[14px]'>
+                    {' '}
+                    {formatCurrency(formData?.Price as string)}
+                  </dd>
+                </dl>
+              </div>
+              <div className='mt-4 col-span-6 space-y-3'>
+                <h3 className='text-sm font-bold'>Tiện nghi</h3>
+                <dl className='grid grid-cols-2 gap-4'>
+                  <dt className='text-gray-600'>Giường:</dt>
+                  <dd className='font-bold text-[14px]'>
+                    {formData?.TenLoaiGiuong} / {formData?.SoLuongGiuong}
+                  </dd>
+                </dl>
+              </div>
+              <div className='mt-4 col-span-12'>
+                <h3 className='text-sm font-bold'>Tiện ích</h3>
+                <dl className='grid grid-cols-2 gap-4'>
+                  <dt className='text-gray-600'>Phòng:</dt>
+                  <dd className='font-bold text-[14px]'>
+                    {formData?.ConvenientRoom}
+                  </dd>
+                  <dt className='text-gray-600'>Phòng tắm:</dt>
+                  <dd className='font-bold text-[14px]'>
+                    {formData?.ConvenientBathRoom}
+                  </dd>
+                </dl>
+              </div>
+              <div className='mt-4 col-span-12'>
+                <h3 className='text-sm font-bold'>Hình ảnh</h3>
+                <Card className='border-none p-0 space-y-2'>
+                  <div className='relative'>
+                    <Image
+                      className='rounded-3xl object-contain'
+                      src={''}
+                      alt={`http://localhost:8000/images/$imageUrl`}
+                      width={80}
+                      height={80}
+                    />
+                  </div>
+                  <CardContent className='flex flex-col gap-4 py-1 max-h-52 p-0'>
+                    <p className='font-bold text-sm text-black line-clamp-2'>
+                      `imageUrl.typeroom- imageUrl.regions`
+                    </p>
+
+                    {/* <p className='text-xs text-gray-500 font-bold line-through'>{formatCurrency(item.minPrice)}</p> */}
+                    <div className='flex flex-row justify-between items-center text-sm'></div>
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
+          ) : (
             <div className='col-span-6 grid grid-cols-12 gap-2'>
 
           <h3 className='col-span-12 text-[18px] underline my-2'>Thông tin</h3>
@@ -139,7 +204,7 @@ export function ModalAddTypeRoom() {
               onChange={(e) =>
                 setFormData((prev) => ({
                   ...prev!,
-                  FloorArea: e.target.valueAsNumber,
+                  FloorArea: e.target.value,
                 }))
               }
             />
@@ -158,7 +223,7 @@ export function ModalAddTypeRoom() {
               onChange={(e) =>
                 setFormData((prev) => ({
                   ...prev!,
-                  MaxQuantityMember: e.target.valueAsNumber,
+                  MaxQuantityMember: e.target.value,
                 }))
               }
             />
@@ -177,7 +242,7 @@ export function ModalAddTypeRoom() {
               onChange={(e) =>
                 setFormData((prev) => ({
                   ...prev!,
-                  Price: e.target.valueAsNumber,
+                  Price: e.target.value,
                 }))
               }
             />
@@ -226,7 +291,7 @@ export function ModalAddTypeRoom() {
               onChange={(e) =>
                 setFormData((prev) => ({
                   ...prev!,
-                  SoLuongGiuong: e.target.valueAsNumber,
+                  SoLuongGiuong: e.target.value,
                 }))
               }
             />
@@ -242,7 +307,7 @@ export function ModalAddTypeRoom() {
                 onCheckedChange={(e) =>
                   setFormData((prev) => ({
                     ...prev!,
-                    Ban_Cong_San_Hien: e ? 1 : 0,
+                    Ban_Cong_San_Hien: e ? "1" : "0",
                   }))
                 }
               />
@@ -256,7 +321,7 @@ export function ModalAddTypeRoom() {
               <Checkbox
                 id='wating-room'
                 onCheckedChange={(e) =>
-                  setFormData((prev) => ({ ...prev!, Khu_Vuc_Cho: e ? 1 : 0 }))
+                  setFormData((prev) => ({ ...prev!, Khu_Vuc_Cho: e ? "1" : "0" }))
                 }
               />
               <label
@@ -273,7 +338,7 @@ export function ModalAddTypeRoom() {
               <Checkbox
                 id='shower'
                 onCheckedChange={(e) =>
-                  setFormData((prev) => ({ ...prev!, Voi_Tam_Dung: e ? 1 : 0 }))
+                  setFormData((prev) => ({ ...prev!, Voi_Tam_Dung: e ? "1" : "0" }))
                 }
               />
               <label
@@ -286,7 +351,7 @@ export function ModalAddTypeRoom() {
               <Checkbox
                 id='bath'
                 onCheckedChange={(e) =>
-                  setFormData((prev) => ({ ...prev!, Bon_Tam: e ? 1 : 0 }))
+                  setFormData((prev) => ({ ...prev!, Bon_Tam: e ? "1" : "0" }))
                 }
               />
               <label
@@ -299,7 +364,7 @@ export function ModalAddTypeRoom() {
               <Checkbox
                 id='hotwater'
                 onCheckedChange={(e) =>
-                  setFormData((prev) => ({ ...prev!, Nuoc_Nong: e ? 1 : 0 }))
+                  setFormData((prev) => ({ ...prev!, Nuoc_Nong: e ? "1" : "0" }))
                 }
               />
               <label
@@ -316,7 +381,7 @@ export function ModalAddTypeRoom() {
               <Checkbox
                 id='air-machine'
                 onCheckedChange={(e) =>
-                  setFormData((prev) => ({ ...prev!, May_Lanh: e ? 1 : 0 }))
+                  setFormData((prev) => ({ ...prev!, May_Lanh: e ? "1" : "0" }))
                 }
               />
               <label
@@ -329,7 +394,7 @@ export function ModalAddTypeRoom() {
               <Checkbox
                 id='bath'
                 onCheckedChange={(e) =>
-                  setFormData((prev) => ({ ...prev!, Bon_Tam: e ? 1 : 0 }))
+                  setFormData((prev) => ({ ...prev!, Bon_Tam: e ? "1" : "0" }))
                 }
               />
               <label
@@ -342,7 +407,7 @@ export function ModalAddTypeRoom() {
               <Checkbox
                 id='microway'
                 onCheckedChange={(e) =>
-                  setFormData((prev) => ({ ...prev!, Lo_Vi_Song: e ? 1 : 0 }))
+                  setFormData((prev) => ({ ...prev!, Lo_Vi_Song: e ? "1" : "0" }))
                 }
               />
               <label
@@ -355,7 +420,7 @@ export function ModalAddTypeRoom() {
               <Checkbox
                 id='watsing-machine'
                 onCheckedChange={(e) =>
-                  setFormData((prev) => ({ ...prev!, May_Giat: e ? 1 : 0 }))
+                  setFormData((prev) => ({ ...prev!, May_Giat: e ? "1" : "0" }))
                 }
               />
               <label
@@ -368,7 +433,7 @@ export function ModalAddTypeRoom() {
               <Checkbox
                 id='frige'
                 onCheckedChange={(e) =>
-                  setFormData((prev) => ({ ...prev!, Tu_Lanh: e ? 1 : 0 }))
+                  setFormData((prev) => ({ ...prev!, Tu_Lanh: e ? "1" : "0" }))
                 }
               />
               <label
@@ -381,7 +446,7 @@ export function ModalAddTypeRoom() {
               <Checkbox
                 id='fax'
                 onCheckedChange={(e) =>
-                  setFormData((prev) => ({ ...prev!, No_Moking: e ? 1 : 0 }))
+                  setFormData((prev) => ({ ...prev!, No_Moking: e ? "1" : "0" }))
                 }
               />
               <label
@@ -392,31 +457,28 @@ export function ModalAddTypeRoom() {
             </div>
           </div>
             </div>
-            <div className='col-span-6'>
-                <h3 className='col-span-12 text-[18px] underline my-2'>Hình ảnh</h3>
-              <ImageUploader files={file} setFiles={setFiles} type='typeroom' />
-            </div>
+          )}
 
-          <DialogFooter className='col-span-12 mt-2'>
+          <DialogFooter>
             <Button
-              className='bg-black text-white dark:border-white hover:text-black space-x-2 dark:border'
-              onClick={() => setIsOpen(false)}>
-              <XIcon /> Hủy
+              type='button'
+              onClick={() => {
+                setIsOpen(false), setIsEdit(false);
+              }}
+              className='bg-black text-white dark:border-white dark:border hover:text-black transition-colors space-x-2 '>
+              <XCircleIcon size={14} /> <span>Hủy</span>
             </Button>
-            <Button
-              className='bg-cyan-500 dark:bg-cyan-900 space-x-2'
-              type='submit'>
-              {createTypeRoomMutation.isPending ? (
-                <Loader />
-              ) : (
-                <>
-                  <PlusIcon /> Thêm
-                </>
-              )}
-            </Button>
+            {isEdit && (
+              <Button
+                type='submit'
+                className='space-x-2 bg-cyan-500 dark:bg-white dark:text-black'>
+                <Edit2 size={14} />
+                <span>Chỉnh sửa </span>
+              </Button>
+            )}
           </DialogFooter>
         </form>
       </DialogContent>
     </Dialog>
   );
-}
+};

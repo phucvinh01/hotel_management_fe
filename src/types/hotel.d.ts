@@ -188,6 +188,13 @@ interface ITypeRoom {
   created_at: string | null;
   updated_at: string | null;
 }
+
+interface InsertTyperoomAndImage extends ITypeRoom {
+  file: File[];
+  region: string[];
+  
+}
+
 interface IRoom {
   id: string;
   TypeRoomId: string;
@@ -353,5 +360,8 @@ interface RoomsTableResult {
 interface TypeRoomsTableResult {
   data : SelectTypeRoomResulet
 }
+
+
+
 
 
