@@ -40,19 +40,18 @@ export function ModalAddTypeRoom() {
   const [maxWidth, setMaxWidth] = useState<number>(0)
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(file);
     const amenities = {
       room: {
-        waitingRoom: formData?.Khu_Vuc_Cho === 1 ? 'Khu Vực Chờ' : '',
-        balcony: formData?.Ban_Cong_San_Hien === 1 ? 'Ban công' : '',
-        airConditioner: formData?.May_Lanh === 1 ? 'Máy Lạnh' : '',
-        microwave: formData?.Lo_Vi_Song === 1 ? 'Lò vi sóng' : '',
-        refrigerator: formData?.Tu_Lanh === 1 ? 'Tủ lạnh' : '',
-        washingMachine: formData?.May_Giat === 1 ? 'Máy giặt' : '',
+        waitingRoom: formData?.Khu_Vuc_Cho === 1 && 'Khu Vực Chờ' ,
+        balcony: formData?.Ban_Cong_San_Hien === 1 && 'Ban công' ,
+        airConditioner: formData?.May_Lanh === 1 && 'Máy Lạnh' ,
+        microwave: formData?.Lo_Vi_Song === 1 && 'Lò vi sóng' ,
+        refrigerator: formData?.Tu_Lanh === 1 && 'Tủ lạnh' ,
+        washingMachine: formData?.May_Giat === 1 && 'Máy giặt' ,
       },
       bathroom: {
-        shower: formData?.Voi_Tam_Dung === 1 ? 'Vòi tắm đứng' : '',
-        bathtub: formData?.Bon_Tam === 1 ? 'Bồn tắm' : '',
+        shower: formData?.Voi_Tam_Dung === 1 && 'Vòi tắm đứng' ,
+        bathtub: formData?.Bon_Tam === 1 &&'Bồn tắm' ,
       },
     };
 
@@ -73,6 +72,9 @@ export function ModalAddTypeRoom() {
     } else {
       console.warn('formData is undefined. Amenities cannot be assigned.');
     }
+
+
+    console.log(formData?.file);
     createTypeRoomMutation.mutate(formData as InsertTyperoomAndImage);
     if (createTypeRoomMutation.isPending) {
       toast({

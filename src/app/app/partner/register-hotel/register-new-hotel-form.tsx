@@ -25,7 +25,15 @@ import Heading from '@/components/shared/Heading';
 import { Card, CardContent, CardTitle } from '@/components/ui/card';
 import { formatCurrency } from '@/lib/formatCurrency';
 import { StarIcon } from 'react-simple-star-rating/dist/components/StarIcon';
-import { HomeIcon, Hotel, Loader2, MapPin, PhoneCallIcon, Timer, TimerOffIcon } from 'lucide-react';
+import {
+  HomeIcon,
+  Hotel,
+  Loader2,
+  MapPin,
+  PhoneCallIcon,
+  Timer,
+  TimerOffIcon,
+} from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 
 export function RegisterNewHotelForm() {
@@ -58,24 +66,30 @@ export function RegisterNewHotelForm() {
                   const res = await uploadImage(
                     fileImage.file,
                     typeId as InsertResult,
-                    'None'
+                    'None',
                   );
-                } else{
+                  if (!res) {
+                    toast({
+                      variant: 'destructive',
+                      title: `Thêm hình ảnh cho  ${typeRoom.Name} thất bại`,
+                    });
+                    setIsLoading(false);
+                  }
+                } else {
                   const res = await uploadImage(
                     fileImage.file,
                     typeId as InsertResult,
-                    fileImage.regions
+                    fileImage.regions,
                   );
-                if (!res) {
-                  toast({
-                    variant: 'destructive',
-                    title: `Thêm hình ảnh cho  ${typeRoom.Name} thất bại`,
-                  });
-                  setIsLoading(false);
+                  if (!res) {
+                    toast({
+                      variant: 'destructive',
+                      title: `Thêm hình ảnh cho  ${typeRoom.Name} thất bại`,
+                    });
+                    setIsLoading(false);
+                  }
                 }
               }
-                }
-
             }
             for (const room of dataRooms) {
               if (room.TypeRoomId === typeRoom.Name) {
@@ -84,7 +98,7 @@ export function RegisterNewHotelForm() {
                     const res = await insertRooms(
                       room,
                       id_typeroom as string,
-                      index + 1
+                      index + 1,
                     );
                     if (!res) {
                       toast({
@@ -107,7 +121,7 @@ export function RegisterNewHotelForm() {
 
         const res = await insertStaffToList(
           id_hotel,
-          admin?.id_staff as string
+          admin?.id_staff as string,
         );
 
         if (res) {
@@ -304,29 +318,52 @@ export function RegisterNewHotelForm() {
           <Heading desc='Tuyệt vời, chúc mừng bạn đã hoàn thành việc niêm yết, đang chờ duyệt để xuất bản'>
             Xin chúc mừng 🎉
           </Heading>
-          <Separator/>
+          <Separator />
 
           <div className='grid grid-cols-2 p-4'>
             <div className=''>
-              <p className='text-gray-500 mb-2 flex gap-4'><HomeIcon/> <span className='text-black text-end'>{dataHotel?.Name}</span></p>
-              <p className='text-gray-500 mb-2 flex gap-4'><MapPin/><span className='text-black text-end'>{dataHotel?.Address}</span></p>
-              <p className='text-gray-500 mb-2 flex gap-4'><PhoneCallIcon/> <span className='text-black text-end'>{dataHotel?.Telephone}</span></p>
-              <p className='text-gray-500 mb-2 flex gap-4'><Timer/><span className='text-black text-end'>{dataHotel?.TimeCheckIn}</span></p>
-              <p className='text-gray-500 mb-2 flex gap-4'><TimerOffIcon/><span className='text-black text-end'>{dataHotel?.TimeCheckOut}</span></p>
+              <p className='text-gray-500 mb-2 flex gap-4'>
+                <HomeIcon />{' '}
+                <span className='text-black text-end'>{dataHotel?.Name}</span>
+              </p>
+              <p className='text-gray-500 mb-2 flex gap-4'>
+                <MapPin />
+                <span className='text-black text-end'>
+                  {dataHotel?.Address}
+                </span>
+              </p>
+              <p className='text-gray-500 mb-2 flex gap-4'>
+                <PhoneCallIcon />{' '}
+                <span className='text-black text-end'>
+                  {dataHotel?.Telephone}
+                </span>
+              </p>
+              <p className='text-gray-500 mb-2 flex gap-4'>
+                <Timer />
+                <span className='text-black text-end'>
+                  {dataHotel?.TimeCheckIn}
+                </span>
+              </p>
+              <p className='text-gray-500 mb-2 flex gap-4'>
+                <TimerOffIcon />
+                <span className='text-black text-end'>
+                  {dataHotel?.TimeCheckOut}
+                </span>
+              </p>
             </div>
             <Card className='border-none p-0 space-y-2'>
               <div className='relative'>
-                {
-                  filesImageHotel[0] &&
-                <Image
-                  className='rounded-3xl object-contain w-full'
-                  src={URL.createObjectURL(filesImageHotel[0] && filesImageHotel[0]?.file)}
-                  alt={`http://localhost:8000/images/${filesImageHotel[0]?.file}`}
-                  width={288}
-                  height={264}
-                />
-                }
-
+                {filesImageHotel[0] && (
+                  <Image
+                    className='rounded-3xl object-contain w-full'
+                    src={URL.createObjectURL(
+                      filesImageHotel[0] && filesImageHotel[0]?.file,
+                    )}
+                    alt={`http://localhost:8000/images/${filesImageHotel[0]?.file}`}
+                    width={288}
+                    height={264}
+                  />
+                )}
               </div>
               <CardContent className='flex flex-col gap-4 py-1 max-h-52 p-0'>
                 <p className='font-bold text-sm text-black line-clamp-2'>
@@ -341,67 +378,71 @@ export function RegisterNewHotelForm() {
             </Card>
           </div>
 
-
-         <Heading desc='Yên tâm bạn có thể thay đổi lại khi đăng ký thành công với chúng tôi'>
+          <Heading desc='Yên tâm bạn có thể thay đổi lại khi đăng ký thành công với chúng tôi'>
             Khách sạn có bạn đã có 🎉
           </Heading>
-          <Separator/>
-
+          <Separator />
 
           <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-2'>
             {dataTypeRoom?.map((roomType, index) => (
               <Card
                 className='flex flex-col justify-center items-center gap-4'
-                key={index}
-                >
+                key={index}>
                 <CardContent className='text-gray-600 space-y-6 mt-5'>
-                <CardTitle className='flex gap-2'><Hotel/> {roomType.Name}</CardTitle>
-                  <p>Số lượng phòng: 
-                  <strong> {
-                    dataRooms?.find((room) => room.TypeRoomId === roomType.Name)
-                      ?.quannity
-                  }</strong>
-                 </p>
+                  <CardTitle className='flex gap-2'>
+                    <Hotel /> {roomType.Name}
+                  </CardTitle>
+                  <p>
+                    Số lượng phòng:
+                    <strong>
+                      {' '}
+                      {
+                        dataRooms?.find(
+                          (room) => room.TypeRoomId === roomType.Name,
+                        )?.quannity
+                      }
+                    </strong>
+                  </p>
                 </CardContent>
               </Card>
             ))}
           </div>
 
-            <Heading desc='Yên tâm bạn có thể thay đổi lại khi đăng ký thành công với chúng tôi'>
+          <Heading desc='Yên tâm bạn có thể thay đổi lại khi đăng ký thành công với chúng tôi'>
             Danh sách hình ảnh 🎉
           </Heading>
           <div className='grid grid-cols-4 gap-4'>
-
             {filesImageHotel.slice(1).map((imageUrl, index) => (
-                <Card className='border-none p-0 space-y-2' key={index}>
-              <div className='relative'>
-                <Image
-                  className='rounded-3xl object-contain w-full'
-                  src={URL.createObjectURL(imageUrl.file)}
-                  alt={`http://localhost:8000/images/$imageUrl`}
-                  width={288}
-                  height={264}
-                />
-              </div>
-              <CardContent className='flex flex-col gap-4 py-1 max-h-52 p-0'>
-                <p className='font-bold text-sm text-black line-clamp-2'>
-                  {imageUrl.typeroom} - {imageUrl.regions}
-                </p>
-              
-                {/* <p className='text-xs text-gray-500 font-bold line-through'>{formatCurrency(item.minPrice)}</p> */}
-                <div className='flex flex-row justify-between items-center text-sm'></div>
-              </CardContent>
-            </Card>
+              <Card
+                className='border-none p-0 space-y-2'
+                key={index}>
+                <div className='relative'>
+                  <Image
+                    className='rounded-3xl object-contain w-full'
+                    src={URL.createObjectURL(imageUrl.file)}
+                    alt={`http://localhost:8000/images/$imageUrl`}
+                    width={288}
+                    height={264}
+                  />
+                </div>
+                <CardContent className='flex flex-col gap-4 py-1 max-h-52 p-0'>
+                  <p className='font-bold text-sm text-black line-clamp-2'>
+                    {imageUrl.typeroom} - {imageUrl.regions}
+                  </p>
+
+                  {/* <p className='text-xs text-gray-500 font-bold line-through'>{formatCurrency(item.minPrice)}</p> */}
+                  <div className='flex flex-row justify-between items-center text-sm'></div>
+                </CardContent>
+              </Card>
             ))}
           </div>
-
         </div>
         <div className='flex justify-end items-end'>
           <Button
             disabled={isLoading}
             className='bg-cyan-500 text-white'
             onClick={() => handleSubmit()}>
-           { isLoading ? <Loader2/> : 'Xác nhận đăng ký'}
+            {isLoading ? <Loader2 /> : 'Xác nhận đăng ký'}
           </Button>
         </div>
       </TabsContent>

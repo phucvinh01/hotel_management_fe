@@ -9,7 +9,7 @@ class Http {
         "X-Requested-With": "XMLHttpRequest",
         'Access-Control-Allow-Origin': '*', 
         'Access-Control-Allow-Credentials': 'true',
-        'Content-Type':'application/json'
+        'Content-Type':'multipart/form-data',        
       },
     })
   }

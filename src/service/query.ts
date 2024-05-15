@@ -63,6 +63,7 @@ export function useCreateTypeRoom() {
       console.log("onSuccess");
         await queryClient.invalidateQueries({ queryKey: ['getTypeRooms'] }); 
         await queryClient.prefetchQuery({ queryKey: ['getTypeRooms'] });
+
     },
   });
 }
@@ -79,7 +80,6 @@ export function useCreateRoom() {
     },
   });
 }
-
 
 export function useRooms(id: string) {
   return useQuery({

@@ -28,11 +28,16 @@ import { toast } from '@/components/ui/use-toast';
 import { formatCurrency } from '@/lib/formatCurrency';
 import { Card, CardContent } from '@/components/ui/card';
 import Image from 'next/image';
+import { getImageTypeRoom } from '@/service/hotel.service';
+import { Item } from '@radix-ui/react-dropdown-menu';
+import { getValueAfterSemicolon } from '@/lib/getValueAfterSemicolon';
+import ImageUploader from '@/app/app/partner/register-hotel/upload-image';
 
 export const ModelViewTypeRoom = ({ data }: { data: any }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [formData, setFormData] = useState<SelectTypeRoomResulet>();
   const [isEdit, setIsEdit] = useState<boolean>(false);
+  const [imageTypeRoom, setImageTypeRoom] = useState<IHotelImage[]>([]);
   const { admin } = useAuth();
 
   const updateRoomMutation = useUpdateRoom();
@@ -46,11 +51,21 @@ export const ModelViewTypeRoom = ({ data }: { data: any }) => {
     typedData = dataTyperooms[0] as SelectRoomsResult[];
   }
 
+  const getImagesTypeRoom = async (id: string) => {
+    const res = await getImageTypeRoom(id);
+    if (res) {
+      setImageTypeRoom(res);
+    } else {
+      setImageTypeRoom([]);
+    }
+  };
+
   useEffect(() => {
     if (isOpen) {
       setFormData(data as SelectTypeRoomResulet);
+      getImagesTypeRoom(formData?.id as string);
     }
-  }, [isOpen, data]);
+  }, [isOpen, data, formData?.id]);
 
   //   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
   //     e.preventDefault();
@@ -111,7 +126,7 @@ export const ModelViewTypeRoom = ({ data }: { data: any }) => {
                 />
               </div>
               <div className='mt-4 col-span-6 space-y-3'>
-                <h3 className='text-sm font-bold'>Thông tin loại phòng</h3>
+                <h3 className='text-lg font-bold'>Thông tin loại phòng</h3>
                 <dl className='grid grid-cols-2 gap-4'>
                   <dt className='text-gray-600'>Loại:</dt>
                   <dd className='font-bold text-[14px]'>{formData?.Name}</dd>
@@ -127,7 +142,7 @@ export const ModelViewTypeRoom = ({ data }: { data: any }) => {
                 </dl>
               </div>
               <div className='mt-4 col-span-6 space-y-3'>
-                <h3 className='text-sm font-bold'>Tiện nghi</h3>
+                <h3 className='text-lg font-bold'>Tiện nghi</h3>
                 <dl className='grid grid-cols-2 gap-4'>
                   <dt className='text-gray-600'>Giường:</dt>
                   <dd className='font-bold text-[14px]'>
@@ -136,326 +151,386 @@ export const ModelViewTypeRoom = ({ data }: { data: any }) => {
                 </dl>
               </div>
               <div className='mt-4 col-span-12'>
-                <h3 className='text-sm font-bold'>Tiện ích</h3>
-                <dl className='grid grid-cols-2 gap-4'>
-                  <dt className='text-gray-600'>Phòng:</dt>
-                  <dd className='font-bold text-[14px]'>
-                    {formData?.ConvenientRoom}
+                <h3 className='text-lg font-bold'>Tiện ích</h3>
+                <dl className='flex flex-col gap-4'>
+                  <dt className='text-gray-600 col-span-3 text-[16px]'>
+                    Phòng:
+                  </dt>
+                  <dd className='font-bold text-[14px] col-span-1'>
+                    <Badge
+                      name={formData?.ConvenientRoom}
+                      color='green'
+                    />
                   </dd>
-                  <dt className='text-gray-600'>Phòng tắm:</dt>
+                  <dt className='text-gray-600 text-[16px]'>Phòng tắm:</dt>
                   <dd className='font-bold text-[14px]'>
-                    {formData?.ConvenientBathRoom}
+                    <Badge
+                      name={formData?.ConvenientBathRoom}
+                      color='green'
+                    />
                   </dd>
                 </dl>
               </div>
               <div className='mt-4 col-span-12'>
-                <h3 className='text-sm font-bold'>Hình ảnh</h3>
-                <Card className='border-none p-0 space-y-2'>
-                  <div className='relative'>
-                    <Image
-                      className='rounded-3xl object-contain'
-                      src={''}
-                      alt={`http://localhost:8000/images/$imageUrl`}
-                      width={80}
-                      height={80}
-                    />
-                  </div>
-                  <CardContent className='flex flex-col gap-4 py-1 max-h-52 p-0'>
-                    <p className='font-bold text-sm text-black line-clamp-2'>
-                      `imageUrl.typeroom- imageUrl.regions`
-                    </p>
+                <h3 className='text-lg font-bold'>Hình ảnh</h3>
+                <div className='grid grid-cols-12 gap-2'>
+                  {imageTypeRoom.map((item, index) => (
+                    <Card
+                      key={index}
+                      className='border-none p-0 space-y-2 col-span-2 flex flex-col'>
+                      <div className='relative justify-center items-center'>
+                        <Image
+                          className='rounded-2xl object-contain min-w-[80px] min-h-[80px]'
+                          src={item.FileName}
+                          alt={`http://localhost:8000/images/$imageUrl`}
+                          width={80}
+                          height={80}
+                        />
+                      </div>
+                      <CardContent className='flex flex-col gap-4 py-1 max-h-52 p-0'>
+                        <p className='font-bold text-sm text-black line-clamp-2'>
+                          {getValueAfterSemicolon(item.TypeRoom)}
+                        </p>
 
-                    {/* <p className='text-xs text-gray-500 font-bold line-through'>{formatCurrency(item.minPrice)}</p> */}
-                    <div className='flex flex-row justify-between items-center text-sm'></div>
-                  </CardContent>
-                </Card>
+                        {/* <p className='text-xs text-gray-500 font-bold line-through'>{formatCurrency(item.minPrice)}</p> */}
+                        <div className='flex flex-row justify-between items-center text-sm'></div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
               </div>
             </div>
           ) : (
-            <div className='col-span-6 grid grid-cols-12 gap-2'>
+            <div className='grid grid-cols-12'>
+              <div className='col-span-6 grid grid-cols-12 gap-2'>
+                <h3 className='col-span-12 text-[18px] underline my-2'>
+                  Thông tin
+                </h3>
 
-          <h3 className='col-span-12 text-[18px] underline my-2'>Thông tin</h3>
+                <div className='flex space-y-2 flex-col col-span-6'>
+                  <Label
+                    htmlFor='name'
+                    className='text-start'>
+                    Tên Loại Phòng
+                  </Label>
+                  <Input
+                    value={formData?.Name}
+                    required
+                    id='name'
+                    onChange={(e) =>
+                      setFormData((prev) => ({ ...prev!, Name: e.target.value }))
+                    }
+                  />
+                </div>
+                <div className='flex space-y-2 flex-col col-span-6'>
+                  <Label
+                    htmlFor='floor'
+                    className='text-start'>
+                    Số sảnh
+                  </Label>
+                  <Input
+                    value={formData?.FloorArea}
+                    min={1}
+                    maxLength={4}
+                    id='floor'
+                    type='number'
+                    onChange={(e) =>
+                      setFormData((prev) => ({
+                        ...prev!,
+                        FloorArea: e.target.value,
+                      }))
+                    }
+                  />
+                </div>
+                <div className='flex space-y-2 flex-col col-span-6'>
+                  <Label
+                    htmlFor='people'
+                    className='text-start'>
+                    Số người tối đa
+                  </Label>
+                  <Input
+                    value={formData?.MaxQuantityMember}
+                    min={1}
+                    maxLength={4}
+                    id='people'
+                    type='number'
+                    onChange={(e) =>
+                      setFormData((prev) => ({
+                        ...prev!,
+                        MaxQuantityMember: e.target.value,
+                      }))
+                    }
+                  />
+                </div>
+                <div className='flex space-y-2 flex-col col-span-6'>
+                  <Label
+                    htmlFor='Price'
+                    className='text-start'>
+                    Giá
+                  </Label>
+                  <Input
+                    value={formData?.Price}
+                    min={0}
+                    maxLength={8}
+                    id='Price'
+                    type='number'
+                    onChange={(e) =>
+                      setFormData((prev) => ({
+                        ...prev!,
+                        Price: e.target.value,
+                      }))
+                    }
+                  />
+                </div>
+                <h3 className='col-span-12 text-[18px] underline my-3'>
+                  Tiện nghi
+                </h3>
+                <div className='flex space-y-2 flex-col col-span-6'>
+                  <Label
+                    htmlFor='typebed'
+                    className='text-start'>
+                    Giường
+                  </Label>
+                  <Select
+                    defaultValue={formData?.TenLoaiGiuong}
+                    name='typebed'
+                    required
+                    onValueChange={(e) =>
+                      setFormData((prev) => ({ ...prev!, TenLoaiGiuong: e }))
+                    }>
+                    <SelectTrigger className=''>
+                      <SelectValue placeholder='Chọn loại giường' />
+                    </SelectTrigger>
+                    <SelectContent className='bg-white text-black dark:bg-black dark:text-white'>
+                      <SelectGroup>
+                        <SelectItem value={'Single'}>Single</SelectItem>
+                        <SelectItem value={'Double'}>Double</SelectItem>
+                        <SelectItem value={'Queen'}>Queen</SelectItem>
+                        <SelectItem value={'King'}>King</SelectItem>
+                        <SelectItem value={'Superking'}>Super king</SelectItem>
+                        <SelectItem value={'Murphy'}>Murphy</SelectItem>
+                        <SelectItem value={'Bunk'}>Bunk</SelectItem>
+                        <SelectItem value={'Round'}>Round</SelectItem>
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className='flex space-y-2 flex-col col-span-6'>
+                  <Label
+                    htmlFor='bed-quantity'
+                    className='text-start'>
+                    Số lượng giường
+                  </Label>
+                  <Input
+                    value={formData?.SoLuongGiuong}
+                    min={0}
+                    maxLength={8}
+                    id='bed-quantity'
+                    type='number'
+                    onChange={(e) =>
+                      setFormData((prev) => ({
+                        ...prev!,
+                        SoLuongGiuong: e.target.value,
+                      }))
+                    }
+                  />
+                </div>
 
-          <div className='flex space-y-2 flex-col col-span-6'>
-            <Label
-              htmlFor='name'
-              className='text-start'>
-              Tên Loại Phòng
-            </Label>
-            <Input
-              required
-              id='name'
-              onChange={(e) =>
-                setFormData((prev) => ({ ...prev!, Name: e.target.value }))
-              }
-            />
-          </div>
-          <div className='flex space-y-2 flex-col col-span-6'>
-            <Label
-              htmlFor='floor'
-              className='text-start'>
-              Số sảnh
-            </Label>
-            <Input
-              min={1}
-              maxLength={4}
-              id='floor'
-              type='number'
-              onChange={(e) =>
-                setFormData((prev) => ({
-                  ...prev!,
-                  FloorArea: e.target.value,
-                }))
-              }
-            />
-          </div>
-          <div className='flex space-y-2 flex-col col-span-6'>
-            <Label
-              htmlFor='people'
-              className='text-start'>
-              Số người tối đa
-            </Label>
-            <Input
-              min={1}
-              maxLength={4}
-              id='people'
-              type='number'
-              onChange={(e) =>
-                setFormData((prev) => ({
-                  ...prev!,
-                  MaxQuantityMember: e.target.value,
-                }))
-              }
-            />
-          </div>
-          <div className='flex space-y-2 flex-col col-span-6'>
-            <Label
-              htmlFor='Price'
-              className='text-start'>
-              Giá
-            </Label>
-            <Input
-              min={0}
-              maxLength={8}
-              id='Price'
-              type='number'
-              onChange={(e) =>
-                setFormData((prev) => ({
-                  ...prev!,
-                  Price: e.target.value,
-                }))
-              }
-            />
-          </div>
-          <h3 className='col-span-12 text-[18px] underline my-3'>Tiện nghi</h3>
-          <div className='flex space-y-2 flex-col col-span-6'>
-            <Label
-              htmlFor='typebed'
-              className='text-start'>
-              Giường
-            </Label>
-            <Select
-              name='typebed'
-              required
-              onValueChange={(e) =>
-                setFormData((prev) => ({ ...prev!, TenLoaiGiuong: e }))
-              }>
-              <SelectTrigger className=''>
-                <SelectValue placeholder='Chọn loại giường' />
-              </SelectTrigger>
-              <SelectContent className='bg-white text-black dark:bg-black dark:text-white'>
-                <SelectGroup>
-                  <SelectItem value={'Single'}>Single</SelectItem>
-                  <SelectItem value={'Double'}>Double</SelectItem>
-                  <SelectItem value={'Queen'}>Queen</SelectItem>
-                  <SelectItem value={'King'}>King</SelectItem>
-                  <SelectItem value={'Superking'}>Super king</SelectItem>
-                  <SelectItem value={'Murphy'}>Murphy</SelectItem>
-                  <SelectItem value={'Bunk'}>Bunk</SelectItem>
-                  <SelectItem value={'Round'}>Round</SelectItem>
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-          </div>
-          <div className='flex space-y-2 flex-col col-span-6'>
-            <Label
-              htmlFor='bed-quantity'
-              className='text-start'>
-              Số lượng giường
-            </Label>
-            <Input
-              min={0}
-              maxLength={8}
-              id='bed-quantity'
-              type='number'
-              onChange={(e) =>
-                setFormData((prev) => ({
-                  ...prev!,
-                  SoLuongGiuong: e.target.value,
-                }))
-              }
-            />
-          </div>
+                <h3 className='col-span-12 text-[18px] underline my-2'>
+                  Tiện ích
+                </h3>
 
-          <h3 className='col-span-12 text-[18px] underline my-2'>Tiện ích</h3>
+                <div className='grid grid-cols-12 col-span-12 px-3'>
+                  <h4 className='col-span-12 my-3'>Phòng</h4>
+                  <div className='flex items-center space-x-2 col-span-4'>
+                    <Checkbox
+                      defaultChecked={
+                        formData?.Ban_Cong_San_Hien === '1' ? true : false
+                      }
+                      id='bacon'
+                      onCheckedChange={(e) =>
+                        setFormData((prev) => ({
+                          ...prev!,
+                          Ban_Cong_San_Hien: e ? '1' : '0',
+                        }))
+                      }
+                    />
+                    <label
+                      htmlFor='bacon'
+                      className='text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'>
+                      Ban công
+                    </label>
+                  </div>
+                  <div className='flex items-center space-x-2 col-span-4'>
+                    <Checkbox
+                      defaultChecked={
+                        formData?.Khu_Vuc_Cho === '1' ? true : false
+                      }
+                      id='wating-room'
+                      onCheckedChange={(e) =>
+                        setFormData((prev) => ({
+                          ...prev!,
+                          Khu_Vuc_Cho: e ? '1' : '0',
+                        }))
+                      }
+                    />
+                    <label
+                      htmlFor='wating-room'
+                      className='text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'>
+                      Khu vực chờ
+                    </label>
+                  </div>
+                </div>
 
-          <div className='grid grid-cols-12 col-span-12 px-3'>
-            <h4 className='col-span-12 my-3'>Phòng</h4>
-            <div className='flex items-center space-x-2 col-span-4'>
-              <Checkbox
-                id='bacon'
-                onCheckedChange={(e) =>
-                  setFormData((prev) => ({
-                    ...prev!,
-                    Ban_Cong_San_Hien: e ? "1" : "0",
-                  }))
-                }
-              />
-              <label
-                htmlFor='bacon'
-                className='text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'>
-                Ban công
-              </label>
-            </div>
-            <div className='flex items-center space-x-2 col-span-4'>
-              <Checkbox
-                id='wating-room'
-                onCheckedChange={(e) =>
-                  setFormData((prev) => ({ ...prev!, Khu_Vuc_Cho: e ? "1" : "0" }))
-                }
-              />
-              <label
-                htmlFor='wating-room'
-                className='text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'>
-                Khu vực chờ
-              </label>
-            </div>
-          </div>
+                <div className='grid grid-cols-12 col-span-12 px-3'>
+                  <h4 className='col-span-12 my-3'>Phòng tắm</h4>
+                  <div className='flex items-center space-x-2 col-span-4'>
+                    <Checkbox
+                      defaultChecked={
+                        formData?.Voi_Tam_Dung === '1' ? true : false
+                      }
+                      id='shower'
+                      onCheckedChange={(e) =>
+                        setFormData((prev) => ({
+                          ...prev!,
+                          Voi_Tam_Dung: e ? '1' : '0',
+                        }))
+                      }
+                    />
+                    <label
+                      htmlFor='shower'
+                      className='text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'>
+                      Vòi tắm đứng
+                    </label>
+                  </div>
+                  <div className='flex items-center space-x-2 col-span-4'>
+                    <Checkbox
+                      defaultChecked={formData?.Bon_Tam === '1' ? true : false}
+                      id='bath'
+                      onCheckedChange={(e) =>
+                        setFormData((prev) => ({
+                          ...prev!,
+                          Bon_Tam: e ? '1' : '0',
+                        }))
+                      }
+                    />
+                    <label
+                      htmlFor='bath'
+                      className='text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'>
+                      Bồn tắm
+                    </label>
+                  </div>
+                  <div className='flex items-center space-x-2 col-span-4'>
+                    <Checkbox
+                      defaultChecked={formData?.Nuoc_Nong === '1' ? true : false}
+                      id='hotwater'
+                      onCheckedChange={(e) =>
+                        setFormData((prev) => ({
+                          ...prev!,
+                          Nuoc_Nong: e ? '1' : '0',
+                        }))
+                      }
+                    />
+                    <label
+                      htmlFor='hotwater'
+                      className='text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'>
+                      Nước nóng
+                    </label>
+                  </div>
+                </div>
 
-          <div className='grid grid-cols-12 col-span-12 px-3'>
-            <h4 className='col-span-12 my-3'>Phòng tắm</h4>
-            <div className='flex items-center space-x-2 col-span-4'>
-              <Checkbox
-                id='shower'
-                onCheckedChange={(e) =>
-                  setFormData((prev) => ({ ...prev!, Voi_Tam_Dung: e ? "1" : "0" }))
-                }
-              />
-              <label
-                htmlFor='shower'
-                className='text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'>
-                Vòi tắm đứng
-              </label>
-            </div>
-            <div className='flex items-center space-x-2 col-span-4'>
-              <Checkbox
-                id='bath'
-                onCheckedChange={(e) =>
-                  setFormData((prev) => ({ ...prev!, Bon_Tam: e ? "1" : "0" }))
-                }
-              />
-              <label
-                htmlFor='bath'
-                className='text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'>
-                Bồn tắm
-              </label>
-            </div>
-            <div className='flex items-center space-x-2 col-span-4'>
-              <Checkbox
-                id='hotwater'
-                onCheckedChange={(e) =>
-                  setFormData((prev) => ({ ...prev!, Nuoc_Nong: e ? "1" : "0" }))
-                }
-              />
-              <label
-                htmlFor='hotwater'
-                className='text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'>
-                Nước nóng
-              </label>
-            </div>
-          </div>
-
-          <div className='grid grid-cols-12 gap-2 col-span-12 px-3'>
-            <h4 className='col-span-12 my-3'>Khác</h4>
-            <div className='flex items-center space-x-2 col-span-4'>
-              <Checkbox
-                id='air-machine'
-                onCheckedChange={(e) =>
-                  setFormData((prev) => ({ ...prev!, May_Lanh: e ? "1" : "0" }))
-                }
-              />
-              <label
-                htmlFor='air-machine'
-                className='text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'>
-                Máy lạnh
-              </label>
-            </div>
-            <div className='flex items-center space-x-2 col-span-4'>
-              <Checkbox
-                id='bath'
-                onCheckedChange={(e) =>
-                  setFormData((prev) => ({ ...prev!, Bon_Tam: e ? "1" : "0" }))
-                }
-              />
-              <label
-                htmlFor='bath'
-                className='text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'>
-                Bồn tắm
-              </label>
-            </div>
-            <div className='flex items-center space-x-2 col-span-4'>
-              <Checkbox
-                id='microway'
-                onCheckedChange={(e) =>
-                  setFormData((prev) => ({ ...prev!, Lo_Vi_Song: e ? "1" : "0" }))
-                }
-              />
-              <label
-                htmlFor='microway'
-                className='text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'>
-                Lò vi sóng
-              </label>
-            </div>
-            <div className='flex items-center space-x-2 col-span-4'>
-              <Checkbox
-                id='watsing-machine'
-                onCheckedChange={(e) =>
-                  setFormData((prev) => ({ ...prev!, May_Giat: e ? "1" : "0" }))
-                }
-              />
-              <label
-                htmlFor='cancel'
-                className='text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'>
-                Máy giặt
-              </label>
-            </div>
-            <div className='flex items-center space-x-2 col-span-4'>
-              <Checkbox
-                id='frige'
-                onCheckedChange={(e) =>
-                  setFormData((prev) => ({ ...prev!, Tu_Lanh: e ? "1" : "0" }))
-                }
-              />
-              <label
-                htmlFor='frige'
-                className='text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'>
-                Tủ lạnh
-              </label>
-            </div>
-            <div className='flex items-center space-x-2 col-span-4'>
-              <Checkbox
-                id='fax'
-                onCheckedChange={(e) =>
-                  setFormData((prev) => ({ ...prev!, No_Moking: e ? "1" : "0" }))
-                }
-              />
-              <label
-                htmlFor='fax'
-                className='text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'>
-                Được hút thuốc
-              </label>
-            </div>
-          </div>
+                <div className='grid grid-cols-12 gap-2 col-span-12 px-3'>
+                  <h4 className='col-span-12 my-3'>Khác</h4>
+                  <div className='flex items-center space-x-2 col-span-4'>
+                    <Checkbox
+                      defaultChecked={formData?.May_Lanh === '1' ? true : false}
+                      id='air-machine'
+                      onCheckedChange={(e) =>
+                        setFormData((prev) => ({
+                          ...prev!,
+                          May_Lanh: e ? '1' : '0',
+                        }))
+                      }
+                    />
+                    <label
+                      htmlFor='air-machine'
+                      className='text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'>
+                      Máy lạnh
+                    </label>
+                  </div>
+                  <div className='flex items-center space-x-2 col-span-4'>
+                    <Checkbox
+                      defaultChecked={formData?.Lo_Vi_Song === '1' ? true : false}
+                      id='microway'
+                      onCheckedChange={(e) =>
+                        setFormData((prev) => ({
+                          ...prev!,
+                          Lo_Vi_Song: e ? '1' : '0',
+                        }))
+                      }
+                    />
+                    <label
+                      htmlFor='microway'
+                      className='text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'>
+                      Lò vi sóng
+                    </label>
+                  </div>
+                  <div className='flex items-center space-x-2 col-span-4'>
+                    <Checkbox
+                      defaultChecked={formData?.May_Giat === '1' ? true : false}
+                      id='watsing-machine'
+                      onCheckedChange={(e) =>
+                        setFormData((prev) => ({
+                          ...prev!,
+                          May_Giat: e ? '1' : '0',
+                        }))
+                      }
+                    />
+                    <label
+                      htmlFor='cancel'
+                      className='text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'>
+                      Máy giặt
+                    </label>
+                  </div>
+                  <div className='flex items-center space-x-2 col-span-4'>
+                    <Checkbox
+                      id='frige'
+                      defaultChecked={formData?.Tu_Lanh === '1' ? true : false}
+                      onCheckedChange={(e) =>
+                        setFormData((prev) => ({
+                          ...prev!,
+                          Tu_Lanh: e ? '1' : '0',
+                        }))
+                      }
+                    />
+                    <label
+                      htmlFor='frige'
+                      className='text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'>
+                      Tủ lạnh
+                    </label>
+                  </div>
+                  <div className='flex items-center space-x-2 col-span-4'>
+                    <Checkbox
+                      id='fax'
+                      defaultChecked={formData?.No_Moking === '1' ? true : false}
+                      onCheckedChange={(e) =>
+                        setFormData((prev) => ({
+                          ...prev!,
+                          No_Moking: e ? '1' : '0',
+                        }))
+                      }
+                    />
+                    <label
+                      htmlFor='fax'
+                      className='text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'>
+                      Được hút thuốc
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div className='col-span-6'>
+                {/* //<ImageUploader files={imageTypeRoom}/> */}
+              </div>
             </div>
           )}
 
