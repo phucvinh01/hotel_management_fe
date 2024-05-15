@@ -2,8 +2,8 @@ const FormatDate = (dateInput: Date | null) => {
     if (dateInput == null) {
         return null;
     }
-    const dateString = "2024-04-29T13:21:43.000000Z";
-    const date = new Date(dateString);
+    //const dateString = "2024-04-29T13:21:43.000000Z";
+    const date = new Date(dateInput);
 
     const day = date.getDate().toString().padStart(2, "0");
     const month = (date.getMonth() + 1).toString().padStart(2, "0");
@@ -16,4 +16,5 @@ const FormatDate = (dateInput: Date | null) => {
     const formattedDate = `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
     return formattedDate;
 }
+
 export default FormatDate;

@@ -1,4 +1,4 @@
-import Hotel from "@/app/hotel/page";
+
 import URL_Enum from "@/axios/URL_Enum";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -10,13 +10,18 @@ import {
     CarouselPrevious,
 } from "@/components/ui/carousel"
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
+const todoGetPriceDiscoun = (price: number, discount: number): number => {
+    return price - price * discount / 100;
+}
 interface IProps {
     typeRoom: ITypeRoom;
     listImage: IHotelImage[];
     listConvenient: IConvenient[];
 }
 const DetailRoom = (props: IProps) => {
+    const route = useRouter();
     const { typeRoom, listImage, listConvenient } = props;
     const [rooms, setRooms] = useState<IRoom[]>([]);
     const convenientBathRoom = typeRoom.ConvenientBathRoom.split(';');
@@ -36,7 +41,7 @@ const DetailRoom = (props: IProps) => {
                 // }
             }).catch((error) => { console.log('Loi load room', error) })
         }
-        fetchData(`http://127.0.0.1:8000/api/room/get-list-by-type-room-id?typeRoomID=${typeRoom.id}`);
+        fetchData(`${URL_Enum.BaseURL_Api}room/get-list-by-type-room-id?typeRoomID=${typeRoom.id}`);
 
     }, []);
     const [modalState, setModalState] = useState<boolean>(false);
@@ -195,7 +200,7 @@ const DetailRoom = (props: IProps) => {
                             </div>
                             <hr />
                             {rooms ? rooms.slice(0, 2).map((item) => (
-                                <div className="flex flex-row flex-wrap my-3">
+                                <div className="flex flex-row flex-wrap my-3 border-b">
                                     <div className="w-1/2 lg:w-4/12  flex flex-col justify-start items-start">
                                         <div className="flex flex-row">
                                             <img src={`/icon/buaansang.webp`} className={`${item.NoMoking ? 'opacity-100' : 'opacity-50'} w-6 h-6 text-gray-300`} />
@@ -278,7 +283,7 @@ const DetailRoom = (props: IProps) => {
                                         <div className="flex flex-row">
                                             <span>
                                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className={`w-6 h-6 
-                                                 ${item.Wifi ? 'text-blue-700' : 'text-gray-300'}`}>
+                                                 ${item.ChangeTimeRecive ? 'text-blue-700' : 'text-gray-300'}`}>
                                                     <path fillRule="evenodd" d="M12 5.25c1.213 0 2.415.046 3.605.135a3.256 3.256 0 0 1 3.01 3.01c.044.583.077 1.17.1 1.759L17.03 8.47a.75.75 0 1 0-1.06 1.06l3 3a.75.75 0 0 0 1.06 0l3-3a.75.75 0 0 0-1.06-1.06l-1.752 1.751c-.023-.65-.06-1.296-.108-1.939a4.756 4.756 0 0 0-4.392-4.392 49.422 49.422 0 0 0-7.436 0A4.756 4.756 0 0 0 3.89 8.282c-.017.224-.033.447-.046.672a.75.75 0 1 0 1.497.092c.013-.217.028-.434.044-.651a3.256 3.256 0 0 1 3.01-3.01c1.19-.09 2.392-.135 3.605-.135Zm-6.97 6.22a.75.75 0 0 0-1.06 0l-3 3a.75.75 0 1 0 1.06 1.06l1.752-1.751c.023.65.06 1.296.108 1.939a4.756 4.756 0 0 0 4.392 4.392 49.413 49.413 0 0 0 7.436 0 4.756 4.756 0 0 0 4.392-4.392c.017-.223.032-.447.046-.672a.75.75 0 0 0-1.497-.092c-.013.217-.028.434-.044.651a3.256 3.256 0 0 1-3.01 3.01 47.953 47.953 0 0 1-7.21 0 3.256 3.256 0 0 1-3.01-3.01 47.759 47.759 0 0 1-.1-1.759L6.97 15.53a.75.75 0 0 0 1.06-1.06l-3-3Z" clipRule="evenodd" />
                                                 </svg>
 
@@ -302,9 +307,9 @@ const DetailRoom = (props: IProps) => {
                                                 <p className={`text-blue-700 ml-2 text-sm`}>
                                                     {item.Hinh_Thuc_Thanh_Toan ? 'Thanh toán khi đặt phòng' : 'Thanh toán khi bạn nhận phòng tại nơi ở'}
                                                 </p>
-                                                <div className="w-[350px] absolute top-15 ml-[-50%] rounded-lg bg-slate-950 opacity-85
-                                                text-white p-5 cursor-pointer  invisible group-hover:visible">
-                                                    <div className='w-[10px] h-[10px] rotate-45  bg-slate-950  opacity-85
+                                                <div className="w-[350px] absolute top-15 ml-[-50%] rounded-lg z-9
+                                                text-white p-5 cursor-pointer  invisible group-hover:visible" style={{ background: 'rgb(0 0 0 / 85%)' }}>
+                                                    <div className='w-[10px] h-[10px] rotate-45
                                     ml-[30%] absolute top-[-5px]'></div>
                                                     <p>Áp dụng thanh toán tại khách sạn</p>
                                                     <p>Cho chuyến đi thêm linh hoạt: KHÔNG CẦN THANH TOÁN NGAY khi đặt phòng!
@@ -320,17 +325,18 @@ const DetailRoom = (props: IProps) => {
 
                                     <div className="w-full lg:w-4/12 flex flex-col justify-start items-end">
                                         <div className="flex flex-row">
-                                            {item.Discount ? <p>{typeRoom.Price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</p> : null}
-                                            <p className="text-2xl text-red-500"><b>{typeRoom.Price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</b></p>
+                                            {item.Discount ? <p className="line-through font-semibold text-gray-700 mr-1">
+                                                {typeRoom.Price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</p> : null}
+                                            <p className="text-2xl text-red-500"><b>{todoGetPriceDiscoun(typeRoom.Price, item.Discount).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</b></p>
 
                                         </div>
                                         <Link className="text-xl font-bold bg-red-500 text-white py-2 px-10 my-3 rounded-xl"
-                                            href={`/hotel/booking/?id=${item.id}`}>Chọn
+                                            href={`/app/hotel/booking/?room_id=${item.id}`}
+                                            onClick={() => { route.push(`/app/hotel/booking/?room_id=${item.id}`) }}>Chọn
                                         </Link>
                                     </div>
-                                    <hr />
-                                    {item.Discount ? <div>Sale lễ</div> : null}
                                 </div>
+
                             )) :
                                 <div>
                                     <svg className="w-11/12 h-[120px] text-gray-500 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
@@ -340,7 +346,9 @@ const DetailRoom = (props: IProps) => {
                                     <p className="text-gray-500 font-bold text-2xl text-center">Loại phòng này hiện chưa hoạt động, hoặc đang bảo trì</p>
                                 </div>}
 
+
                         </div>
+
 
                         {/* coppy */}
 
@@ -401,7 +409,7 @@ const DetailRoom = (props: IProps) => {
                                                 ${indexImageModal === index ? 'border border-b-2 border-blue-700' : ''}`}
                                                 onClick={() => {
                                                     setIndexImageModal(index);
-                                                    setImageModalCurrent(URL_Enum.BaseURL_Image + listImage[indexImageModal].FileName);
+                                                    setImageModalCurrent(URL_Enum.BaseURL_Image + listImage[index].FileName);
                                                 }} />
                                         </CarouselItem>
                                     ))}

@@ -233,7 +233,7 @@ const RateHotel = (props: IProps) => {
                     </div>
                     {/* filter */}
                     <div className=' flex flex-col rounded-lg justify-start items-start pl-4
-                py-4 mt-3'><p className='text-lg font-medium text-gray-900'>Sắp xếp</p>
+                py-4'><p className='text-lg font-medium text-gray-900'>Sắp xếp</p>
                         <div className='w-full lg:w-8/12 flex flex-col lg:flex-row bg-white rounded-lg border-2
                         border-gray-100 py-3 px-2 shadow-3 shadow-gray-300'>
 

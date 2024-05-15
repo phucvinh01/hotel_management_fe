@@ -16,8 +16,11 @@ import {
 } from "@/components/ui/carousel"
 import React, { lazy, useEffect, useRef, useState } from 'react'
 import RateShortModal from '@/components/shared/RateShortModal'
+import { useRouter, useSearchParams } from 'next/navigation'
 
 export default function HotelDetail() {
+    const searchParams = useSearchParams();
+    const route = useRouter();
     const [loadingState, setLoadingState] = useState<boolean>(true);
     const [showDescript, setShowDescript] = useState<boolean>(false);
     const [currentScreen, setCurrentScreen] = useState<string>('TongQuan');
@@ -32,6 +35,10 @@ export default function HotelDetail() {
     const [hienThiGia, setHienThiGia] = useState<string>('Mỗi phòng mỗi đêm (bao gồm thuế và phí)');
     const [dsHienThiGiaState, setDsHienThiGiaState] = useState<boolean>(false);//mac dinh an danh sach 
     useEffect(() => {
+        if (searchParams.get('id') == null
+            || searchParams.get('id') == ''
+            || searchParams.get('id') == undefined)
+            route.push('/app/hotel');
         const fecthData = (url: string) => {
             setLoadingState(true);
             axios.get(url).then((response) => {
@@ -57,7 +64,7 @@ export default function HotelDetail() {
                     setLoadingState(false)
                 });
         }
-        fecthData('http://127.0.0.1:8000/api/hotel/get-one-by-id?id=HT20240406094559');
+        fecthData(URL_Enum.BaseURL_Api + 'hotel/get-one-by-id?id=' + searchParams.get('id'));
     }, []);
     useEffect(() => {
         setLoadingState(true);
@@ -68,7 +75,7 @@ export default function HotelDetail() {
             }).catch((error) => console.log('loi load diadiemlancan', error))
                 .finally(() => { setLoadingState(false) });
         }
-        fetchData('http://127.0.0.1:8000/api/diadiemlancan/get-list-by-id?id=HT20240406094559');
+        fetchData(URL_Enum.BaseURL_Api + 'diadiemlancan/get-list-by-id?id=' + searchParams.get('id'));
     }, [])
     // const getListConvenientByTypeRoomId = (typeRoomId: string): IConvenient[] => {
     //     var listConvenient: IConvenient[] = []
@@ -223,7 +230,7 @@ export default function HotelDetail() {
                         <div className='w-full lg:w-7/12 relative'>
                             <img loading='lazy' src={`${URL_Enum.BaseURL_Image}/${hotel.images && hotel?.images.find((image) => {
                                 return image.TypeRoom === 'None;Ảnh bìa'
-                            })?.FileName}`} className='w-full rounded-xl'
+                            })?.FileName}`} className='w-full rounded-xl lg:h-[410px]'
                                 onClick={() => handleStateModalListImagesChange(true, 0)} />
                             <div className='absolute bottom-36 w-[12px] h-[12px] bg-gray-900 ml-[-5px] rotate-45
                     z-[-10] opacity-75 '></div>
@@ -246,7 +253,9 @@ export default function HotelDetail() {
 
                         <div className='w-full lg:w-5/12 flex  flex-1'>
                             <div className='flex flex-wrap'>
-                                {hotel?.images?.length > 6 ? hotel?.images?.slice(0, 6).map((item, index) => (
+                                {hotel?.images?.length > 6 ? hotel?.images?.filter((fitem) => {
+                                    return fitem.TypeRoom !== 'None;Ảnh bìa'
+                                }).slice(0, 6).map((item, index) => (
                                     index != 5 ?
                                         item.FileName && item.TypeRoom != 'None;Ảnh bìa' ?
                                             <img loading='lazy' src={` ${URL_Enum.BaseURL_Image}${item.FileName}`}
@@ -605,7 +614,7 @@ export default function HotelDetail() {
                      bg-slate-100 rounded-lg p-3' id='ChinhSach' ref={targetElementRefs.ChinhSach}>
                         <div className='w-full lg:w-4/12 flex flex-row relative'>
                             <p className='text-2xl text-gray-900 absolute m-3'><b>Chính sách & Thông tin chung</b></p>
-                            <img src='/background/ChinhSachVaThongTinChung.jpg' className='w-full h-full' />
+                            <img src='/background/ChinhSachVaThongTinChung.jpg' className='w-full h-[360px]' />
                         </div>
                         <div className='flex flex-row p-2 w-full lg:w-8/12'>
                             <span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" className="bi bi-clock-history" viewBox="0 0 16 16">
@@ -624,7 +633,7 @@ export default function HotelDetail() {
                                 <hr />
                                 {hotel.policies && hotel.policies.length > 0 ?
                                     <ul>
-                                        {hotel.policies.map((item:any, index:number) => (
+                                        {hotel.policies.map((item: any, index: number) => (
                                             <li key={index}>
                                                 <div className='flex flex-row justify-start items-center'>
                                                     <img src={`/icon/${item.ImageIcon}`} className='w-8 h-8' />
@@ -639,7 +648,7 @@ export default function HotelDetail() {
                                 <p className='text-xl font-bold text-gray-900 mt-5'><b>Thông tin chung</b></p>
                                 <div className='flex flex-row bg-slate-50 py-1 font-semibold overflow-hidden'>
                                     <p className='w-4/12'>Tiện ích chung:</p>
-                                    <p className='w-8/12'>{hotel.convenients?.slice(0, 4).map((item:any,index:number) => (<span key={index}>{item.Description[0]}, </span>))}</p>
+                                    <p className='w-8/12'>{hotel.convenients?.slice(0, 4).map((item: any, index: number) => (<span key={index}>{item.Description[0]}, </span>))}</p>
                                 </div>
 
                                 <div className='flex flex-rowpy-1 font-semibold overflow-hidden py-1'>

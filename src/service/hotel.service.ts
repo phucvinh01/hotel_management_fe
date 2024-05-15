@@ -42,14 +42,14 @@ export const getHotelsByProvince = async (province: string): Promise<IResponeCar
 
 export type InsertResult = {
   id: string,
-  hotel_id:string,
+  hotel_id: string,
 }
 
 
-export const insertHotel = async (body:Hotel | undefined): Promise<string | false | undefined> => {
+export const insertHotel = async (body: Hotel | undefined): Promise<string | false | undefined> => {
   try {
     console.log("insertHotel");
-    const response = await axios.post<InsertResult>(`/hotel/insert-hotel`,body);
+    const response = await axios.post<InsertResult>(`/hotel/insert-hotel`, body);
     if (response.status === 200) {
       return response.data.id
     }
@@ -59,10 +59,10 @@ export const insertHotel = async (body:Hotel | undefined): Promise<string | fals
   }
 };
 
-export const insertTyperoom = async (body:TypeRoom | undefined,id:string): Promise<InsertResult | false | undefined> => {
+export const insertTyperoom = async (body: TypeRoom | undefined, id: string): Promise<InsertResult | false | undefined> => {
   try {
-    
-    const response = await axios.post<InsertResult>(`/hotel/insert-typeroom`,{...body,"HotelId":id});
+
+    const response = await axios.post<InsertResult>(`/hotel/insert-typeroom`, { ...body, "HotelId": id });
     if (response.status === 200) {
       return response.data;
     }
@@ -72,7 +72,7 @@ export const insertTyperoom = async (body:TypeRoom | undefined,id:string): Promi
   }
 };
 
-export async function uploadImage(image: File, typeRoom: InsertResult,region:string): Promise<boolean> {
+export async function uploadImage(image: File, typeRoom: InsertResult, region: string): Promise<boolean> {
   try {
     // Tạo FormData chứa dữ liệu cần uploadid_hotel
     const formData = new FormData();
@@ -86,16 +86,16 @@ export async function uploadImage(image: File, typeRoom: InsertResult,region:str
       body: formData,
     });
     console.log('Image uploaded successfully:', await response.text());
-    return true ;
+    return true;
   } catch (error) {
     console.error('Error uploading image:', error);
     return false;
   }
 }
 
-export const insertRoom = async (body:Room | undefined, id:string,index:number): Promise<InsertResult | false | undefined> => {
+export const insertRoom = async (body: Room | undefined, id: string, index: number): Promise<InsertResult | false | undefined> => {
   try {
-    const response = await axios.post<InsertResult>(`/room/insert-room`,{...body,  "typeRoom_id":id, "name_room":`${body?.RoomName} ${index} ` });
+    const response = await axios.post<InsertResult>(`/room/insert-room`, { ...body, "typeRoom_id": id, "name_room": `${body?.RoomName} ${index} ` });
     if (response.status === 200) {
       return response.data;
     }
@@ -105,7 +105,7 @@ export const insertRoom = async (body:Room | undefined, id:string,index:number):
   }
 };
 
-export const insertStaff = async (HotelId:string, StaffId:string): Promise<InsertResult | false | undefined> => {
+export const insertStaff = async (HotelId: string, StaffId: string): Promise<InsertResult | false | undefined> => {
   try {
     const response = await axios.post<InsertResult>(``);
     if (response.status === 200) {
@@ -117,6 +117,34 @@ export const insertStaff = async (HotelId:string, StaffId:string): Promise<Inser
   }
 };
 
+//TanVND
+export const getHotelsByProvinceId = async (provinceId: string): Promise<IResponeCardHotel | false | undefined> => {
+  try {
+    const response = await axios.get<IResponeCardHotel>(`hotel/get-list-by-province-id?id=${provinceId}`);
+    if (response.status === 200) {
+      return response.data;
+    }
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+};
+
+export const searchListHotelWithParam = async (p_province: string, p_totalnight: string,
+  p_totalmember: string, p_totalmemberchild: string, p_timereceive: string, p_totalroom: string)
+  : Promise<IResponeCardHotel | false | undefined> => {
+  try {
+    const response = await axios.get<IResponeCardHotel>(`hotel/search?province=${p_province}&totalnight=${p_totalnight}&
+      totalmember=${p_totalmember}&totalmemberchild=${p_totalmemberchild}
+      &timereceive=${p_timereceive}&totalroom=${p_totalroom}`);
+    if (response.status === 200) {
+      return response.data;
+    }
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+};
 
 
 

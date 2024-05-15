@@ -37,18 +37,18 @@ interface Hotel {
 
 
 interface IResponeCardHotel {
-  hotels:ICardHotel[]
+  hotels: ICardHotel[]
 }
 
 interface ICardHotel {
-    id: string;
-    Name: string;
-    Address: string;
-    FileName: string;
-    IsActive:number
-    min_price: number;
-    total_reviews: number;
-    average_rating?: number | undefined;
+  id: string;
+  Name: string;
+  Address: string;
+  FileName: string;
+  IsActive: number
+  min_price: number;
+  total_reviews: number;
+  average_rating?: number | undefined;
 }
 
 
@@ -79,7 +79,7 @@ interface Rate {
 
 interface Room {
   id?: string;
-  TypeRoomId?	: string;
+  TypeRoomId?: string;
   State?: string;
   TimeRecive?: string;
   TimeLeave?: string;
@@ -96,6 +96,8 @@ interface Room {
   RoomName?: string;
   Bao_Gom_Thue_Va_Phi?: number;
   quannity?: number
+
+  typeroom?: ITypeRoom;
 }
 
 interface HotelImage {
@@ -109,28 +111,29 @@ interface HotelImage {
 
 
 type TypeRoom = {
-  id:string,
-  HotelId:string,
-  Name:string,
-  ConvenientRoom?:[],
-  ConvenientBathRoom?:[],
-  FloorArea?:number,
-  MaxQuantityMember:number,
-  Price:string,
-  Voi_Tam_Dung:number,
-  Ban_Cong_San_Hien:number,
-  Khu_Vuc_Cho:number,
-	May_Lanh:number,
-  Nuoc_Nong:number,
-  Bon_Tam:number,
-  created_at?:string,
-  updated_at?:string,
-  TenLoaiGiuong:string,
-  SoLuongGiuong:number,
-  Lo_Vi_Song:number,
-  Tu_Lanh:number,
-  May_Giat:number,
-  No_Moking:number,	
+  id: string,
+  HotelId: string,
+  Name: string,
+  ConvenientRoom?: [],
+  ConvenientBathRoom?: [],
+  FloorArea?: number,
+  MaxQuantityMember: number,
+  Price: string,
+  Voi_Tam_Dung: number,
+  Ban_Cong_San_Hien: number,
+  Khu_Vuc_Cho: number,
+  May_Lanh: number,
+  Nuoc_Nong: number,
+  Bon_Tam: number,
+  created_at?: string,
+  updated_at?: string,
+  TenLoaiGiuong: string,
+  SoLuongGiuong: number,
+  Lo_Vi_Song: number,
+  Tu_Lanh: number,
+  May_Giat: number,
+  No_Moking: number,
+  hotel?: IHotel;
 }
 interface IConvenient {
   id: string;
@@ -187,6 +190,8 @@ interface ITypeRoom {
   No_Moking: boolean;
   created_at: string | null;
   updated_at: string | null;
+
+  hotel?: IHotel;
 }
 interface IRoom {
   id: string;
@@ -206,6 +211,8 @@ interface IRoom {
   Bao_Gom_Thue_Va_Phi: string;
   created_at: string | null;
   updated_at: string | null;
+
+  typeroom?: ITypeRoom;
 }
 
 interface IDiaDiemLanCan {
@@ -263,6 +270,36 @@ interface IHotel {
   policies?: IPolicy[];
   rates?: IRate[];
   type_rooms?: ITypeRoom[];
+}
+
+interface IMemberBooking {
+  id: string,
+  BookHotelId: string,
+  FullName: string,
+  DateOfBirth: Date | null,
+  Sex: boolean,
+  created_at: Date | null,
+  updated_at: Date | null
+
+}
+interface IBooking {
+  id: string,
+  GuestId: string,
+  RoomId: string,
+  ConfirmBy: string | null,
+  CreateDate: Date,
+  Price: number,
+  Gift: string,
+  Discount: number,
+  State: boolean,
+  Notes: string,
+  TimeRecive: Date,
+  TimeLeave: Date,
+  ConfirmAt: Date | null,
+  created_at: Date | null,
+  updated_at: Date | null,
+
+  members: IMemberBooking[]
 }
 
 interface IHotelImage {
