@@ -30,7 +30,7 @@ import { useCreateRoom } from '@/service/query';
 
 export function ModalAddRoom() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [typerooms, setTyperooms] = useState<SelectTypeRoomResulet[]>([]);
+  const [typerooms, setTyperooms] = useState<SelectTypeRoom[]>([]);
   const [formData, setFormData] = useState<Room>({})
  const createRoomMutation = useCreateRoom();
   const handleSubmit = async (e:FormEvent<HTMLFormElement>) => {

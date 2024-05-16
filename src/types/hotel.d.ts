@@ -324,7 +324,7 @@ interface SelectRoomsResult {
   Bao_Gom_Thue_Va_Phi: number;
 }
 
-interface SelectTypeRoomResulet {
+interface SelectTypeRoom {
   id: string;
   HotelId: string;
   Name: string;
@@ -358,7 +358,7 @@ interface RoomsTableResult {
 }
 
 interface TypeRoomsTableResult {
-  data : SelectTypeRoomResulet
+  data : SelectTypeRoom
 }
 
 

@@ -23,7 +23,11 @@ import { FormEvent, useEffect, useState } from 'react';
 import { Edit2, EyeIcon, MoveLeft, Settings, XCircleIcon } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuthContext';
 import Badge from '@/components/shared/Badge';
-import { useGetTypeRooms, useUpdateRoom } from '@/service/query';
+import {
+  useGetTypeRooms,
+  useUpdateRoom,
+  useUpdateTypeRoom,
+} from '@/service/query';
 import { toast } from '@/components/ui/use-toast';
 import { formatCurrency } from '@/lib/formatCurrency';
 import { Card, CardContent } from '@/components/ui/card';
@@ -32,15 +36,16 @@ import { getImageTypeRoom } from '@/service/hotel.service';
 import { Item } from '@radix-ui/react-dropdown-menu';
 import { getValueAfterSemicolon } from '@/lib/getValueAfterSemicolon';
 import ImageUploader from '@/app/app/partner/register-hotel/upload-image';
+import CarouselImageTypeRoom from './casousel-image-typeroom';
 
 export const ModelViewTypeRoom = ({ data }: { data: any }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [formData, setFormData] = useState<SelectTypeRoomResulet>();
+  const [formData, setFormData] = useState<SelectTypeRoom>();
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const [imageTypeRoom, setImageTypeRoom] = useState<IHotelImage[]>([]);
   const { admin } = useAuth();
 
-  const updateRoomMutation = useUpdateRoom();
+  const updateTypeRoomMutation = useUpdateTypeRoom();
   let typedData: SelectRoomsResult[] = [];
 
   const { data: dataTyperooms, isLoading } = useGetTypeRooms(
@@ -62,35 +67,68 @@ export const ModelViewTypeRoom = ({ data }: { data: any }) => {
 
   useEffect(() => {
     if (isOpen) {
-      setFormData(data as SelectTypeRoomResulet);
+      setFormData(data as SelectTypeRoom);
       getImagesTypeRoom(formData?.id as string);
     }
   }, [isOpen, data, formData?.id]);
 
-  //   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-  //     e.preventDefault();
-  //     updateRoomMutation.mutate(formData);
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log(formData);
+    const amenities = {
+      room: {
+        waitingRoom: formData?.Khu_Vuc_Cho === '1' ? 'Khu Vực Chờ' : null,
+        balcony: formData?.Ban_Cong_San_Hien === '1' ? 'Ban công' : null,
+        airConditioner: formData?.May_Lanh === '1' ? 'Máy Lạnh' : null,
+        microwave: formData?.Lo_Vi_Song === '1' ? 'Lò vi sóng' : null,
+        refrigerator: formData?.Tu_Lanh === '1' ? 'Tủ lạnh' : null,
+        washingMachine: formData?.May_Giat === '1' ? 'Máy giặt' : null,
+      },
+      bathroom: {
+        shower: formData?.Voi_Tam_Dung === '1' ? 'Vòi tắm đứng' : null,
+        bathtub: formData?.Bon_Tam === '1' ? 'Bồn tắm' : null,
+      },
+    };
 
-  //     if (updateRoomMutation.isPending) {
-  //       toast({
-  //         title: 'Đang khợi tạo',
-  //       });
-  //     } else if (updateRoomMutation.isError) {
-  //       const errorMessage = updateRoomMutation.error
-  //         ? updateRoomMutation.error.message
-  //         : 'Có lỗi xảy ra';
-  //       toast({
-  //         title: errorMessage,
-  //       });
-  //       setIsOpen(true);
-  //     } else if(updateRoomMutation.isSuccess) {
-  //       toast({
-  //         title: 'Cập nhật thành công',
-  //       });
-  //       setIsOpen(false);
-  //       setIsEdit(false)
-  //     }
-  //   };
+    if (formData) {
+      const convenientRoomValues = Object.values(amenities.room).filter(
+        (value) => value !== null,
+      );
+      formData.ConvenientRoom = convenientRoomValues.join('; ');
+
+      const convenientBathroomValues = Object.values(amenities.bathroom).filter(
+        (value) => value !== null,
+      );
+      formData.ConvenientBathRoom = convenientBathroomValues.join('; ');
+    } else {
+      console.warn('formData is undefined. Amenities cannot be assigned.');
+    }
+
+    try {
+      const result = await updateTypeRoomMutation.mutateAsync(
+        formData as SelectTypeRoom,
+      );
+      console.log(result);
+      if (result === true) {
+        toast({
+          title: 'Cập nhật thành công',
+        });
+        setIsOpen(false);
+        setIsEdit(false);
+      } else {
+        toast({
+          variant: 'destructive',
+          title: 'Cập nhật thất bại',
+        });
+        setIsOpen(true);
+      }
+    } catch (error) {
+      toast({
+        title: error as string,
+      });
+      setIsOpen(true);
+    }
+  };
 
   return (
     <Dialog
@@ -104,7 +142,7 @@ export const ModelViewTypeRoom = ({ data }: { data: any }) => {
         />
       </DialogTrigger>
       <DialogContent className='sm:max-w-[825px] bg-white dark:bg-black dark:text-white'>
-        <form>
+        <form onSubmit={(e) => handleSubmit(e)}>
           <DialogHeader className='flex flex-row justify-between items-center mb-3'>
             <DialogTitle>
               {isEdit === true
@@ -118,7 +156,7 @@ export const ModelViewTypeRoom = ({ data }: { data: any }) => {
             )}
           </DialogHeader>
           {isEdit !== true ? (
-            <div className='grid gird-col-12  p-4 border-t'>
+            <div className='grid gird-col-12 p-4 border-t'>
               <div className='col-span-12 flex justify-end items-center'>
                 <Badge
                   name={formData?.state_room + '/' + formData?.total_rooms}
@@ -126,7 +164,7 @@ export const ModelViewTypeRoom = ({ data }: { data: any }) => {
                 />
               </div>
               <div className='mt-4 col-span-6 space-y-3'>
-                <h3 className='text-lg font-bold'>Thông tin loại phòng</h3>
+                <h3 className=' text-lg font-bold'>Thông tin loại phòng</h3>
                 <dl className='grid grid-cols-2 gap-4'>
                   <dt className='text-gray-600'>Loại:</dt>
                   <dd className='font-bold text-[14px]'>{formData?.Name}</dd>
@@ -142,7 +180,7 @@ export const ModelViewTypeRoom = ({ data }: { data: any }) => {
                 </dl>
               </div>
               <div className='mt-4 col-span-6 space-y-3'>
-                <h3 className='text-lg font-bold'>Tiện nghi</h3>
+                <h3 className=' text-lg font-bold'>Tiện nghi</h3>
                 <dl className='grid grid-cols-2 gap-4'>
                   <dt className='text-gray-600'>Giường:</dt>
                   <dd className='font-bold text-[14px]'>
@@ -151,9 +189,9 @@ export const ModelViewTypeRoom = ({ data }: { data: any }) => {
                 </dl>
               </div>
               <div className='mt-4 col-span-12'>
-                <h3 className='text-lg font-bold'>Tiện ích</h3>
+                <h3 className=' text-lg font-bold'>Tiện ích</h3>
                 <dl className='flex flex-col gap-4'>
-                  <dt className='text-gray-600 col-span-3 text-[16px]'>
+                  <dt className='text-gray-600 col-span-3  text-[16px]'>
                     Phòng:
                   </dt>
                   <dd className='font-bold text-[14px] col-span-1'>
@@ -172,7 +210,7 @@ export const ModelViewTypeRoom = ({ data }: { data: any }) => {
                 </dl>
               </div>
               <div className='mt-4 col-span-12'>
-                <h3 className='text-lg font-bold'>Hình ảnh</h3>
+                <h3 className=' text-lg font-bold'>Hình ảnh</h3>
                 <div className='grid grid-cols-12 gap-2'>
                   {imageTypeRoom.map((item, index) => (
                     <Card
@@ -201,9 +239,9 @@ export const ModelViewTypeRoom = ({ data }: { data: any }) => {
               </div>
             </div>
           ) : (
-            <div className='grid grid-cols-12'>
+            <div className='grid grid-cols-12 gap-10'>
               <div className='col-span-6 grid grid-cols-12 gap-2'>
-                <h3 className='col-span-12 text-[18px] underline my-2'>
+                <h3 className=' col-span-12 text-[18px] underline my-2 font-bold'>
                   Thông tin
                 </h3>
 
@@ -218,7 +256,10 @@ export const ModelViewTypeRoom = ({ data }: { data: any }) => {
                     required
                     id='name'
                     onChange={(e) =>
-                      setFormData((prev) => ({ ...prev!, Name: e.target.value }))
+                      setFormData((prev) => ({
+                        ...prev!,
+                        Name: e.target.value,
+                      }))
                     }
                   />
                 </div>
@@ -282,7 +323,7 @@ export const ModelViewTypeRoom = ({ data }: { data: any }) => {
                     }
                   />
                 </div>
-                <h3 className='col-span-12 text-[18px] underline my-3'>
+                <h3 className=' col-span-12 text-[18px] underline my-3 font-bold'>
                   Tiện nghi
                 </h3>
                 <div className='flex space-y-2 flex-col col-span-6'>
@@ -336,12 +377,12 @@ export const ModelViewTypeRoom = ({ data }: { data: any }) => {
                   />
                 </div>
 
-                <h3 className='col-span-12 text-[18px] underline my-2'>
+                <h3 className=' col-span-12 text-[18px] underline my-2 font-bold'>
                   Tiện ích
                 </h3>
 
                 <div className='grid grid-cols-12 col-span-12 px-3'>
-                  <h4 className='col-span-12 my-3'>Phòng</h4>
+                  <h4 className='col-span-12 my-3 font-bold'>Phòng</h4>
                   <div className='flex items-center space-x-2 col-span-4'>
                     <Checkbox
                       defaultChecked={
@@ -383,7 +424,7 @@ export const ModelViewTypeRoom = ({ data }: { data: any }) => {
                 </div>
 
                 <div className='grid grid-cols-12 col-span-12 px-3'>
-                  <h4 className='col-span-12 my-3'>Phòng tắm</h4>
+                  <h4 className='col-span-12 my-3 font-bold'>Phòng tắm</h4>
                   <div className='flex items-center space-x-2 col-span-4'>
                     <Checkbox
                       defaultChecked={
@@ -422,7 +463,9 @@ export const ModelViewTypeRoom = ({ data }: { data: any }) => {
                   </div>
                   <div className='flex items-center space-x-2 col-span-4'>
                     <Checkbox
-                      defaultChecked={formData?.Nuoc_Nong === '1' ? true : false}
+                      defaultChecked={
+                        formData?.Nuoc_Nong === '1' ? true : false
+                      }
                       id='hotwater'
                       onCheckedChange={(e) =>
                         setFormData((prev) => ({
@@ -460,7 +503,9 @@ export const ModelViewTypeRoom = ({ data }: { data: any }) => {
                   </div>
                   <div className='flex items-center space-x-2 col-span-4'>
                     <Checkbox
-                      defaultChecked={formData?.Lo_Vi_Song === '1' ? true : false}
+                      defaultChecked={
+                        formData?.Lo_Vi_Song === '1' ? true : false
+                      }
                       id='microway'
                       onCheckedChange={(e) =>
                         setFormData((prev) => ({
@@ -512,7 +557,9 @@ export const ModelViewTypeRoom = ({ data }: { data: any }) => {
                   <div className='flex items-center space-x-2 col-span-4'>
                     <Checkbox
                       id='fax'
-                      defaultChecked={formData?.No_Moking === '1' ? true : false}
+                      defaultChecked={
+                        formData?.No_Moking === '1' ? true : false
+                      }
                       onCheckedChange={(e) =>
                         setFormData((prev) => ({
                           ...prev!,
@@ -528,8 +575,8 @@ export const ModelViewTypeRoom = ({ data }: { data: any }) => {
                   </div>
                 </div>
               </div>
-              <div className='col-span-6'>
-                {/* //<ImageUploader files={imageTypeRoom}/> */}
+              <div className='col-span-6 grid place-items-center'>
+                <CarouselImageTypeRoom listData={imageTypeRoom} />
               </div>
             </div>
           )}

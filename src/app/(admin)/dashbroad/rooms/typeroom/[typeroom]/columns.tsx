@@ -11,7 +11,7 @@ import { labels } from "@/components/table/data/data"
 import { Badge } from "@/components/ui/badge"
 import { DataTableRowActions } from "./data-table-row-actions"
 
-export const columns: ColumnDef<SelectTypeRoomResulet>[] = [
+export const columns: ColumnDef<SelectTypeRoom>[] = [
   {
     id: "id",
     header: ({ table }) => (

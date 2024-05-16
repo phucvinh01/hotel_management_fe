@@ -1,11 +1,13 @@
 
-import axios from '../axios/http'
+import http from '../axios/http'
+import axios, { AxiosInstance ,AxiosError } from 'axios'
+
 
 // Staff
 
 export const insertStaff = async (HotelId:string, StaffId:string): Promise<InsertResult | false | undefined> => {
   try {
-    const response = await axios.post<InsertResult>(``);
+    const response = await http.post<InsertResult>(``);
     if (response.status === 200) {
       return response.data;
     }
@@ -22,7 +24,7 @@ export const insertStaff = async (HotelId:string, StaffId:string): Promise<Inser
 
 export const getHotelPage = async (page: number): Promise<ApiGetPageResponse | false> => {
   try {
-    const data = await axios.get(`hotel/get-page?page=${page}`);
+    const data = await http.get(`hotel/get-page?page=${page}`);
     if (data.status === 200) {
       const res: ApiGetPageResponse = data.data;
       return res;
@@ -35,7 +37,7 @@ export const getHotelPage = async (page: number): Promise<ApiGetPageResponse | f
 
 export const getHotel = async (id:string):Promise<HotelResponse | undefined> => {
   try {
-    const response = await axios.get<HotelResponse>(`/hotel/get-hotel?id=${id}`);
+    const response = await http.get<HotelResponse>(`/hotel/get-hotel?id=${id}`);
     if (response.status === 200) {
       return response.data;
     }
@@ -48,7 +50,7 @@ export const getHotel = async (id:string):Promise<HotelResponse | undefined> => 
 
 export const getOneHotelById = async (id: string): Promise<IOneHotel | false | undefined> => {
   try {
-    const response = await axios.get<IOneHotel>(`hotel/get-one-by-id?id=${id}`);
+    const response = await http.get<IOneHotel>(`hotel/get-one-by-id?id=${id}`);
     if (response.status === 200) {
       return response.data;
     }
@@ -60,7 +62,7 @@ export const getOneHotelById = async (id: string): Promise<IOneHotel | false | u
 
 export const getHotelsByProvince = async (province: string): Promise<IResponeCardHotel | false | undefined> => {
   try {
-    const response = await axios.get<IResponeCardHotel>(`hotel/hotels-by-province?province=${province}`);
+    const response = await http.get<IResponeCardHotel>(`hotel/hotels-by-province?province=${province}`);
     if (response.status === 200) {
       return response.data;
     }
@@ -79,7 +81,7 @@ export type InsertResult = {
 export const insertHotel = async (body:Hotel | undefined): Promise<string | false | undefined> => {
   try {
     console.log("insertHotel");
-    const response = await axios.post<InsertResult>(`/hotel/insert-hotel`,body);
+    const response = await http.post<InsertResult>(`/hotel/insert-hotel`,body);
     if (response.status === 200) {
       return response.data.id
     }
@@ -96,7 +98,11 @@ export const insertHotel = async (body:Hotel | undefined): Promise<string | fals
 export const insertTyperooms = async (body:TypeRoom,id:string): Promise<InsertResult | false | undefined> => {
   try {
     
-    const response = await axios.post<InsertResult>(`/hotel/insert-typeroom`,{...body,"HotelId":id});
+    const response = await axios.post<InsertResult>(`/room/insert-typeroom`,{...body,"HotelId":id},{
+      headers: {
+        'Content-Type': 'multipart/form-data' 
+    }
+    });
     if (response.status === 200) {
       return response.data;
     }
@@ -109,9 +115,30 @@ export const insertTyperooms = async (body:TypeRoom,id:string): Promise<InsertRe
 export const insertTyperoom = async (body:InsertTyperoomAndImage): Promise<string | undefined> => {
   try {
     
-    const response = await axios.post<string>(`/hotel/insert-typeroom`,body);
+    const response = await axios.post<string>(`http://localhost:8000/api/room/insert-typeroom`,body, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        "X-Requested-With": "XMLHttpRequest",
+        'Access-Control-Allow-Origin': '*', 
+        'Access-Control-Allow-Credentials': 'true',
+    }
+    });
     if (response.status === 200) {
        return response.data;
+    }
+  } catch (error:any) {
+    return error;
+  }
+};
+
+export const updateTyperoom = async (body:SelectTypeRoom): Promise<string | boolean> => {
+  try {
+    
+    const response = await http.put<string>(`/room/update-typeroom`,body);
+    if (response.status === 200) {
+       return response.data;
+    }else {
+      return false
     }
   } catch (error:any) {
     return error;
@@ -141,7 +168,7 @@ export async function uploadImage(image: File, typeRoom: InsertResult,region:str
 
 export const getTypeRooms = async (id: string): Promise<any> => {
   try {
-    const response = await axios.get<TypeRoomsTableResult>(`/room/select-typeroom?id=${id}`);
+    const response = await http.get<TypeRoomsTableResult>(`/room/select-typeroom?id=${id}`);
     if (response.status === 200) {
       return response.data;
     } else {
@@ -158,7 +185,7 @@ export const getTypeRooms = async (id: string): Promise<any> => {
 
 export const insertRooms = async (body:Room | undefined, id:string,index:number): Promise<InsertResult | false | undefined> => {
   try {
-    const response = await axios.post<InsertResult>(`/room/insert-room`,{...body,  "TypeRoomId":id, "RoomName":`${body?.RoomName} ${index} ` });
+    const response = await http.post<InsertResult>(`/room/insert-room`,{...body,  "TypeRoomId":id, "RoomName":`${body?.RoomName} ${index} ` });
     if (response.status === 200) {
       return response.data;
     }
@@ -171,7 +198,7 @@ export const insertRooms = async (body:Room | undefined, id:string,index:number)
 
 export const insertRoom = async (body:Room): Promise<InsertResult | false | undefined> => {
   try {
-    const response = await axios.post<InsertResult>(`/room/insert-room`,body);
+    const response = await http.post<InsertResult>(`/room/insert-room`,body);
     if (response.status === 200) {
       return response.data;
     }
@@ -190,7 +217,7 @@ export const insertRoom = async (body:Room): Promise<InsertResult | false | unde
 
 export const getRooms = async (id: string): Promise<SelectRoomsResult[] | undefined> => {
   try {
-    const response = await axios.get<SelectRoomsResult[]>(`/room/select-room?id=${id}`);
+    const response = await http.get<SelectRoomsResult[]>(`/room/select-room?id=${id}`);
     if (response.status === 200) {
       return response.data;
     } else {
@@ -204,7 +231,7 @@ export const getRooms = async (id: string): Promise<SelectRoomsResult[] | undefi
 
 export const updateRoom = async (body: Room): Promise<boolean | undefined> => {
   try {
-    const response = await axios.put<string>(`/room/update-room`, body);
+    const response = await http.put<string>(`/room/update-room`, body);
     if (response.status === 200) {
       return true;
     }else if(response.status === 201) {
@@ -223,7 +250,7 @@ export const updateRoom = async (body: Room): Promise<boolean | undefined> => {
 
 export const getImageTypeRoom = async (id: string ):Promise<IHotelImage[] | undefined> => {
   try {
-    const response = await axios.get<IHotelImage[]>(`/image/select-image-by-typeroom?typeroom=${id}`);
+    const response = await http.get<IHotelImage[]>(`/image/select-image-by-typeroom?typeroom=${id}`);
     if (response.status === 200) {
       return response.data;
     }else if(response.status === 201) {

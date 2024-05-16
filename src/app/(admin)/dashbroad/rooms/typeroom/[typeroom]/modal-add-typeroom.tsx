@@ -42,25 +42,29 @@ export function ModalAddTypeRoom() {
     e.preventDefault();
     const amenities = {
       room: {
-        waitingRoom: formData?.Khu_Vuc_Cho === 1 && 'Khu Vực Chờ' ,
-        balcony: formData?.Ban_Cong_San_Hien === 1 && 'Ban công' ,
-        airConditioner: formData?.May_Lanh === 1 && 'Máy Lạnh' ,
-        microwave: formData?.Lo_Vi_Song === 1 && 'Lò vi sóng' ,
-        refrigerator: formData?.Tu_Lanh === 1 && 'Tủ lạnh' ,
-        washingMachine: formData?.May_Giat === 1 && 'Máy giặt' ,
+        waitingRoom: formData?.Khu_Vuc_Cho === 1 ? 'Khu Vực Chờ' : null,
+        balcony: formData?.Ban_Cong_San_Hien === 1 ? 'Ban công' : null,
+        airConditioner: formData?.May_Lanh === 1 ? 'Máy Lạnh' : null,
+        microwave: formData?.Lo_Vi_Song === 1 ? 'Lò vi sóng' : null,
+        refrigerator: formData?.Tu_Lanh === 1 ? 'Tủ lạnh' : null,
+        washingMachine: formData?.May_Giat === 1 ? 'Máy giặt' : null,
       },
       bathroom: {
-        shower: formData?.Voi_Tam_Dung === 1 && 'Vòi tắm đứng' ,
-        bathtub: formData?.Bon_Tam === 1 &&'Bồn tắm' ,
+        shower: formData?.Voi_Tam_Dung === 1 ? 'Vòi tắm đứng' : null,
+        bathtub: formData?.Bon_Tam === 1 ? 'Bồn tắm' : null,
       },
     };
 
     if (formData) {
-      formData.ConvenientRoom = Object.values(amenities.room).join('; ');
-      formData.ConvenientBathRoom = Object.values(amenities.bathroom).join(
-        '; '
+      const convenientRoomValues = Object.values(amenities.room).filter(
+        (value) => value !== null,
       );
-      formData.HotelId = admin?.id_hotel;
+      formData.ConvenientRoom = convenientRoomValues.join('; ');
+
+      const convenientBathroomValues = Object.values(amenities.bathroom).filter(
+        (value) => value !== null,
+      );
+      formData.ConvenientBathRoom = convenientBathroomValues.join('; ');
     } else {
       console.warn('formData is undefined. Amenities cannot be assigned.');
     }

@@ -7,7 +7,7 @@ import {
   useMutation,
 } from "@tanstack/react-query";
 
-import { getRooms, getTypeRooms, insertRoom, insertTyperoom, updateRoom } from "./hotel.service";
+import { getRooms, getTypeRooms, insertRoom, insertTyperoom, updateRoom, updateTyperoom } from "./hotel.service";
 
 
 
@@ -64,6 +64,20 @@ export function useCreateTypeRoom() {
         await queryClient.invalidateQueries({ queryKey: ['getTypeRooms'] }); 
         await queryClient.prefetchQuery({ queryKey: ['getTypeRooms'] });
 
+    },
+  });
+}
+
+export function useUpdateTypeRoom() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (data: SelectTypeRoom) => updateTyperoom(data),
+    onSuccess: async () => {
+        await queryClient.invalidateQueries({ queryKey: ['getTypeRooms'] }); 
+        await queryClient.prefetchQuery({ queryKey: ['getTypeRooms'] }); 
+    },
+    onError: async (error) => {
+      return "Cập nhật phòng thất bại";
     },
   });
 }
