@@ -139,8 +139,10 @@ export default function HotelDetail() {
         DanhGia: useRef<HTMLDivElement>(null),
     };
 
+   
+
     const handleGoToElement = (elementKey: string) => {
-        const targetElementRef = targetElementRefs[elementKey];
+        const targetElementRef = targetElementRefs[elementKey] ;
         if (targetElementRef.current) {
             targetElementRef.current.scrollIntoView({ behavior: 'smooth' });
         }
@@ -212,7 +214,7 @@ export default function HotelDetail() {
                                 <p className='text-right text-2xl lg:text-5xl text-red-600'><b>
                                     {hotel.type_rooms && hotel.type_rooms[0].Price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
                                 </b></p>
-                                <button className='rounded-lg bg-red-600 text-white font-bold
+                                <button className='rounded-3xl bg-red-600 text-white font-bold
                         p-2 lg:p-5 w-full my-2'>Chọn phòng</button>
                             </div>
                         </div>
@@ -251,24 +253,24 @@ export default function HotelDetail() {
                                         item.FileName && item.TypeRoom != 'None;Ảnh bìa' ?
                                             <img loading='lazy' src={` ${URL_Enum.BaseURL_Image}${item.FileName}`}
                                                 onClick={() => handleStateModalListImagesChange(true, index)}
-                                                className='w-1/2 rounded-lg h-[137px] p-1' />
+                                                className='w-1/2 rounded-3xl h-[137px] p-1' />
                                             : null
-                                        : <div className='w-1/2 scale-[0.95] hover:scale-100 rounded-lg h-[137px] relative'
+                                        : <div key={item.id} className='w-1/2 scale-[0.95] hover:scale-100 rounded-3xl h-[137px] relative'
                                             onClick={() => handleStateModalListImagesChange(true, index)}>
-                                            <div className='w-full rounded-lg h-[137px] absolute z-1
+                                            <div className='w-full rounded-3xl h-[137px] absolute z-1
                                      bg-black opacity-70 flex justify-center items-center'>
                                                 <button className='font-bold text-white text-center'>Xem tất cả hình ảnh</button>
                                             </div>
                                             <img loading='lazy' src={` ${URL_Enum.BaseURL_Image}/${item.FileName}`}
                                                 onClick={() => handleStateModalListImagesChange(true, 5)}
-                                                className='w-full rounded-lg  h-[137px]' />
+                                                className='w-full rounded-3xl  h-[137px]' />
                                         </div>
                                 ))
                                     : hotel?.images?.map((item, index) => (
                                         item.FileName && item.TypeRoom != 'None;Ảnh bìa' ?
-                                            <img loading='lazy' src={` ${URL_Enum.BaseURL_Image}/${item.FileName}`}
+                                            <img key={index} loading='lazy' src={` ${URL_Enum.BaseURL_Image}/${item.FileName}`}
                                                 onClick={() => handleStateModalListImagesChange(true, index)}
-                                                className='w-1/2 rounded-lg h-[137px] p-1' />
+                                                className='w-1/2 rounded-3xl h-[137px] p-1' />
                                             : null))}
                             </div>
                         </div>
@@ -278,16 +280,16 @@ export default function HotelDetail() {
 
                     {/* gioi thieu khach san */}
                     <div className='w-10/12 flex flex-col lg:flex-row' id='TongQuan' ref={targetElementRefs.TongQuan}>
-                        <div className='w-full  my-5 lg:my-3 lg:w-4/12 flex bg-slate-100 rounded-lg p-3 flex-wrap'>
+                        <div className='w-full  my-5 lg:my-3 lg:w-4/12 flex bg-slate-100 rounded-3xl p-3 flex-wrap'>
                             <p className='w-8/12 text-gray-950 font-bold'>Giới thiệu cơ sở lưu trú</p>
                             <span className='w-4/12  text-right font-bold text-blue-500 underline
                     cursor-pointer'>Xem thêm ⟩</span>
                             <p>{hotel.Description && hotel?.Description.slice(0, 304)}</p>
                         </div>
-                        <div className='w-full my-5 lg:my-3 lg:w-8/12 flex flex-col lg:flex-row lg:ml-2 rounded-lg p-3'
+                        <div className='w-full my-5 lg:my-3 lg:w-8/12 flex flex-col lg:flex-row lg:ml-2 rounded-3xl p-3'
                             style={{ backgroundImage: "url('/background/bg-map.jpg')" }}>
                             <div className='w-full h-30 flex flex-col'>
-                                <div className='w-full  my-5 lg:my-0 flex rounded-lg flex-wrap'>
+                                <div className='w-full  my-5 lg:my-0 flex rounded-3xl flex-wrap'>
                                     <p className='w-8/12 text-gray-950 font-bold'>Địa điểm lân cận</p>
                                     <span className='w-4/12  text-right font-bold text-blue-500 underline
                     cursor-pointer'>Xem thêm ⟩</span>
@@ -295,7 +297,7 @@ export default function HotelDetail() {
                                 {/* them dia chi lan can */}
                                 <ul className='w-full grid lg:grid-cols-2'>
                                     {diadiemlancan.slice(0, 6).map((item) => (
-                                        <li className='w-full flex flex-row items-center p-1 overflow-hidden text-gray-900
+                                        <li key={item.id} className='w-full flex flex-row items-center p-1 overflow-hidden text-gray-900
                                         font-semibold'>
                                             <div className='w-9/12 flex flex-row items-center justify-start'>
                                                 <img src={`/icon/${item.ImageIcon}`} className='w-7 h-7 mr-2' />
@@ -311,16 +313,16 @@ export default function HotelDetail() {
 
                     {/* tien ich va danh gia */}
                     <div className='w-10/12 flex flex-col lg:flex-row'>
-                        <div className='w-full  my-5 lg:my-3 lg:w-4/12 flex bg-slate-100 rounded-lg p-3 flex-wrap'>
+                        <div className='w-full  my-5 lg:my-3 lg:w-4/12 flex bg-slate-100 rounded-3xl p-3 flex-wrap'>
                             <p className='w-8/12 text-gray-950 font-bold'>Tiện ích chính</p>
                             <span className='w-4/12  text-right font-bold text-blue-500 underline
                     cursor-pointer'>Xem thêm ⟩</span>
                             <ul>
                                 {hotel?.convenients?.slice(0, 6).map((item) => (
-                                    <li className='font-semibold text-gray-900 my-2'><p className='flex 
+                                    <li key={item.id} className='font-semibold text-gray-900 my-2'><p className='flex 
                             justify-start items-center'>
                                         <span>
-                                            <img loading='lazy' className='w-5 h-5 rounded-sm mr-3' src={`/icon/${item.ImageIcon}`} />
+                                            <img loading='lazy' className='w-5 h-5 rounded-3xl mr-3' src={`/icon/${item.ImageIcon}`} />
                                         </span>{item.Description[0]}
                                     </p>
                                     </li>
@@ -328,7 +330,7 @@ export default function HotelDetail() {
                             </ul>
                         </div>
                         <div className='w-full flex-wrap my-5 lg:my-3 lg:w-8/12 flex flex-col lg:flex-row lg:ml-2 
-                rounded-lg  bg-slate-100 p-3 '>
+                rounded-3xl  bg-slate-100 p-3 '>
                             <p className='w-8/12 text-gray-950 font-bold'>Khách nói gì về kỳ nghỉ của họ</p>
                             <span className='w-4/12  text-right font-bold text-blue-500 underline
                     cursor-pointer'>Xem thêm ⟩</span>
@@ -337,7 +339,7 @@ export default function HotelDetail() {
                                     <CarouselContent className="w-full h-full">
                                         {hotel.rates?.map((item, index) => (
                                             <CarouselItem key={item.id} className="basis-1/2">
-                                                <div className='w-full p-3 rounded-md border border-gray-200
+                                                <div className='w-full p-3 rounded-3xl border border-gray-200
                                     shadow-1 shadow-gray-400 flex flex-col cursor-pointer h-[140px] bg-white'
                                                     onClick={() => {
                                                         setRateItem(item);
@@ -368,9 +370,9 @@ export default function HotelDetail() {
                     </div>
 
                     {/* danh muc phong */}
-                    <div id='ePhong' className='w-10/12 flex flex-col bg-cyan-200 p-3 rounded-lg' ref={targetElementRefs.Phong}>
+                    <div id='ePhong' className='w-10/12 flex flex-col bg-cyan-200 p-3 rounded-3xl' ref={targetElementRefs.Phong}>
                         <p className='font-semibold text-xl'>Những phòng còn trống tại {hotel?.Name}</p>
-                        <div className=' flex flex-row bg-blue-800 rounded-lg justify-start items-center pl-4
+                        <div className=' flex flex-row bg-blue-800 rounded-3xl justify-start items-center pl-4
                 py-4 my-3'>
                             <img src='/policy/TagPolicy.webp' className='w-12 h-12' />
                             <p className='text-lg text-white font-bold ml-2'>
@@ -378,7 +380,7 @@ export default function HotelDetail() {
                                 Hãy chọn phòng có thể hủy miễn phí!</p>
                         </div>
                         {/* filter */}
-                        <div className=' flex flex-col bg-white rounded-lg justify-start items-start pl-4
+                        <div className=' flex flex-col bg-white rounded-3xl justify-start items-start pl-4
                 py-4 my-3'>
                             <p className='text-lg text-left text-gray-900 font-bold my-3'>
                                 Tìm kiếm nhanh hơn bằng cách chọn những tiện nghi bạn cần</p>
@@ -409,7 +411,7 @@ export default function HotelDetail() {
                                                 <path fillRule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm11.378-3.917c-.89-.777-2.366-.777-3.255 0a.75.75 0 0 1-.988-1.129c1.454-1.272 3.776-1.272 5.23 0 1.513 1.324 1.513 3.518 0 4.842a3.75 3.75 0 0 1-.837.552c-.676.328-1.028.774-1.028 1.152v.75a.75.75 0 0 1-1.5 0v-.75c0-1.279 1.06-2.107 1.875-2.502.182-.088.351-.199.503-.331.83-.727.83-1.857 0-2.584ZM12 18a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" clipRule="evenodd" />
                                             </svg>
                                         </span>
-                                        <div className='w-11/12 rounded-lg bg-slate-900 opacity-80
+                                        <div className='w-11/12 rounded-3xl bg-slate-900 opacity-80
                             text-white font-medium p-1 absolute mt-[-70px] ml-[-50%] invisible 
                             group-hover:visible'>
                                             <p>Giướng lớn có thể bao gồm: giường đôi/queen/king. Phù hợp cho 2 người lớn.</p>
@@ -429,10 +431,10 @@ export default function HotelDetail() {
                                         </svg>
                                         </span>
                                     </p>
-                                    <div className={`bg-white shadow-1 shadow-gray-500 p-3 rounded-md absolute z-10
+                                    <div className={`bg-white shadow-1 shadow-gray-500 p-3 rounded-3xl absolute z-10
                             top-[50px] ${dsHienThiGiaState ? 'block' : 'hidden'}`}>
                                         {arrHienThiGia.map((item) => (
-                                            <p className={`text-lg font-bold ${item === hienThiGia ? 'text-cyan-600'
+                                            <p key={item} className={`text-lg font-bold ${item === hienThiGia ? 'text-cyan-600'
                                                 : 'text-gray-900'} my-2 cursor-pointer select-none`}
                                                 onClick={() => {
                                                     setHienThiGia(item);
@@ -454,7 +456,7 @@ export default function HotelDetail() {
                     <div className='w-10/12 flex justify-end items-end'>
 
                         <div className='flex relative justify-start items-center h-26 bg-blue-400 w-11/12
-             my-10 rounded-lg'>
+             my-10 rounded-3xl'>
                             <img src='/background/taiappbg.webp' className='h-full absolute  ml-16 left-[-90px]' />
                             <img src='/background/taiapp.webp' className='h-full absolute scale-125 left-[-90px]' />
                             <div className='z-9 flex flex-col pl-10'>
@@ -463,7 +465,7 @@ export default function HotelDetail() {
                                     của chúng tôi. Bạn cũng tải app ngay nhé!</p>
                             </div>
                             <button className='text-cyan-400 bg-white text-xl font-bold
-                    p-2 rounded-lg absolute right-4'>Tải app</button>
+                    p-2 rounded-3xl absolute right-4'>Tải app</button>
                         </div>
                     </div>
 
@@ -471,7 +473,7 @@ export default function HotelDetail() {
                     <div></div>
 
                     {/* thong tin khu vuc */}
-                    <div className='w-full lg:w-10/12 flex flex-col lg:flex-row flex-wrap bg-slate-100 rounded-lg' id='eViTri'
+                    <div className='w-full lg:w-10/12 flex flex-col lg:flex-row flex-wrap bg-slate-100 rounded-3xl' id='eViTri'
                         ref={targetElementRefs.ViTri}>
                         <div className='w-full lg:w-4/12 p-3'>
                             <p className='font-semibold text-lg text-gray-800 cursor-pointer
@@ -490,7 +492,7 @@ export default function HotelDetail() {
                                 {diadiemlancan.filter((item) => {
                                     return item.IsPopular == false;
                                 }).map((jitem) => (
-                                    <li className='py-2'>
+                                    <li key={jitem.id} className='py-2'>
                                         <div className='flex felx-row justify-start items-center  cursor-pointer'>
                                             <img src={`/icon/${jitem.ImageIcon}`} className='w-8 h-8 mr-2' />
                                             <p className='font-semibold'>{jitem.Name}</p>
@@ -506,7 +508,7 @@ export default function HotelDetail() {
                                 {diadiemlancan.filter((item) => {
                                     return item.IsPopular == true;
                                 }).map((jitem) => (
-                                    <li className='py-2'>
+                                    <li key={jitem.id} className='py-2'>
                                         <div className='flex felx-row justify-start items-center  cursor-pointer'>
                                             <img src={`/icon/${jitem.ImageIcon}`} className='w-8 h-8 mr-2' />
                                             <p className='font-semibold'>{jitem.Name}</p>
@@ -528,10 +530,10 @@ export default function HotelDetail() {
 
                     {/* thong tin khu vuc */}
                     <div className='my-3 w-full lg:w-10/12 flex flex-col lg:flex-row flex-wrap
-                     bg-slate-100 rounded-lg'>
+                     bg-slate-100 rounded-3xl'>
                         <div className='w-full relative'>
                             <img src={`${URL_Enum.BaseURL_Image}${hotel.images && hotel.images.filter((item) => { return item.TypeRoom == 'None;Ảnh bìa' })[0].FileName}`}
-                                className='w-full h-[320px] rounded-lg' />
+                                className='w-full h-[320px] rounded-3xl' />
                             <div className='absolute bottom-0 w-full opacity-65 text-2xl font-bold text-white
                          bg-black py-5 pl-3 rounded-b-lg'>
                                 Khám phá thêm về {hotel.Name}
@@ -561,15 +563,15 @@ export default function HotelDetail() {
 
                     {/* tat ca tien ich*/}
                     <div className='my-3 w-full lg:w-10/12 flex flex-col lg:flex-row flex-wrap
-                     bg-slate-100 rounded-lg p-3' id='TienIch' ref={targetElementRefs.TienIch}>
+                     bg-slate-100 rounded-3xl p-3' id='TienIch' ref={targetElementRefs.TienIch}>
                         <p className='text-xl text-gray-900'><b>Tất cả tiện ích</b></p>
                         <div className='w-full flex flex-row flex-wrap'>
                             {getListTypeImage().slice(0, 5).map((item) => (
-                                <div className='w-1/2 lg:w-1/5 rounded-md p-2'>
+                                <div key={item.FirstImage} className='w-1/2 lg:w-1/5 rounded-3xl p-2'>
                                     <div className='w-full relative cursor-pointer'
                                         onClick={() => handleStateModalListImagesChange(true, 0)} >
                                         <img src={`${URL_Enum.BaseURL_Image}${item.FirstImage}`}
-                                            className='w-full h-[150px] rounded-md ' />
+                                            className='w-full h-[150px] rounded-3xl ' />
                                         <p className='z-1 absolute bottom-0 w-full opacity-80 text-white
                                 bg-black p-2 text-center text-xl rounded-b-md'>{item.TypeName}</p>
                                     </div>
@@ -581,7 +583,7 @@ export default function HotelDetail() {
                             <ul className='text-lg font-semibold text-gray-900 ml-5
                             grid grid-cols-2 gap-1 lg:grid-cols-3 w-full'>
                                 {hotel.convenients?.map((item) => (
-                                    <li>
+                                    <li key={item.id}>
                                         <div className='w-full flex flex-col'>
                                             <div className='flex flex-row w-full justify-start items-center'>
                                                 <img src={`/icon/${item.ImageIcon}`} className='w-8 h-8' />
@@ -589,7 +591,7 @@ export default function HotelDetail() {
                                             </div>
                                             <ul className='list-disc pl-5'>
                                                 {item.Description?.map((jitem) => (
-                                                    <li>{jitem}</li>
+                                                    <li key={jitem}>{jitem}</li>
                                                 ))}
                                             </ul>
                                         </div>
@@ -602,7 +604,7 @@ export default function HotelDetail() {
 
                     {/* chinh sach thong tin */}
                     <div className='my-3 w-full lg:w-10/12 flex flex-col lg:flex-row flex-wrap
-                     bg-slate-100 rounded-lg p-3' id='ChinhSach' ref={targetElementRefs.ChinhSach}>
+                     bg-slate-100 rounded-3xl p-3' id='ChinhSach' ref={targetElementRefs.ChinhSach}>
                         <div className='w-full lg:w-4/12 flex flex-row relative'>
                             <p className='text-2xl text-gray-900 absolute m-3'><b>Chính sách & Thông tin chung</b></p>
                             <img src='/background/ChinhSachVaThongTinChung.jpg' className='w-full h-full' />
@@ -667,17 +669,17 @@ export default function HotelDetail() {
                         targetElementRefTongQuan={targetElementRefs.DanhGia} />
 
                     {/* final bay  */}
-                    <div className='my-3 w-full lg:w-10/12 flex flex-col lg:flex-row flex-wrap rounded-lg h-[320px] items-end'>
-                        <div className='my-3 w-full flex flex-col lg:flex-row flex-wrap rounded-lg relative h-[210px]'>
+                    <div className='my-3 w-full lg:w-10/12 flex flex-col lg:flex-row flex-wrap rounded-3xl h-[320px] items-end'>
+                        <div className='my-3 w-full flex flex-col lg:flex-row flex-wrap rounded-3xl relative h-[210px]'>
 
-                            <div className='w-full rounded-lg bg-gradient-to-b from-sky-700 via-sky-500 to-blue-500 px-12 py-15'>
+                            <div className='w-full rounded-3xl bg-gradient-to-b from-sky-700 via-sky-500 to-blue-500 px-12 py-15'>
                                 <p className='text-4xl font-bold text-white'>Bạn đã sẵn sàng quyết định chưa?</p>
                                 <button className='px-3 py-4 text-2xl font-bold text-white
-                            bg-orange-400 rounded-lg my-3'
+                            bg-orange-400 rounded-3xl my-3'
                                     onClick={() => { handleGoToElement('Phong') }}>Đặt phòng ngay thôi</button>
                                 <img src={`${URL_Enum.BaseURL_Image}${hotel.images.find((item) => {
                                     return item.TypeRoom == 'None;Ảnh bìa';
-                                })?.FileName}`} className='w-5/12 h-[290px] absolute bottom-3 right-8 rounded-lg' />
+                                })?.FileName}`} className='w-5/12 h-[290px] absolute bottom-3 right-8 rounded-3xl' />
 
                                 <img />
                             </div>
@@ -703,7 +705,7 @@ export default function HotelDetail() {
                         <p className='text-2xl font-semibold text-gray-900'>
                             <b>Không tìm thấy những gì bạn cần?</b></p>
                         <button className='px-3 py-4 text-2xl font-bold text-white
-                            bg-blue-400 rounded-lg my-3'>Tìm cơ sở lưu trú khác tại {hotel.province.DisplayName}</button>
+                            bg-blue-400 rounded-3xl my-3'>Tìm cơ sở lưu trú khác tại {hotel.province?.DisplayName}</button>
                     </div>
 
 

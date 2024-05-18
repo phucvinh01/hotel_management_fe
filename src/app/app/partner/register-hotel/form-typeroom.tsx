@@ -130,7 +130,8 @@ const FormTypeRoom = ({
                 <Label htmlFor='typeroom-price'>Giá của loại phòng này</Label>
                 <Input
                   value={data && data[index]?.Price}
-                  type='text'
+                  type='number'
+                  min={1}
                   id='typeroom-price'
                   onChange={(e) =>
                     setFormData((prev) => {

@@ -10,7 +10,7 @@ export interface FileData {
 interface Props {
   files: FileData[];
   setFiles: (files: FileData[]) => void;
-  type?: boolean;
+  type?: string;
   dataRender?: TypeRoom[];
 }
 
@@ -66,59 +66,74 @@ const ImageUploader: React.FC<Props> = (props) => {
 
   const renderImageTable = () => {
     return (
-      <table className='w-full bg-slate-200 mt-3 rounded-lg px-5'>
+      <table className='w-full bg-slate-200 mt-3 rounded-3xl px-2'>
         <thead>
           <tr>
-            <th className='px-2 py-1 text-md'>File</th>
-            <th className='px-2 py-1 text-md'>Ảnh</th>
-            <th className='px-2 py-1 text-md'>Loại phòng</th>
-            <th className='px-2 py-1 text-md'>Khu vực</th>
-            <th className='px-2 py-1 text-md'>Hành động</th>
+            <th className='px-2 py-1 text-sm'>File</th>
+            <th className='px-2 py-1 text-sm'>Ảnh</th>
+            {!type && <th className='px-2 py-1 text-sm'>Loại phòng</th>}
+            <th className='px-2 py-1 text-sm'>Khu vực</th>
+            <th className='px-2 py-1 text-sm'>Hành động</th>
           </tr>
         </thead>
         <tbody>
-          {files.slice(1).map((file) => (
-            <tr key={file.filename}>
+          {files.map((file, index) => (
+            <tr key={file.filename} className='text-center'>
               <td className='border px-2 py-1 text-[11px]'> {file.filename}</td>
-              <td className='border px-2 py-1 text-[11px]'>
+              <td className='border px-2 py-1 text-[11px] grid'>
                 <Image
                   loading='lazy'
                   width={70}
                   height={70}
-                  className='object-cover rounded-lg min-h-[70px]'
+                  className='object-cover rounded-3xl min-h-[70px] mx-auto'
                   src={URL.createObjectURL(file.file)}
                   alt={file.filename}
                 />
               </td>
-              <td>
-                <Select
-                  value={file.typeroom}
-                  onValueChange={(e) => {
-                    setFiles(
-                      files.map((f) =>
-                        f.filename === file.filename
-                          ? { ...f, typeroom: e }
-                          : f
-                      )
-                    );
-                  }}>
-                 <SelectTrigger className='w-[180px]'>
-                    <SelectValue placeholder='Loại phòng' />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      {
-                        dataRender?.map((item,index) => {
-                          return(
-                           <SelectItem value={item.Name} key={index}>{item.Name}</SelectItem>
-                          )
-                        })
-                        }
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-                </td>
+
+              {!type && (
                 <td>
+                  <Select
+                    disabled={type !== 'typeroom' && index === 0}
+                    value={file.typeroom}
+                    onValueChange={(e) => {
+                      setFiles(
+                        files.map((f) =>
+                          f.filename === file.filename
+                            ? { ...f, typeroom: e }
+                            : f
+                        )
+                      );
+                    }}>
+                    {}
+                    <SelectTrigger className='w-full'>
+                      {type !== 'typeroom' && index === 0 ? (
+                        <SelectValue placeholder='None' />
+                      ) : (
+                        <SelectValue placeholder='Loại phòng' />
+                      )}
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        {dataRender?.map((item, index) => {
+                          return (
+                            <SelectItem
+                              value={item.Name}
+                              key={index}>
+                              {item.Name}
+                            </SelectItem>
+                          );
+                        })}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                </td>
+              )}
+
+              <td
+                className={
+                  type !== 'typeroom' && index === 0 ? `invisible` : ''
+                }>
                 <Select
                   value={file.regions}
                   onValueChange={(e) => {
@@ -128,10 +143,10 @@ const ImageUploader: React.FC<Props> = (props) => {
                       )
                     );
                   }}>
-                  <SelectTrigger className='w-[180px]'>
+                  <SelectTrigger className='w-[120px]'>
                     <SelectValue placeholder='Chọn khu vực' />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className='bg-white text-black dark:bg-black dark:text-white'>
                     <SelectGroup>
                       <SelectItem value='Phòng tắm'>Phòng tắm</SelectItem>
                       <SelectItem value='Sảnh chờ'>Sảnh chờ</SelectItem>
@@ -143,10 +158,8 @@ const ImageUploader: React.FC<Props> = (props) => {
                   </SelectContent>
                 </Select>
               </td>
-              <td>
-                <Button onClick={() => removeFile(file)}>
-                  <XCircle />
-                </Button>
+              <td className=''>
+                <XCircle className='grid mx-auto' onClick={() => removeFile(file)} />
               </td>
             </tr>
           ))}
@@ -167,15 +180,14 @@ const ImageUploader: React.FC<Props> = (props) => {
         regions: file.regions,
       })),
     };
-    console.log('Submit data:', formData);
   };
 
   return (
-    <div className='m-4 p-4 border border-gray-300 rounded-lg'>
+    <div className='m-4 p-4 border border-gray-300 rounded-3xl'>
       <div className='flex items-center justify-center w-full'>
         <label
           htmlFor='dropzone-file'
-          className='flex flex-col items-center justify-center w-full h-30 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600'>
+          className='flex flex-col items-center justify-center w-full h-30 border-2 border-gray-300 border-dashed rounded-3xl cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600'>
           <div className='flex flex-col items-center justify-center pt-5 pb-6'>
             <svg
               className='w-8 h-8 mb-4 text-gray-500 dark:text-gray-400'

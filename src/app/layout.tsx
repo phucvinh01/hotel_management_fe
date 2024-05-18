@@ -1,11 +1,12 @@
 import type { Metadata } from 'next';
 import { Toaster } from '@/components/ui/toaster';
 import { AuthProvider } from '@/hooks/useAuthContext';
-
+import "../css/__dates_picker.scss";
 export const metadata: Metadata = {
-  title: 'Traveloka - Nền tảng du lịch hàng đầu Đông Nam Á',
-  description: 'Traveloka',
+  title: 'Vietnam Venture',
+  description: 'Vietnam Venture',
 };
+import ReactQueryProvider from '../hooks/useQuery';
 
 export default function RootLayout({
   children,
@@ -13,16 +14,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
+    <ReactQueryProvider>
     <html
       lang='en'
       suppressHydrationWarning={true}>
       <body>
-
+        
         <AuthProvider>
           {children}
           <Toaster />
         </AuthProvider>
+      
         </body>
     </html>
+    </ReactQueryProvider>
   );
 }

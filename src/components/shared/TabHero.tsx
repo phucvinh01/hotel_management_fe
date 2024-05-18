@@ -14,7 +14,7 @@ import {
   PlaneTakeoffIcon,
 } from 'lucide-react';
 import { useState } from 'react';
-import SearchForm from './form/SearchForm';
+import SearchForm from './form/Search/SearchForm';
 
 const tabList = [
   {

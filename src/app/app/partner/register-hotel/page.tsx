@@ -1,14 +1,14 @@
 import React from 'react'
 import { RegisterNewHotelForm } from './register-new-hotel-form'
+import Image from 'next/image'
 const style = {
-    backgroundImage: "url('/background/register-new-hotel-bg.jpg')",
+    backgroundImage: "url('/images/pexels.jpg')",
     backgroundSize: 'cover',
   }
 const page = () => {
   return (
-    <div style={style} className="min-h-screen flex justify-center items-center px-10">
+    <div style={style}  className="flex justify-center items-center min-h-screen">
       <RegisterNewHotelForm/>
-
       </div>
   )
 }

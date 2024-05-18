@@ -47,14 +47,14 @@ export function DatePickerWithRange2({
 
 
   return (
-    <div className={cn('grid gap-2 bg-gray-50 border border-gray-300 h-12 rounded-lg', className)}>
+    <div className={cn('grid gap-2 bg-gray-50 border border-gray-300 h-12 rounded-3xl', className)}>
       <Popover>
         <PopoverTrigger asChild>
           <Button
             id='date'
             variant={'outline'}
             className={cn(
-              ' justify-start text-left h-12 bg-blue-200 border border-blue-200 text-white text-lg rounded-lg w-full font-bold pl-6 ',
+              ' justify-start text-left h-12 bg-blue-200 border border-blue-200 text-white text-lg rounded-3xl w-full font-bold pl-6 ',
               !date && 'text-muted-foreground'
             )}>
             <CalendarIcon className='mr-2 h-4 w-4' />

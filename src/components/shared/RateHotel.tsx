@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Star from "./Star";
 import URL_Enum from "@/axios/URL_Enum";
-import FormatDate from "@/service/FormatDateString";
+import FormatDate from "@/util/FormatDateString";
 import ModalImageRate from "./ModalImageRate";
 import {
     Carousel,
@@ -141,7 +141,7 @@ const RateHotel = (props: IProps) => {
         listRate && listRate.length > 0 ?
             <>
                 <div className='my-3 w-full lg:w-10/12 flex flex-col flex-wrap
-                     bg-slate-100 rounded-lg p-3' id='DanhGia' ref={targetElementRefTongQuan}>
+                     bg-slate-100 rounded-3xl p-3' id='DanhGia' ref={targetElementRefTongQuan}>
                     <p className="text-2xl text-gray-900"><b>Đánh giá từ khách</b></p>
                     <p className="text-xl text-gray-900 my-2"><b>Xếp hạng & Điểm đánh giá chung</b></p>
                     <p className="text-lg text-gray-900 font-semibold">Từ {listRate.length} đánh giá của khách đã ở</p>
@@ -160,7 +160,7 @@ const RateHotel = (props: IProps) => {
                             <div className="flex flex-row w-ful items-center mb-3">
                                 <p className="text-lg font-semibold text-left w-2/12">{haiLong[4].text}</p>
                                 <div className="flex flex-row w-10/12 h-[12px] bg-white
-                                border border-blue-500 rounded-md justify-start items-center">
+                                border border-blue-500 rounded-3xl justify-start items-center">
                                     <div className={`h-full w-[${haiLong[4].tile.toString()}%] bg-blue-500 z-1`}></div>
                                 </div>
                                 <p className="text-lg font-semibold text-left w-2/12 ml-3">
@@ -171,7 +171,7 @@ const RateHotel = (props: IProps) => {
                             <div className="flex flex-row w-ful items-center my-3">
                                 <p className="text-lg font-semibold text-left w-2/12">{haiLong[3].text}</p>
                                 <div className="flex flex-row w-10/12 h-[12px] bg-white
-                                border border-blue-500 rounded-md justify-start items-center">
+                                border border-blue-500 rounded-3xl justify-start items-center">
                                     <div className={`h-full w-[${haiLong[3].tile.toString()}%] bg-blue-500 z-1`}></div>
                                 </div>
                                 <p className="text-lg font-semibold text-left w-2/12 ml-3">
@@ -182,7 +182,7 @@ const RateHotel = (props: IProps) => {
                             <div className="flex flex-row w-ful items-center my-3">
                                 <p className="text-lg font-semibold text-left w-2/12">{haiLong[2].text}</p>
                                 <div className="flex flex-row w-10/12 h-[12px] bg-white
-                                border border-blue-500 rounded-md justify-start items-center">
+                                border border-blue-500 rounded-3xl justify-start items-center">
                                     <div className={`h-full w-[${haiLong[2].tile.toString()}%] bg-blue-500 z-1`}></div>
                                 </div>
                                 <p className="text-lg font-semibold text-left w-2/12 ml-3">
@@ -193,7 +193,7 @@ const RateHotel = (props: IProps) => {
                             <div className="flex flex-row w-ful items-center my-3">
                                 <p className="text-lg font-semibold text-left w-2/12">{haiLong[1].text}</p>
                                 <div className="flex flex-row w-10/12 h-[12px] bg-white
-                                border border-blue-500 rounded-md justify-start items-center">
+                                border border-blue-500 rounded-3xl justify-start items-center">
                                     <div className={`h-full w-[${haiLong[1].tile.toString()}%] bg-blue-500 z-1`}></div>
                                 </div>
                                 <p className="text-lg font-semibold text-left w-2/12 ml-3">
@@ -204,7 +204,7 @@ const RateHotel = (props: IProps) => {
                             <div className="flex flex-row w-ful items-center my-3">
                                 <p className="text-lg font-semibold text-left w-2/12">{haiLong[0].text}</p>
                                 <div className="flex flex-row w-10/12 h-[12px] bg-white
-                                border border-blue-500 rounded-md justify-start items-center">
+                                border border-blue-500 rounded-3xl justify-start items-center">
                                     <div className={`h-full w-[${haiLong[0].tile.toString()}%] bg-blue-500 z-1`}></div>
                                 </div>
                                 <p className="text-lg font-semibold text-left w-2/12 ml-3">
@@ -232,9 +232,9 @@ const RateHotel = (props: IProps) => {
                         </div>
                     </div>
                     {/* filter */}
-                    <div className=' flex flex-col rounded-lg justify-start items-start pl-4
+                    <div className=' flex flex-col rounded-3xl justify-start items-start pl-4
                 py-4 mt-3'><p className='text-lg font-medium text-gray-900'>Sắp xếp</p>
-                        <div className='w-full lg:w-8/12 flex flex-col lg:flex-row bg-white rounded-lg border-2
+                        <div className='w-full lg:w-8/12 flex flex-col lg:flex-row bg-white rounded-3xl border-2
                         border-gray-100 py-3 px-2 shadow-3 shadow-gray-300'>
 
                             <div className='w-full lg:w-1/2 my-2 flex flex-col justify-start items-start relative'>
@@ -254,10 +254,10 @@ const RateHotel = (props: IProps) => {
                                     </svg>
                                     </span>
                                 </p>
-                                <div className={`bg-white shadow-1 shadow-gray-500 p-3 rounded-md absolute z-10
+                                <div className={`bg-white shadow-1 shadow-gray-500 p-3 rounded-3xl absolute z-10
                             top-[25px] ${dsFilterRateState ? 'block' : 'hidden'}`}>
                                     {arrFilterRate.map((item) => (
-                                        <p className={`text-lg font-bold ${item === hienFilterRate ? 'text-cyan-600'
+                                        <p key={item} className={`text-lg font-bold ${item === hienFilterRate ? 'text-cyan-600'
                                             : 'text-gray-900'} my-2 cursor-pointer select-none`}
                                             onClick={() => {
                                                 setHienFilterRate(item);
@@ -285,8 +285,8 @@ const RateHotel = (props: IProps) => {
                     {/* form them danh gia */}
 
                     {/* list danh gia */}
-                    {listRateTemp.map((item) => (
-                        <div className="flex flex-row w-full p-3 bg-white rounded-lg
+                    {listRateTemp.map((item,index) => (
+                        <div key={index} className="flex flex-row w-full p-3 bg-white rounded-3xl
                         border-2 border-gray-300 mb-3">
                             <div className="w-4/12 flex flex-col justify-start items-center">
                                 <img src={`${URL_Enum.BaseURL_Avarta}${item.guest?.Avarta}`}
@@ -314,7 +314,7 @@ const RateHotel = (props: IProps) => {
                                                     <CarouselItem key={index} className="basis-1/5">
                                                         <img src={`${URL_Enum.BaseURL_Rate}${jitem}`}
                                                             alt={jitem} className={`w-full
-                                                h-[70px] rounded-lg object-cover cursor-pointer`}
+                                                h-[70px] rounded-3xl object-cover cursor-pointer`}
                                                             onClick={() => {
                                                                 item.HinhAnh ? setListImageRateP(item.HinhAnh.split(';'))
                                                                     : setListImageRateP([])
@@ -325,7 +325,7 @@ const RateHotel = (props: IProps) => {
                                             </CarouselContent >
                                         </Carousel>
                                         {/* <img src={`${URL_Enum.BaseURL_Rate}${item.HinhAnh}`}
-                                        className="w-5/12 h-[180px] rounded-md" /> */}
+                                        className="w-5/12 h-[180px] rounded-3xl" /> */}
                                     </div> : null}
                             </div>
                         </div>
@@ -337,7 +337,7 @@ const RateHotel = (props: IProps) => {
             </>
             : <>
                 <div className='my-3 w-full lg:w-10/12 flex flex-col flex-wrap
-        bg-slate-100 rounded-lg p-3'>
+        bg-slate-100 rounded-3xl p-3'>
                     <p className="text-2xl text-gray-900"><b>Đánh giá từ khách</b></p>
                     <p className="text-xl text-gray-900 font-semibold">Khách sạn chưa có thông tin đánh giá từ khách hàng.</p>
                 </div>

@@ -28,8 +28,8 @@ const AmountPeopleForm = () => {
   };
 
   return (
-    <div className='container flex gap-4 flex-col py-4 w-[330px] rounded-lg'>
-      <div className='flex justify-between items-center rounded-lg'>
+    <div className='container flex gap-4 flex-col py-4 w-[330px] rounded-3xl'>
+      <div className='flex justify-between items-center rounded-3xl'>
         <div className='flex gap-3'>
           <HomeIcon className='text-cyan-500' />
           <p>Số phòng</p>

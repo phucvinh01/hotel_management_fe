@@ -43,7 +43,7 @@ const ModalImageRate = (props: IProps) => {
 
     return (
         <div className={`w-full ${modalImageRateState ? 'block' : 'hidden'} h-full flex
-        z-9999 fixed inset-0 justify-center items-center`} style={{ background: 'rgb(0 0 0 / 55%)' }}>
+        z-[999]9 fixed inset-0 justify-center items-center`} style={{ background: 'rgb(0 0 0 / 55%)' }}>
             <div className="w-9/12 h-[95%] flex flex-col rounded-2xl justify-center items-center
                 bg-black opacity-100">
                 <div className="flex flex-row w-full relative p-3">
@@ -87,7 +87,7 @@ const ModalImageRate = (props: IProps) => {
                                 <CarouselItem key={item} className="basis-1/5">
                                     <img src={`${URL_Enum.BaseURL_Rate}${item}`}
                                         alt={item}
-                                        className={`w-full h-[90px] rounded-lg object-cover cursor-pointer
+                                        className={`w-full h-[90px] rounded-3xl object-cover cursor-pointer
                                                 ${indexImageRateModal === index ? 'border border-b-2 border-blue-700' : ''}`}
                                         onClick={() => {
                                             setIndexImageRateModal(index);

@@ -46,7 +46,7 @@ interface ICardHotel {
     Address: string;
     FileName: string;
     IsActive:number
-    min_price: number;
+    min_price: string;
     total_reviews: number;
     average_rating?: number | undefined;
 }
@@ -80,7 +80,7 @@ interface Rate {
 interface Room {
   id?: string;
   TypeRoomId?	: string;
-  State?: string;
+  State?: number;
   TimeRecive?: string;
   TimeLeave?: string;
   Gift?: string;
@@ -166,28 +166,41 @@ interface IRate {
 }
 interface ITypeRoom {
   id: string;
-  HotelId: string;
-  Ban_Cong_San_Hien: boolean;
-  Bon_Tam: boolean;
+  HotelId?: string;
+  Ban_Cong_San_Hien: number;
+  Bon_Tam: number;
   ConvenientBathRoom: string;
   ConvenientRoom: string;
   FloorArea: number;
-  Khu_Vuc_Cho: boolean;
+  Khu_Vuc_Cho: number;
   MaxQuantityMember: number;
-  May_Lanh: boolean;
+  May_Lanh: number;
   Name: string;
-  Nuoc_Nong: boolean;
+  Nuoc_Nong: number;
   Price: number;
-  Voi_Tam_Dung: boolean;
+  Voi_Tam_Dung: number;
   TenLoaiGiuong: string;
   SoLuongGiuong: number;
-  Lo_Vi_Song: boolean;
-  Tu_Lanh: boolean;
-  May_Giat: boolean;
-  No_Moking: boolean;
+  Lo_Vi_Song: number;
+  Tu_Lanh: number;
+  May_Giat: number;
+  No_Moking: number;
   created_at: string | null;
   updated_at: string | null;
 }
+
+interface InsertTyperoomAndImage extends ITypeRoom {
+  file: File[];
+  region: string[];
+}
+
+interface IMutilpleImageUpload {
+  file: File[];
+  region: string[];
+  typeroom:string,
+  hotel:string,
+}
+
 interface IRoom {
   id: string;
   TypeRoomId: string;
@@ -273,3 +286,88 @@ interface IHotelImage {
   created_at: string | null;
   updated_at: string | null;
 }
+
+
+type HotelResponse = {
+  id: string;
+  Name: string;
+  Address: string;
+  Telephone: string;
+  Description: string;
+  LocationDetail: string;
+  IsActive: number;
+  TimeCheckIn: string;
+  TimeCheckOut: string;
+  created_at: string | null;
+  updated_at: string | null;
+  Type: string;
+  StarRate: number;
+  Province_Id: string | null;
+  number_of_room_types: string;
+  total_rooms_state_0: string
+};
+
+interface SelectRoomsResult {
+  type_name: string;
+  type_price: string;
+  hotel_name: string;
+  id: string;
+  TypeRoomId: string;
+  State: string;
+  TimeRecive: string | null;
+  TimeLeave: string | null;
+  Gift: string;
+  Discount: number;
+  Breakfast: number;
+  Wifi: number;
+  NoSmoking: number;
+  Cancel: number;
+  ChangeTimeRecive: number;
+  created_at: string | null;
+  updated_at: string | null;
+  RoomName: string;
+  Hinh_Thuc_Thanh_Toan: number;
+  Bao_Gom_Thue_Va_Phi: number;
+}
+
+interface SelectTypeRoom {
+  id: string;
+  HotelId: string;
+  Name: string;
+  ConvenientRoom: string;
+  ConvenientBathRoom: string;
+  FloorArea: string;
+  MaxQuantityMember: string;
+  Price: string;
+  Voi_Tam_Dung: number;
+  Ban_Cong_San_Hien: number;
+  Khu_Vuc_Cho: number;
+  May_Lanh: number;
+  Nuoc_Nong: number;
+  Bon_Tam: number;
+  created_at: string | null;
+  updated_at: string | null;
+  TenLoaiGiuong: string;
+  SoLuongGiuong: string;
+  Lo_Vi_Song: number;
+  Tu_Lanh: number;
+  May_Giat: number;
+  No_Moking: number;
+  total_rooms: string;
+  state_room: string;
+ RoomName: string,
+}
+
+
+interface RoomsTableResult {
+  data : SelectRoomsResult
+}
+
+interface TypeRoomsTableResult {
+  data : SelectTypeRoom
+}
+
+
+
+
+
