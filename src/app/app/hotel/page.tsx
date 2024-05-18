@@ -11,20 +11,32 @@ import {
 import { useEffect, useState } from 'react';
 import React from 'react';
 import URL_Enum from '@/axios/URL_Enum';
-import http from '@/axios/http';
 import Link from 'next/link';
+import { GetListProvinceDefault } from '@/service/province.service';
+import Star from '@/components/shared/Star';
+import { useRouter } from 'next/navigation';
+import LocalStoreEnum from '@/axios/LocalStoreEnum';
 
 const dateNow = (): string => {
-  var currentDate = new Date();
-
-  return currentDate.getFullYear() + '-' + String(currentDate.getMonth() + 1).padStart(2, '0')
-    + '-' + String(currentDate.getDay()).padStart(2, '0');
+  var currentDate_ = new Date();
+  return currentDate_.getFullYear() + '-' + String(currentDate_.getMonth() + 1).padStart(2, '0')
+    + '-' + String(currentDate_.getDate()).padStart(2, '0');
+}
+const formatYMD = (valueDMY: string, charSplit: string, currentFormat: string): string => {
+  const arrValue = valueDMY.split(charSplit);
+  if (currentFormat == 'DMY') {
+    return arrValue[2] + '-' + arrValue[1] + '-' + arrValue[0];
+  }
+  else {
+    return arrValue[2] + '-' + arrValue[0] + '-' + arrValue[1];
+  }
 }
 
-
+interface DemAndDate {
+  Dem: string,
+  DemDate: string
+}
 export default function Hotel() {
-
-
   const listContryImg = [
     {
       "id": 1,
@@ -67,6 +79,7 @@ export default function Hotel() {
       "url": "/country/bengji.webp"
     },
   ]
+  const route = useRouter();
   const [dsTinhState, setDsTinhState] = useState<'block' | 'hidden'>('hidden');
   const [dsDemState, setDsDemState] = useState<'block' | 'hidden'>('hidden');
   const [dsThanhVienState, setDsThanhVienState] = useState<'block' | 'hidden'>('hidden');
@@ -78,6 +91,33 @@ export default function Hotel() {
   const [valueSoPhong, setValueSoPhong] = useState<number>(1);
   const [valueNguoiLonTreEmPhong, setValueNguoiLonTreEmPhong] = useState<string>(
     valueSoNguoiLon + ' Người lớn' + valueSoTreEm + ' Trẻ em' + valueSoPhong + ' Phòng');
+  const [dsDate, setDsDate] = useState<DemAndDate[]>([]);
+  const [selectedDate, setSelectedDate] = useState<string>(dateNow());
+  const [startDate, setStartDate] = useState<string>(dateNow());
+
+  useEffect(() => {
+    const generateDsDate = () => {
+      console.log('date', startDate);
+      var listDate: DemAndDate[] = [];
+      for (var i = 0; i < 29; i++) {
+        const currentDate = new Date(Number.parseInt(startDate.split('-')[0])
+          , Number.parseInt(startDate.split('-')[1]), Number.parseInt(startDate.split('-')[2]));
+
+        currentDate.setDate(currentDate.getDate() + i);
+        const day = String(currentDate.getDate()).padStart(2, '0');
+        const month = String(currentDate.getMonth()).padStart(2, '0');
+        const year = currentDate.getFullYear();
+        const formattedDate = `${day}/${month}/${year}`;
+        var demI = i + 1;
+        var objectDate = { Dem: demI + ' Đêm', DemDate: formattedDate }
+        listDate.push(objectDate);
+      }
+      console.table(listDate);
+      setDsDate(listDate);
+      setSelectedDate(listDate[0].DemDate);
+    }
+    generateDsDate();
+  }, [startDate]);
   const handleShowHideDsTinh = (): void => {
     if (allowShowHide === true) {
       setDsTinhState('block');
@@ -158,23 +198,18 @@ export default function Hotel() {
   const [selectedProvinceOption, setSelectedProvinceOption] = useState<string>('');
   // Trạng thái lưu giữ giá trị radio button dia danh được chọn
   useEffect(() => {
-    const fecthData = async (url: string) => {
-      try {
-        const response = await fetch(url);
-        const data = await response.json();
-        setProvinces(data.result.data);
-        setSelectedProvinceOption(provinces[0].id);
-      } catch (error) {
-        console.log(error);
+    GetListProvinceDefault().then((response) => {
+      if (response != false && response != undefined) {
+        setProvinces(response);
+        setSelectedProvinceOption(response[0].id);
       }
-    }
-    fecthData('http://127.0.0.1:8000/api/province/get-page?page=1')
-
+    }).catch((error) => { console.log(error) });
   }, []);
 
   const handleProvinceOptionChange = (id_province: string): void => {
     setSelectedProvinceOption(id_province); // Cập nhật giá trị của radio button được chọn
   };
+
 
   return (
     <main className="w-full mb-10">
@@ -195,7 +230,6 @@ export default function Hotel() {
                 </div>
               </CarouselItem>
               {listContryImg.map((item) => (
-
                 <CarouselItem
                   key={item.id}
                   className='basis-1/4'>
@@ -287,33 +321,42 @@ export default function Hotel() {
                 </div>
 
                 {/* do du lieuj vao day */}
-                <div className="row-modal-ds-tinh" onClick={() => handleSelectedTinh('Thành phố Hồ Chí Minh')}>
-                  <div className='flex flex-col w-3/5 justify-center items-start'>
-                    <p className="pl-3 text-gray-500 text-lg font-semibold">
-                      <b>Thành phố Hồ Chí Minh</b></p>
-                    <p className='pl-3 text-gray-500 font-semibold'>Việt nam</p>
+                {provinces.map((item) => (
+                  <div className="row-modal-ds-tinh" onClick={() => handleSelectedTinh(item.DisplayName)}>
+                    <div className='flex flex-col w-3/5 justify-center items-start'>
+                      <p className="pl-3 text-gray-500 text-lg font-semibold">
+                        <b>{item.DisplayName}</b></p>
+                      <p className='pl-3 text-gray-500 font-semibold'>Việt nam</p>
+                    </div>
+                    <div className='flex flex-col w-2/5 justify-center items-end'>
+                      <button className=' pr-3 rounded-2xl w-2/5 border border-cyan-400'>Vùng</button>
+                      <p className="pr-3 text-gray-500"><b>{item.totalHotel} khách sạn</b></p>
+                    </div>
                   </div>
-                  <div className='flex flex-col w-2/5 justify-center items-end'>
-                    <button className=' pr-3 rounded-2xl w-2/5 border border-cyan-400'>Vùng</button>
-                    <p className="pr-3 text-gray-500"><b>1222 khách sạn</b></p>
-                  </div>
-                </div>
+                ))}
+
                 {/* tinh thanh pho bien */}
                 <div className="bg-gray-100 w-full flex flex-row h-16 items-center">
                   <p className="pl-3 text-blue-500 text-lg font-semibold"><b>Điểm đến phổ biến</b></p>
                 </div>
                 {/* do du lieuj vao day */}
-                <div className="row-modal-ds-tinh" onClick={() => handleSelectedTinh('Thành phố Đà Nẵng')}>
-                  <div className='flex flex-col w-3/5 justify-center items-start'>
-                    <p className="pl-3 text-gray-500 text-lg font-semibold">
-                      <b>Thành phố Đà Nẵng</b></p>
-                    <p className='pl-3 text-gray-500 font-semibold'>Việt nam</p>
+                {provinces.filter((fitem) => {
+                  return fitem.PopularRate > 0;
+                }).map((item) => (
+                  <div className="row-modal-ds-tinh" onClick={() => handleSelectedTinh(item.DisplayName)}>
+                    <div className='flex flex-col w-3/5 justify-center items-start'>
+                      <p className="pl-3 text-gray-500 text-lg font-semibold">
+                        <b>{item.DisplayName}</b></p>
+                      <p className='pl-3 text-gray-500 font-semibold'>Việt nam</p>
+                    </div>
+                    <div className='flex flex-col w-2/5 justify-center items-end'>
+                      <button className=' pr-3 rounded-2xl w-2/5 border border-cyan-400'>Vùng</button>
+                      <p className="pr-3 text-gray-500"><b>{item.totalHotel} khách sạn</b></p>
+                    </div>
                   </div>
-                  <div className='flex flex-col w-2/5 justify-center items-end'>
-                    <button className=' pr-3 rounded-2xl w-2/5 border border-cyan-400'>Vùng</button>
-                    <p className="pr-3 text-gray-500"><b>1222 khách sạn</b></p>
-                  </div>
-                </div>
+                ))
+                }
+
               </div>
 
             </div>
@@ -329,7 +372,12 @@ export default function Hotel() {
 
                   </span>
                   <input type="date"
-                    className='text-input' />
+                    className='text-input'
+                    defaultValue={dateNow()}
+                    onChange={(event) => {
+                      console.log('datechang', startDate);
+                      setStartDate(event.target.value);
+                    }} />
                 </div>
 
 
@@ -345,28 +393,25 @@ export default function Hotel() {
                   </span>
                   <input type="text"
                     placeholder="Chọn số đếm bạn thuê"
-                    defaultValue={valueSoDem}
+                    value={valueSoDem}
                     className='text-input' />
                 </div>
                 {/* modal hien thi danh sach so dem thue phong */}
-                <div id='dsSoDem' className={`${dsDemState} bg-white rounded-3xl w-11/12 mx-auto absolute z-10 shadow-md shadow-cyan-700`}>
+                <div id='dsSoDem' className={`${dsDemState} bg-white rounded-lg w-11/12 mx-auto absolute z-10 shadow-md shadow-cyan-700
+                h-[360px] overflow-hidden overflow-y-auto`}>
                   {/* chonj dem - do du lieu vao day*/}
-                  <div className="row-modal-ds-tinh" onClick={() => handleSelectedDem('1 Đêm')}>
-                    <div className='flex flex-col w-3/5 justify-center items-start'>
-                      <p className="pl-3 text-gray-500 text-lg font-semibold">
-                        <b>1 Đêm</b></p>
-                      <p className='pl-3 text-gray-500 font-semibold'>14/04/2024</p>
+                  {dsDate.map((item) => (
+                    <div className="row-modal-ds-tinh" onClick={() => {
+                      handleSelectedDem(item.Dem);
+                      setSelectedDate(item.DemDate);
+                    }}>
+                      <div className='flex flex-col w-3/5 justify-center items-start'>
+                        <p className="pl-3 text-gray-500 text-lg font-semibold">
+                          <b>{item.Dem}</b></p>
+                        <p className='pl-3 text-gray-500 font-semibold'>{item.DemDate}</p>
+                      </div>
                     </div>
-                  </div>
-
-                  <div className="row-modal-ds-tinh" onClick={() => handleSelectedDem('2 Đêm')}>
-                    <div className='flex flex-col w-3/5 justify-center items-start'>
-                      <p className="pl-3 text-gray-500 text-lg font-semibold">
-                        <b>2 Đêm</b></p>
-                      <p className='pl-3 text-gray-500 font-semibold'>15/04/2024</p>
-                    </div>
-                  </div>
-
+                  ))}
                 </div>
               </div>
               <div className="w-4/12 pr-6">
@@ -382,6 +427,7 @@ export default function Hotel() {
                     readOnly
                     placeholder="Chọn địa điểm của bạn"
                     defaultValue={dateNow()}
+                    value={formatYMD(selectedDate, '/', 'DMY')}
                     className='text-input cursor-not-allowed' />
                 </div>
               </div>
@@ -452,15 +498,23 @@ export default function Hotel() {
               </div>
               <div className='w-4/12 pr-6  items-end'>
                 <h1 className="lable-input" style={{ color: 'transparent' }}>*</h1>
-                <button className='w-full bg-gradient-to-r from-blue-600 via-blue-500 to-sky-600 
-                                flex justify-center items-center h-12 rounded-3xl'>
+                <Link href={`hotel/search?province=${valueTinh}&totalnight=${valueSoDem.split(' ')[0]}&totalmember=${valueSoNguoiLon}&totalmemberchild=${valueSoTreEm}&timereceive=${startDate}&totalroom=${valueSoPhong}`}
+                  className='w-full bg-gradient-to-r from-blue-600 via-blue-500 to-sky-600 
+                flex justify-center items-center h-12 rounded-lg'
+                  onClick={() => {
+                    localStorage.setItem(LocalStoreEnum.CURRENT_PROVINCE_SEARCH, valueTinh);
+                    localStorage.setItem(LocalStoreEnum.TOTAL_OLD_MEMBER, valueSoNguoiLon.toString());
+                    localStorage.setItem(LocalStoreEnum.TOTAL_CHILD_MEMBER, valueSoTreEm.toString());
+                    localStorage.setItem(LocalStoreEnum.START_DATE, startDate);
+                    localStorage.setItem(LocalStoreEnum.TOTAL_ROOM, valueSoPhong.toString());
+                  }}>
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-white font-medium">
                     <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
                   </svg>
                   <span className='text-center font-medium text-white'>
                     Tìm khách sạn
                   </span>
-                </button>
+                </Link>
               </div>
             </div>
             {/* footer */}
@@ -493,8 +547,11 @@ export default function Hotel() {
             <CarouselContent className="">
               {provinces.map((item) => (
                 <CarouselItem key={item.id} className="basis-1/5">
-                  <img src={`${URL_Enum.BaseURL_ImageProvince}/${item.Image}`} className='w-full rounded-3xl'
-                    alt={`${item.DisplayName}`} />
+                  <Link href={`hotel/search?provinceid=${item.id}`}>
+                    <img src={`${URL_Enum.BaseURL_ImageProvince}/${item.Image}`} className='w-full rounded-lg'
+                      alt={`${item.DisplayName}`} />
+                  </Link>
+
                 </CarouselItem>
               ))}
             </CarouselContent >
@@ -518,14 +575,31 @@ export default function Hotel() {
           ))}
 
         </div>
-        <div className="flex h-3/4 w-full justify-center items-center">
+        <div className="flex h-3/4 w-full justify-center items-center bg-slate-200 p-2 rounded-lg">
           <Carousel className="w-full " id='slider'>
             <CarouselContent className="">
-              {provinces.map((item) => (
-                <CarouselItem key={item.id} className="basis-1/5">
-                  <img src={`${URL_Enum.BaseURL_ImageProvince}/${item.Image}`} className='w-full rounded-3xl'
-                    alt={`${item.DisplayName}`} />
-                </CarouselItem>
+              {provinces.filter((fitem) => {
+                return fitem.id == selectedProvinceOption;
+              }).map((item) => (
+                item.hotels?.map((hitem) => (
+                  <CarouselItem key={hitem.id} className="basis-1/5">
+                    <div className='w-full h-[240px] flex flex-col bg-white shadow-1 shadow-gray-500 
+                    rounded-lg overflow-hidden hover:shadow-blue-500 hover:shadow-3'>
+                      <Link href={`hotel/hotel_detail/?id=${hitem.id}`}>
+                        <img src={`${URL_Enum.BaseURL_Image}/${hitem.images[0].FileName}`}
+                          className='w-full h-[125px] rounded-lg hover:scale-105'
+                          alt={`${hitem.images[0].FileName}`} />
+                        <p className='text-left w-full text-gray-700 font-semibold px-2 h-10'>
+                          {hitem.Name.length > 50 ? hitem.Name.slice(0, 40) + '...' : hitem.Name}</p>
+                        <span className='w-full px-2'><Star color='text-yellow-400' size='4' star={hitem.StarRate} /></span>
+                        <span className='w-full px-2 text-danger font-semibold'>{hitem.type_rooms[0]?.Price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</span>
+                      </Link>
+
+                    </div>
+
+                  </CarouselItem>
+                ))
+
               ))}
             </CarouselContent >
             <CarouselPrevious className={`${provinces.length > 5 ? 'block' : 'hidden'} ml-10 `} />

@@ -232,9 +232,9 @@ const RateHotel = (props: IProps) => {
                         </div>
                     </div>
                     {/* filter */}
-                    <div className=' flex flex-col rounded-3xl justify-start items-start pl-4
-                py-4 mt-3'><p className='text-lg font-medium text-gray-900'>Sắp xếp</p>
-                        <div className='w-full lg:w-8/12 flex flex-col lg:flex-row bg-white rounded-3xl border-2
+                    <div className=' flex flex-col rounded-lg justify-start items-start pl-4
+                py-4'><p className='text-lg font-medium text-gray-900'>Sắp xếp</p>
+                        <div className='w-full lg:w-8/12 flex flex-col lg:flex-row bg-white rounded-lg border-2
                         border-gray-100 py-3 px-2 shadow-3 shadow-gray-300'>
 
                             <div className='w-full lg:w-1/2 my-2 flex flex-col justify-start items-start relative'>
@@ -285,7 +285,7 @@ const RateHotel = (props: IProps) => {
                     {/* form them danh gia */}
 
                     {/* list danh gia */}
-                    {listRateTemp.map((item,index) => (
+                    {listRateTemp.map((item, index) => (
                         <div key={index} className="flex flex-row w-full p-3 bg-white rounded-3xl
                         border-2 border-gray-300 mb-3">
                             <div className="w-4/12 flex flex-col justify-start items-center">

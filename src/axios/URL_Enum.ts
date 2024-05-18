@@ -1,9 +1,11 @@
 enum URL_Enum {
-    BaseURL_ImageProvince = 'http://127.0.0.1:8000/images/province/',
-    BaseURL_Poster = 'http://127.0.0.1:8000/images/poster/',
-    BaseURL_Image = 'http://127.0.0.1:8000/images/',
-    BaseURL_Avarta = 'http://127.0.0.1:8000/avarta/',
-    BaseURL_Rate = 'http://127.0.0.1:8000/images/rate/',
-    BaseURL_Image_Icon = 'http://127.0.0.1:8000/images/icon/'
+    BaseURL = 'http://127.0.1:8000/',
+    BaseURL_Api = BaseURL + 'api/',
+    BaseURL_ImageProvince = BaseURL + 'images/province/',
+    BaseURL_Poster = BaseURL + 'images/poster/',
+    BaseURL_Image = BaseURL + 'images/',
+    BaseURL_Avarta = BaseURL + 'avarta/',
+    BaseURL_Rate = BaseURL + 'images/rate/',
+    BaseURL_Image_Icon = BaseURL + 'images/icon/'
 }
 export default URL_Enum;
