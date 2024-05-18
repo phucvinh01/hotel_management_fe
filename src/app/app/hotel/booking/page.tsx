@@ -11,6 +11,7 @@ import FormatStringToDate from "@/service/FormatStringToDate";
 import GenerateId from "@/service/generateId";
 import { getAvartaHotelByIdHotel } from "@/service/images.service";
 import axios from "axios";
+import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 
 import { useEffect, useRef, useState } from "react";
@@ -39,7 +40,7 @@ interface IProps {
     QuantityRoom: number;
 }
 const Booking = () => {
-    const TotalRoom = localStorage.getItem(LocalStoreEnum.TOTAL_ROOM);
+    const TotalRoom = (typeof localStorage !== 'undefined') ? localStorage.getItem(LocalStoreEnum.TOTAL_ROOM) : 1;
     console.log('TotalRoom', TotalRoom);
     const { user, logout } = useAuth();
     const route = useRouter();
@@ -299,6 +300,114 @@ const Booking = () => {
                                                 </table> : <p>Chưa có người ở cùng, hãy thêm nếu bạn có người đi cùng.</p>}
 
                                         </div>
+
+                                        {/* git code */}
+                                        <div className="w-full flex flex-row justify-center items-center text-lg my-2 
+                                        bg-cyan-100 py-3 px-2 rounded-lg">
+                                            <div className="w-4/12 flex flex-col"><p className="w-full flex flex-row mx-1 text-lg ">Nhập mã giảm giá</p>
+                                                <span className="w-full flex flex-row mx-1 font-semibold text-danger text-xs">Nhập mã giảm giá nếu có</span></div>
+                                            <input type="text" id="gitCode" name="gitCode"
+                                                className="w-8/12 h-[22px] outline outline-cyan-400 px-2 rounded-md mx-1
+                                                      cursor-pointer text-lg "
+                                                placeholder="Nhập mã giảm giá" />
+
+                                        </div>
+
+                                        {/* gia */}
+                                        <div className="w-full flex flex-row justify-start items-start text-lg my-2 
+                                        bg-cyan-100 py-3 px-2 rounded-lg flex-wrap">
+                                            <p className="w-full text-xl font-bold text-gray-900 underline">Chi tiết giá</p>
+                                            <span className="w-full flex flex-row mx-1 font-semibold text-cyan-500 text-sm">
+                                                <span>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-info-circle-fill text-cyan-500" viewBox="0 0 16 16">
+                                                        <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2" />
+                                                    </svg>
+                                                </span>
+                                                Thuế và phí là các khoản được chúng tôi chuyển trả cho khách sạn. Mọi thắc mắc về thuế và hóa đơn, vui lòng tham khảo Điều khoản và Điều kiện của chúng tôi để được giải đáp
+                                            </span>
+
+                                            {/* gia phong */}
+                                            <div className="w-1/2 flex flex-col">
+                                                <p className="font-semibold mr-1 text-lg text-gray-800 ">Giá phòng</p>
+                                                <p>
+                                                    <span className="font-semibold mr-1 text-lg text-gray-800 ">
+                                                        (x{TotalRoom} Phòng)
+                                                    </span>
+                                                    <span className="font-semibold mr-1 text-lg text-gray-800 ">
+                                                        {room.typeroom?.Name}, (x{totalDay}Đêm)
+                                                    </span>
+                                                </p>
+                                            </div>
+                                            <div className="w-1/2 flex flex-col">
+                                                <p className="font-semibold mr-1 text-lg text-transparent ">_</p>
+                                                <p>
+                                                    <span className="font-semibold mr-1 text-lg text-gray-800 ">
+                                                        {room.typeroom?.Price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
+                                                        (x{totalDay})
+                                                        = {((room.typeroom?.Price ?? 0) * totalDay * Number.parseInt(TotalRoom ?? '1')).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
+                                                    </span>
+                                                </p>
+                                            </div>
+
+                                            {/* thue vat */}
+                                            {room.Bao_Gom_Thue_Va_Phi ? <span className="w-full font-semibold mr-1 text-lg text-red-500 ">
+                                                Đã bao gồm thuế VAT(8%)
+                                            </span> :
+                                                <div className="w-full flex flex-row my-2">
+                                                    <p className="w-1/2 font-semibold mr-1 text-lg text-gray-800 ">Giá chưa bao gồm VAT, bạn phải trả thêm:
+                                                        <br /><label className="text-sm text-danger">VAT = 8% giá trị phiếu đặt</label></p>
+                                                    <p className="w-1/2 font-semibold mr-1 text-lg text-gray-800 ">
+                                                        {(totalPrice * 8 / 100).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
+                                                    </p>
+                                                </div>}
+
+                                            {/* gia phong co khuyen mai */}
+                                            {room.Discount > 0 ?
+                                                <><div className="w-1/2 flex flex-col my-2">
+                                                    <p className="font-semibold mr-1 text-lg text-gray-800 ">Giá phòng sau giảm giá</p>
+                                                    <span className="font-semibold mr-1 text-lg text-red-500 ">
+                                                        Phòng được giảm: {room.Discount}%
+                                                    </span>
+                                                </div>
+                                                    <div className="w-1/2 flex flex-col my-2">
+                                                        <p>
+                                                            <span className="font-bold mr-1 text-2xl text-red-500 ">
+                                                                = {(totalPrice).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
+                                                            </span>
+                                                        </p>
+                                                    </div></>
+                                                : null}
+
+                                            {/* gia phong phai tra */}
+                                            <div className="w-1/2 flex flex-col">
+                                                <p className="font-semibold mr-1 text-lg text-gray-800 ">Giá phòng phải thanh toán</p>
+                                            </div>
+                                            <div className="w-1/2 flex flex-col">
+                                                <span className="font-bold mr-1 text-2xl text-red-500 ">
+                                                    = {room.Bao_Gom_Thue_Va_Phi ?
+                                                        totalPrice.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })
+                                                        : (totalPrice + (totalPrice * 8 / 100)).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
+                                                </span>
+                                            </div>
+
+                                            {/* and form dat */}
+                                            <p className="font-bold mr-1 text-lg w-full flex flex-row justify-center items-center my-2 text-cyan-500 ">
+                                                <span>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-clock-history text-cyan-600" viewBox="0 0 16 16">
+                                                        <path d="M8.515 1.019A7 7 0 0 0 8 1V0a8 8 0 0 1 .589.022zm2.004.45a7 7 0 0 0-.985-.299l.219-.976q.576.129 1.126.342zm1.37.71a7 7 0 0 0-.439-.27l.493-.87a8 8 0 0 1 .979.654l-.615.789a7 7 0 0 0-.418-.302zm1.834 1.79a7 7 0 0 0-.653-.796l.724-.69q.406.429.747.91zm.744 1.352a7 7 0 0 0-.214-.468l.893-.45a8 8 0 0 1 .45 1.088l-.95.313a7 7 0 0 0-.179-.483m.53 2.507a7 7 0 0 0-.1-1.025l.985-.17q.1.58.116 1.17zm-.131 1.538q.05-.254.081-.51l.993.123a8 8 0 0 1-.23 1.155l-.964-.267q.069-.247.12-.501m-.952 2.379q.276-.436.486-.908l.914.405q-.24.54-.555 1.038zm-.964 1.205q.183-.183.35-.378l.758.653a8 8 0 0 1-.401.432z" />
+                                                        <path d="M8 1a7 7 0 1 0 4.95 11.95l.707.707A8.001 8.001 0 1 1 8 0z" />
+                                                        <path d="M7.5 3a.5.5 0 0 1 .5.5v5.21l3.248 1.856a.5.5 0 0 1-.496.868l-3.5-2A.5.5 0 0 1 7 9V3.5a.5.5 0 0 1 .5-.5" />
+                                                    </svg>
+                                                </span>
+                                                Hãy giữ phòng này ngay trước khi nó tăng cao hơn!</p>
+
+                                            <button className="w-full bg-orange-500 p-2 text-white font-bold rounded-lg">Tiếp tục thanh toán</button>
+
+                                            <p className="font-semibold mr-1 text-sm my-2 text-cyan-500 text-center ">
+                                                <span>Bằng việc tiếp tục thanh toán, bạn đã đồng ý với</span>
+                                                <Link href="" className=" font-bold underline"> Điều khoản & Điều kiện </Link>
+                                                <span>cũng như Chính sách quyền riêng tư của chúng tôi.</span></p>
+                                        </div>
                                     </div>
 
 
@@ -414,6 +523,9 @@ const Booking = () => {
                                             <span className="font-bold mr-1 text-2xl text-red-500 ">
                                                 {totalPrice.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
                                             </span>
+                                            <span className="font-bold mr-1 text-sm text-red-500 ">
+                                                {room.Bao_Gom_Thue_Va_Phi ? 'Đã bao gồm thuế VAT' : 'Chưa bao gồm thuế VAT'}
+                                            </span>
 
                                         </div>
                                     </div>
@@ -426,14 +538,14 @@ const Booking = () => {
                                         </span>Chính sách hủy và đổi lịch</p>
                                     {room.Cancel ? <p className="text-gray-700 w-full flex flex-row text-lg font-semibold items-center my-1 ml-3">
                                         <span>
-                                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" data-id="IcSystemStatusOkDoneFill16"><g clip-path="url(#clip0_1563_15870)"><path fill-rule="evenodd" clip-rule="evenodd" d="M0 8C0 12.4183 3.58172 16 8 16C12.4183 16 16 12.4183 16 8C16 3.58172 12.4183 0 8 0C3.58172 0 0 3.58172 0 8ZM12.2071 6.70711C12.5976 6.31658 12.5976 5.68342 12.2071 5.29289C11.8166 4.90237 11.1834 4.90237 10.7929 5.29289L7 9.08579L5.20711 7.29289C4.81658 6.90237 4.18342 6.90237 3.79289 7.29289C3.40237 7.68342 3.40237 8.31658 3.79289 8.70711L6.29289 11.2071C6.68342 11.5976 7.31658 11.5976 7.70711 11.2071L12.2071 6.70711Z" fill="#0BC175"></path></g><defs><clipPath id="clip0_1563_15870"><rect width="16" height="16" fill="white"></rect></clipPath></defs></svg>
+                                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" data-id="IcSystemStatusOkDoneFill16"><g clipPath="url(#clip0_1563_15870)"><path fillRule="evenodd" clipRule="evenodd" d="M0 8C0 12.4183 3.58172 16 8 16C12.4183 16 16 12.4183 16 8C16 3.58172 12.4183 0 8 0C3.58172 0 0 3.58172 0 8ZM12.2071 6.70711C12.5976 6.31658 12.5976 5.68342 12.2071 5.29289C11.8166 4.90237 11.1834 4.90237 10.7929 5.29289L7 9.08579L5.20711 7.29289C4.81658 6.90237 4.18342 6.90237 3.79289 7.29289C3.40237 7.68342 3.40237 8.31658 3.79289 8.70711L6.29289 11.2071C6.68342 11.5976 7.31658 11.5976 7.70711 11.2071L12.2071 6.70711Z" fill="#0BC175"></path></g><defs><clipPath id="clip0_1563_15870"><rect width="16" height="16" fill="white"></rect></clipPath></defs></svg>
                                         </span>
                                         Miễn phí hủy phòng trước {FormatDate(room.TimeRecive)?.split(' ')[0]}
                                     </p> : null}
 
                                     {room.ChangeTimeRecive ? <p className="text-gray-700 w-full flex flex-row text-lg font-semibold items-center my-1 ml-3">
                                         <span>
-                                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" data-id="IcSystemStatusOkDoneFill16"><g clip-path="url(#clip0_1563_15870)"><path fill-rule="evenodd" clip-rule="evenodd" d="M0 8C0 12.4183 3.58172 16 8 16C12.4183 16 16 12.4183 16 8C16 3.58172 12.4183 0 8 0C3.58172 0 0 3.58172 0 8ZM12.2071 6.70711C12.5976 6.31658 12.5976 5.68342 12.2071 5.29289C11.8166 4.90237 11.1834 4.90237 10.7929 5.29289L7 9.08579L5.20711 7.29289C4.81658 6.90237 4.18342 6.90237 3.79289 7.29289C3.40237 7.68342 3.40237 8.31658 3.79289 8.70711L6.29289 11.2071C6.68342 11.5976 7.31658 11.5976 7.70711 11.2071L12.2071 6.70711Z" fill="#0BC175"></path></g><defs><clipPath id="clip0_1563_15870"><rect width="16" height="16" fill="white"></rect></clipPath></defs></svg>
+                                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" data-id="IcSystemStatusOkDoneFill16"><g clipPath="url(#clip0_1563_15870)"><path fillRule="evenodd" clipRule="evenodd" d="M0 8C0 12.4183 3.58172 16 8 16C12.4183 16 16 12.4183 16 8C16 3.58172 12.4183 0 8 0C3.58172 0 0 3.58172 0 8ZM12.2071 6.70711C12.5976 6.31658 12.5976 5.68342 12.2071 5.29289C11.8166 4.90237 11.1834 4.90237 10.7929 5.29289L7 9.08579L5.20711 7.29289C4.81658 6.90237 4.18342 6.90237 3.79289 7.29289C3.40237 7.68342 3.40237 8.31658 3.79289 8.70711L6.29289 11.2071C6.68342 11.5976 7.31658 11.5976 7.70711 11.2071L12.2071 6.70711Z" fill="#0BC175"></path></g><defs><clipPath id="clip0_1563_15870"><rect width="16" height="16" fill="white"></rect></clipPath></defs></svg>
                                         </span>
                                         Có thể đổi lịch trước {FormatDate(room.TimeRecive)?.split(' ')[0]}
                                     </p> : null}
@@ -466,13 +578,13 @@ const Booking = () => {
                              justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
                                 data-modal-hide="popup-modal" onClick={() => { setModalErr(false) }}>
                                 <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
                                 </svg>
                                 <span className="sr-only">Close modal</span>
                             </button>
                             <div className="p-4 md:p-5 text-center">
                                 <svg className="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                                 </svg>
                                 <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">{modalErrValue}</h3>
                                 <button data-modal-hide="popup-modal" type="button" className="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center" onClick={() => { setModalErr(false) }}>
@@ -493,7 +605,7 @@ const Booking = () => {
                              justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
                                 onClick={() => { setModalChinhSachDoiHuyState(false) }}>
                                 <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
                                 </svg>
                                 <span className="sr-only">Close modal</span>
                             </button>
@@ -505,14 +617,14 @@ const Booking = () => {
 
                                 {room.Cancel ? <p className="text-green-600 w-full flex flex-row text-lg font-semibold items-center my-1 ml-3">
                                     <span>
-                                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" data-id="IcSystemStatusOkDoneFill16"><g clip-path="url(#clip0_1563_15870)"><path fill-rule="evenodd" clip-rule="evenodd" d="M0 8C0 12.4183 3.58172 16 8 16C12.4183 16 16 12.4183 16 8C16 3.58172 12.4183 0 8 0C3.58172 0 0 3.58172 0 8ZM12.2071 6.70711C12.5976 6.31658 12.5976 5.68342 12.2071 5.29289C11.8166 4.90237 11.1834 4.90237 10.7929 5.29289L7 9.08579L5.20711 7.29289C4.81658 6.90237 4.18342 6.90237 3.79289 7.29289C3.40237 7.68342 3.40237 8.31658 3.79289 8.70711L6.29289 11.2071C6.68342 11.5976 7.31658 11.5976 7.70711 11.2071L12.2071 6.70711Z" fill="#0BC175"></path></g><defs><clipPath id="clip0_1563_15870"><rect width="16" height="16" fill="white"></rect></clipPath></defs></svg>
+                                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" data-id="IcSystemStatusOkDoneFill16"><g clipPath="url(#clip0_1563_15870)"><path fillRule="evenodd" clipRule="evenodd" d="M0 8C0 12.4183 3.58172 16 8 16C12.4183 16 16 12.4183 16 8C16 3.58172 12.4183 0 8 0C3.58172 0 0 3.58172 0 8ZM12.2071 6.70711C12.5976 6.31658 12.5976 5.68342 12.2071 5.29289C11.8166 4.90237 11.1834 4.90237 10.7929 5.29289L7 9.08579L5.20711 7.29289C4.81658 6.90237 4.18342 6.90237 3.79289 7.29289C3.40237 7.68342 3.40237 8.31658 3.79289 8.70711L6.29289 11.2071C6.68342 11.5976 7.31658 11.5976 7.70711 11.2071L12.2071 6.70711Z" fill="#0BC175"></path></g><defs><clipPath id="clip0_1563_15870"><rect width="16" height="16" fill="white"></rect></clipPath></defs></svg>
                                     </span>
                                     Miễn phí hủy phòng trước {FormatDate(room.TimeRecive)?.split(' ')[0]}
                                 </p> : null}
 
                                 {room.ChangeTimeRecive ? <p className="text-green-600 w-full flex flex-row text-lg font-semibold items-center my-1 ml-3">
                                     <span>
-                                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" data-id="IcSystemStatusOkDoneFill16"><g clip-path="url(#clip0_1563_15870)"><path fill-rule="evenodd" clip-rule="evenodd" d="M0 8C0 12.4183 3.58172 16 8 16C12.4183 16 16 12.4183 16 8C16 3.58172 12.4183 0 8 0C3.58172 0 0 3.58172 0 8ZM12.2071 6.70711C12.5976 6.31658 12.5976 5.68342 12.2071 5.29289C11.8166 4.90237 11.1834 4.90237 10.7929 5.29289L7 9.08579L5.20711 7.29289C4.81658 6.90237 4.18342 6.90237 3.79289 7.29289C3.40237 7.68342 3.40237 8.31658 3.79289 8.70711L6.29289 11.2071C6.68342 11.5976 7.31658 11.5976 7.70711 11.2071L12.2071 6.70711Z" fill="#0BC175"></path></g><defs><clipPath id="clip0_1563_15870"><rect width="16" height="16" fill="white"></rect></clipPath></defs></svg>
+                                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" data-id="IcSystemStatusOkDoneFill16"><g clipPath="url(#clip0_1563_15870)"><path fillRule="evenodd" clipRule="evenodd" d="M0 8C0 12.4183 3.58172 16 8 16C12.4183 16 16 12.4183 16 8C16 3.58172 12.4183 0 8 0C3.58172 0 0 3.58172 0 8ZM12.2071 6.70711C12.5976 6.31658 12.5976 5.68342 12.2071 5.29289C11.8166 4.90237 11.1834 4.90237 10.7929 5.29289L7 9.08579L5.20711 7.29289C4.81658 6.90237 4.18342 6.90237 3.79289 7.29289C3.40237 7.68342 3.40237 8.31658 3.79289 8.70711L6.29289 11.2071C6.68342 11.5976 7.31658 11.5976 7.70711 11.2071L12.2071 6.70711Z" fill="#0BC175"></path></g><defs><clipPath id="clip0_1563_15870"><rect width="16" height="16" fill="white"></rect></clipPath></defs></svg>
                                     </span>
                                     Có thể đổi lịch trước {FormatDate(room.TimeRecive)?.split(' ')[0]}
                                 </p> : null}
