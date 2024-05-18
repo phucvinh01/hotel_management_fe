@@ -104,7 +104,7 @@ const Booking = () => {
                     setTotalPrice((CalculateTotalDay(new Date(response.data.result.TimeRecive),
                         new Date(response.data.result.TimeLeave)) * (response.data.result.typeroom.Price
                             - response.data.result.typeroom.Price * response.data.result.Discount / 100
-                        )) * Number.parseInt(TotalRoom != null ? TotalRoom : '1'));
+                        )) * Number.parseInt(TotalRoom != null ? TotalRoom.toString() : '1'));
                 }
 
                 //search avarta hotel
@@ -149,9 +149,9 @@ const Booking = () => {
             {/* <Loading modalState={loadingBookingState} /> */}
             {room != undefined ? <div className="mb-8 w-full flex flex-col justify-center
              items-center">
-                <div className="w-full flex flex-row h-22 bg-slate-300 justify-center items-center">
+                <div className="fixed top-[90px] z-50 w-full flex flex-row h-22 py-1.5 bg-slate-300 justify-center items-center">
                     <div className="w-4/12">
-                        <p>Traveloka</p>
+                        <p className="font-semibold ml-32">ĐẶT PHÒNG</p>
 
                     </div>
                     <div className="w-8/12 flex flex-row items-center justify-end font-semibold mr-5">
@@ -175,7 +175,7 @@ const Booking = () => {
                         >Gửi phiếu xác nhận</p>
                     </div>
                 </div>
-                <div className="w-full bg-slate-200 flex justify-center items-center">
+                <div className="w-full  mt-[20px] bg-slate-100 flex justify-center items-center">
                     <div className="w-10/12">
                         <p className="text-2xl my-3"><b>Đặt phòng của bạn</b></p>
                         <p className="text-gray-500 font-semibold text-lg">Hãy đảm bảo tất cả thông tin chi tiết trên trang này đã chính
@@ -344,7 +344,7 @@ const Booking = () => {
                                                     <span className="font-semibold mr-1 text-lg text-gray-800 ">
                                                         {room.typeroom?.Price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
                                                         (x{totalDay})
-                                                        = {((room.typeroom?.Price ?? 0) * totalDay * Number.parseInt(TotalRoom ?? '1')).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
+                                                        = {((room.typeroom?.Price ?? 0) * totalDay * Number.parseInt(TotalRoom ? TotalRoom.toString() : '1')).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
                                                     </span>
                                                 </p>
                                             </div>

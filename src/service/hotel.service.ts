@@ -65,9 +65,9 @@ export const getOneHotelById = async (
 
 export const getHotelsByProvince = async (
   province: string,
-): Promise<IResponeCardHotel | false | undefined> => {
+): Promise<IHotel | false | undefined> => {
   try {
-    const response = await http.get<IResponeCardHotel>(
+    const response = await http.get<IHotel>(
       `hotel/hotels-by-province?province=${province}`,
     );
     if (response.status === 200) {
@@ -206,7 +206,7 @@ export const updateRoom = async (body: Room): Promise<boolean | undefined> => {
 //TanVND
 export const getHotelsByProvinceId = async (provinceId: string): Promise<IResponeCardHotel | false | undefined> => {
   try {
-    const response = await axios.get<IResponeCardHotel>(`hotel/get-list-by-province-id?id=${provinceId}`);
+    const response = await http.get<IResponeCardHotel>(`hotel/get-list-by-province-id?id=${provinceId}`);
     if (response.status === 200) {
       return response.data;
     }
@@ -218,9 +218,9 @@ export const getHotelsByProvinceId = async (provinceId: string): Promise<IRespon
 
 export const searchListHotelWithParam = async (p_province: string, p_totalnight: string,
   p_totalmember: string, p_totalmemberchild: string, p_timereceive: string, p_totalroom: string)
-  : Promise<IResponeCardHotel | false | undefined> => {
+  : Promise<IHotel | false | undefined> => {
   try {
-    const response = await axios.get<IResponeCardHotel>(`hotel/search?province=${p_province}&totalnight=${p_totalnight}&
+    const response = await http.get<IHotel>(`hotel/search?province=${p_province}&totalnight=${p_totalnight}&
       totalmember=${p_totalmember}&totalmemberchild=${p_totalmemberchild}
       &timereceive=${p_timereceive}&totalroom=${p_totalroom}`);
     if (response.status === 200) {
