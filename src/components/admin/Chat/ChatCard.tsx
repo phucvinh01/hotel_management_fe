@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Chat } from "@/types/chat";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
 const chatData: Chat[] = [
   {
@@ -55,12 +56,12 @@ const chatData: Chat[] = [
 
 const ChatCard = () => {
   return (
-    <div className="col-span-12 rounded-sm border border-stroke bg-white py-6 shadow-default dark:border-strokedark dark:bg-boxdark xl:col-span-4">
-      <h4 className="mb-6 px-7.5 text-xl font-semibold text-black dark:text-white">
+    <Card >
+      <CardHeader className="mb-6 px-7.5 text-xl font-semibold text-black dark:text-white">
         Chats
-      </h4>
+      </CardHeader>
 
-      <div>
+      <CardContent>
         {chatData.map((chat, key) => (
           <Link
             href="/"
@@ -108,8 +109,8 @@ const ChatCard = () => {
             </div>
           </Link>
         ))}
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 };
 

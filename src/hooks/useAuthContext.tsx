@@ -8,12 +8,18 @@ import {
   useEffect,
   useState,
 } from 'react';
-import { getMe, loginWithAdministrator, login as SignIn } from '@/service/auth.service';
+import {
+  getAdmin,
+  getMe,
+  loginWithAdministrator,
+  login as SignIn,
+} from '@/service/auth.service';
 import { useToast } from '@/components/ui/use-toast';
+import { ERORR_SERVER } from '@/constant';
 
 interface IAuthContext {
   user: IUser | null;
-  admin:IAdministratorHotel | undefined;
+  admin: IAdministratorHotel | undefined;
   login: (username: string, password: string, type: string) => void;
   loginAdministrator: (email: string, password: string) => void;
   logout: () => void;
@@ -21,10 +27,10 @@ interface IAuthContext {
 
 const AuthContext = createContext<IAuthContext>({
   user: null,
-  admin:undefined,
+  admin: undefined,
   login: () => {},
   logout: () => {},
-  loginAdministrator: () => {}
+  loginAdministrator: () => {},
 });
 
 type Props = {
@@ -42,20 +48,36 @@ export function AuthProvider({ children }: Props) {
     return res;
   };
 
+  const getAdminInfo = async (id: string) => {
+    const res = await getAdmin(id);
+    return res;
+  };
+
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const isUser = localStorage.getItem('isUser');
+    const isAdmin = localStorage.getItem('isAdmin');
     const fetchUserInfo = async () => {
-      if (token) {
-        const res = await getMeInfo(token as string);
+      if (isUser) {
+        const res = await getMeInfo(isUser as string);
         if (res) {
-          console.log('setItem');
-          localStorage.setItem('token', res.id);
-          setUser(res)
+          localStorage.setItem('isUser', res.id);
+          setUser(res);
         }
       } else {
         setUser(null);
-        console.log('removeItem');
-        localStorage.removeItem('token');
+        localStorage.removeItem('isUser');
+      }
+
+      if (isAdmin) {
+        const res = await getAdminInfo(isAdmin as string);
+        if (res) {
+          localStorage.setItem('Hotel', res.id_hotel as string);
+          localStorage.setItem('isAdmin', res.id);
+          setAdmin(res);
+        }
+      } else {
+        setAdmin(undefined);
+        localStorage.removeItem('isAdmin');
       }
     };
 
@@ -66,20 +88,35 @@ export function AuthProvider({ children }: Props) {
     fetchUserInfo();
   }, []);
 
-  const loginAdministrator = async(
-    email:string,password:string
-  ) => {
-    const res = await loginWithAdministrator({email:email,password:password})
+  const loginAdministrator = async (email: string, password: string) => {
+    const respone = await loginWithAdministrator({
+      email: email,
+      password: password,
+    });
 
-    if(res?.id_hotel === 'underfine') {
-      setAdmin(res)
-      router.push("/app/partner/register-hotel")
+    if(respone?.success) {
+      if (respone?.user?.id_hotel === 'underfine') {
+            setAdmin(respone.user);
+            localStorage.setItem('isAdmin', respone.user.id as string);
+            router.push('/app/partner/register-hotel');
+          } else {
+            if (respone?.user) {
+              setAdmin(respone?.user);
+              localStorage.setItem('Hotel', respone.user.id_hotel as string);
+              localStorage.setItem('isAdmin', respone.user.id as string);
+              router.push('/dashbroad');
+            }
+          }
     }
     else {
-      setAdmin(res)
-      router.push("/dashbroad")
+      toast({
+        variant:"destructive",
+        title: respone?.message
+      })
     }
-  }
+
+    
+  };
 
   const login = async (
     emailOrPhone: string,
@@ -109,25 +146,38 @@ export function AuthProvider({ children }: Props) {
       );
     }
     if (respone) {
-      if (respone.id) {
+      if (respone.success) {
         toast({
-          title: 'Đăng nhập thành công',
+          title: respone.message,
         });
-        setUser(respone);
-        localStorage.setItem('token', respone.id);
+        setUser(respone.user);
+        localStorage.setItem('isUser', respone.user?.id as string);
+      } else {
+        toast({
+          title: respone.message,
+        });
       }
     } else {
       toast({
         variant: 'destructive',
-        title: 'Đăng nhập thất bại',
+        title: ERORR_SERVER,
       });
     }
   };
 
   const logout = () => {
-     router.replace("/")
-    localStorage.removeItem('token');
-    setUser(null)
+    const isUser = localStorage.getItem('isUser');
+    const isAdmin = localStorage.getItem('isAdmin');
+    if (isUser) {
+      router.replace('/');
+      localStorage.removeItem('isUser');
+      setUser(null);
+    }
+    if (isAdmin) {
+      router.replace('/app/partner');
+      localStorage.removeItem('isAdmin');
+      setAdmin(undefined);
+    }
   };
 
   const authContextValue: IAuthContext = {
@@ -135,7 +185,7 @@ export function AuthProvider({ children }: Props) {
     admin,
     login,
     logout,
-    loginAdministrator
+    loginAdministrator,
   };
 
   return (

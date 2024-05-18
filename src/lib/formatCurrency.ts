@@ -1,4 +1,4 @@
-export function formatCurrency(number:number) {
+export function formatCurrency(number:string) {
     // Định dạng số thành chuỗi, sau đó thêm dấu phẩy mỗi ba số
     const formattedNumber = number?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     

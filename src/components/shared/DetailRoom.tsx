@@ -74,22 +74,22 @@ const DetailRoom = (props: IProps) => {
     }
     return (
 
-        <div className="w-full rounded-lg my-3 relative">
+        <div className="w-full rounded-3xl my-3 relative">
             {/* // chi tiet phong */}
-            <div className="w-full bg-gray-100 rounded-lg flex  flex-col lg:flex-col p-3">
+            <div className="w-full bg-gray-100 rounded-3xl flex  flex-col lg:flex-col p-3">
                 <p className="font-bold text-2xl text-gray-900 my-2">{typeRoom.Name}</p>
-                <div className="w-full bg-gray-100 rounded-lg flex flex-col lg:flex-row p-3">
-                    <div id='cardleft_phieudat' className="w-full lg:w-4/12 bg-white rounded-lg">
+                <div className="w-full bg-gray-100 rounded-3xl flex flex-col lg:flex-row p-3">
+                    <div id='cardleft_phieudat' className="w-full lg:w-4/12 bg-white rounded-3xl">
                         <div className="w-full relative flex items-end justify-end">
                             <img src={`${URL_Enum.BaseURL_Image}${listImage[0].FileName}`}
                                 className=" w-full rounded-t-lg h-60 cursor-pointer"
                                 onClick={() => handleShowModal()} />
                             <p className="bg-gray-900 opacity-85 font-bold text-lg
-                        absolute text-white px-2 py-1 rounded-md m-2">1/{listImage.length}</p>
+                        absolute text-white px-2 py-1 rounded-3xl m-2">1/{listImage.length}</p>
                         </div>
                         <div className="flex flex-row">
                             {listImage.slice(1, 4).map((item, index) => (
-                                <img src={`${URL_Enum.BaseURL_Image}${item.FileName}`}
+                                <img key={index} src={`${URL_Enum.BaseURL_Image}${item.FileName}`}
                                     onClick={() => handleShowModal()}
                                     className={`w-4/12 h-20 ${index == 1 ? 'mx-2' : ''} my-2 cursor-pointer`} />))}
                         </div>
@@ -165,7 +165,7 @@ const DetailRoom = (props: IProps) => {
                         </div>
                         <div className="w-full p-3">
                             <button className="text-center w-full font-bold text-cyan-500 cursor-pointer 
-                    py-2 rounded-lg bg-gray-200 flex flex-row justify-center items-center"
+                    py-2 rounded-3xl bg-gray-200 flex flex-row justify-center items-center"
                                 onClick={() => handleShowModal()}>
                                 <span>
                                     <svg className="w-6 h-6 text-cyan-500 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
@@ -181,7 +181,7 @@ const DetailRoom = (props: IProps) => {
 
                     {/* phieu dat phong */}
                     <div className={`w-full flex flex-col lg:w-8/12 max-h-[450px]`}>
-                        <div className=" w-full flex flex-col bg-white my-2 lg:my-0 lg:ml-3 rounded-lg  p-3 mb-3">
+                        <div className=" w-full flex flex-col bg-white my-2 lg:my-0 lg:ml-3 rounded-3xl  p-3 mb-3">
                             <p className="font-bold text-xl text-gray-900 my-2">{typeRoom.Name}</p>
                             <div className="flex flex-row my-3">
                                 <div className="w-4/12 flex justify-start items-center">
@@ -247,7 +247,7 @@ const DetailRoom = (props: IProps) => {
                                             <p className={`${item.Cancel ? 'text-blue-700 cursor-pointer' : 'text-gray-300'} font-bold ml-2 text-lg`}>
                                                 Miễn phí hủy phòng
                                             </p>
-                                            {item.Cancel ? (<div className="w-[350px] absolute top-10 ml-[-50%] rounded-lg bg-slate-950 z-1 opacity-85
+                                            {item.Cancel ? (<div className="w-[350px] absolute top-10 ml-[-50%] rounded-3xl bg-slate-950 z-1 opacity-85
                                                 text-white p-5 cursor-pointer invisible group-hover:visible">
                                                 <div className='w-[10px] h-[10px] rotate-45  bg-slate-950
                                     ml-[30%] absolute top-[-5px]'></div>
@@ -357,7 +357,7 @@ const DetailRoom = (props: IProps) => {
             </div>
             {/* //modal chi tiet phong */}
 
-            <div className={`w-full ${modalState ? 'block' : 'hidden'} h-full flex z-999999
+            <div className={`w-full ${modalState ? 'block' : 'hidden'} h-full flex z-[999999]
           fixed inset-0 justify-center items-center`} style={{ background: 'rgb(0 0 0 / 85%)' }}>
                 <div className="w-9/12 h-[90%] flex flex-row rounded-2xl
                 bg-black opacity-100">
@@ -375,7 +375,7 @@ const DetailRoom = (props: IProps) => {
                         {/* hinh anh dai dien  */}
                         <div className="flex flex-row relative items-center">
                             <img src={imageModalCurrent}
-                                className="w-11/12 h-[390px] ml-4 rounded-lg" />
+                                className="w-11/12 h-[390px] ml-4 rounded-3xl" />
                             <button className="bg-black opacity-50 w-9 h-9 absolute text-center
                             justify-center items-center flex text-white left-2 ml-3 rounded-full"
                                 onClick={() => handlePreviousImage()}>
@@ -393,7 +393,7 @@ const DetailRoom = (props: IProps) => {
 
                             </button>
                             <p className="font-bold text-xl text-white absolute
-                            left-0 bottom-0 m-5 p-2 rounded-lg bg-black opacity-85">
+                            left-0 bottom-0 m-5 p-2 rounded-3xl bg-black opacity-85">
                                 {listImage[indexImageModal].TypeRoom.split(';')[1]}
                             </p>
                         </div>
@@ -405,7 +405,7 @@ const DetailRoom = (props: IProps) => {
                                         <CarouselItem key={item.id} className="basis-1/5">
                                             <img src={`${URL_Enum.BaseURL_Image}${item.FileName}`}
                                                 alt={item.FileName} className={`w-full
-                                                h-[70px] rounded-sm object-cover cursor-pointer
+                                                h-[70px] rounded-3xl object-cover cursor-pointer
                                                 ${indexImageModal === index ? 'border border-b-2 border-blue-700' : ''}`}
                                                 onClick={() => {
                                                     setIndexImageModal(index);
@@ -421,7 +421,7 @@ const DetailRoom = (props: IProps) => {
 
                     </div>
                     {/* chi tiet phong */}
-                    <div className="flex  flex-col w-4/12 bg-white rounded-lg h-full">
+                    <div className="flex  flex-col w-4/12 bg-white rounded-3xl h-full">
                         <div className="flex flex-col h-[80%] overflow-y-scroll p-3">
                             {/* Thong tin phong */}
                             <p><b>Thông tin phòng</b></p>
@@ -499,7 +499,7 @@ const DetailRoom = (props: IProps) => {
                             <ul className="text-lg font-semibold text-gray-900 ml-5
                             grid grid-cols-2 gap-1">
                                 {convenientBathRoom.map((item) =>
-                                    (<li className="list-disc">{item}</li>))}
+                                    (<li key={item} className="list-disc">{item}</li>))}
                             </ul>
                             <hr />
                             {/* tien nghi phong */}
@@ -507,7 +507,7 @@ const DetailRoom = (props: IProps) => {
                             <ul className="text-lg font-semibold text-gray-900 ml-5
                             grid grid-cols-2 gap-1">
                                 {convenientRoom.map((item) =>
-                                    (<li className="list-disc">{item}</li>))}
+                                    (<li key={item} className="list-disc">{item}</li>))}
                             </ul>
                             <hr />
                             {/* ve phong nay */}
@@ -521,7 +521,7 @@ const DetailRoom = (props: IProps) => {
                                 {typeRoom.Price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
                                 <span className="text-lg font-bold text-gray-900 ml-2">/Phòng /Đêm</span></p>
                             <button className="w-full bg-cyan-500 text-white
-                            font-bold rounded-lg py-2"
+                            font-bold rounded-3xl py-2"
                                 onClick={() => handleShowModal()}>Thêm lựa chọn phòng</button>
                         </div>
                     </div>

@@ -11,6 +11,9 @@ import Link from 'next/link';
 import { checkExistEmail, register } from '@/service/auth.service';
 import { useToast } from '@/components/ui/use-toast';
 import { useRouter } from 'next/navigation';
+import Logo from '@/components/shared/Logo';
+import validateEmail from '@/lib/validateEmail';
+import validatePhoneNumberVN from '@/lib/validatePhoneNumberVN';
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -50,45 +53,54 @@ export function RegisterFormPartnert({
   }
 
   const hanldeRegister = async () => {
-    setIsLoading(true)
-    if (!email) {
+    setIsLoading(true);
+    if (!email || !validateEmail(email)) {
       toast({
         variant: 'destructive',
-        title: 'Thiếu thông tin',
-        description: 'Vui lòng nhập email',
+        title: email ? 'Sai định dạng' : 'Thiếu thông tin',
+        description: email
+          ? 'Vui lòng nhập email hợp lệ'
+          : 'Vui lòng nhập email',
       });
+      setIsLoading(false);
       return;
     }
+
     if (!name) {
       toast({
         variant: 'destructive',
-        title: 'Thiếu thông tin',
-        description: 'Vui lòng nhập tên của bạn',
+        title: 'Vui lòng nhập tên của bạn!',
       });
+      setIsLoading(false);
       return;
     }
-    if (!phone || phone.length < 10) {
+    if (!phone || !validatePhoneNumberVN(phone)) {
       toast({
         variant: 'destructive',
-        title: 'Thiếu thông tin',
-        description: 'Vui lòng nhập số điện thoại',
+        title: phone ? 'Sai định dạng' : 'Thiếu thông tin',
+        description: phone
+          ? 'Vui lòng nhập số điện thoại hợp lệ'
+          : 'Vui lòng nhập số điện thoại',
       });
+      setIsLoading(false);
       return;
     }
     if (!password) {
       toast({
         variant: 'destructive',
-        title: 'Thiếu thông tin',
-        description: 'Vui lòng nhập password',
+        title: 'Mật khẩu là không thể thiếu',
+        description: 'Vui lòng nhập mật khẩu',
       });
+      setIsLoading(false);
       return;
     }
-    if (password.trim != comfrim.trim) {
+    if (password.trim != comfrim.trim || !comfrim) {
       toast({
         variant: 'destructive',
         title: 'Mật khẩu không chính xác',
-        description: 'Vui lòng nhập mật khẩu',
+        description: 'Vui lòng xác nhận lại mật khẩu',
       });
+      setIsLoading(false);
       return;
     }
 
@@ -102,15 +114,23 @@ export function RegisterFormPartnert({
 
     const respone = await register(formData);
 
-    if (respone && respone) {
+    if (respone && respone.success) {
       toast({
-        title: 'Đăng ký thành công',
-        description: 'Hãy đăng nhập tài khoản của bạn',
+        title: respone.message,
       });
-      router.replace("/app/partner/login")
       setIsRegister(false);
+      setIsLoading(false);
+      router.replace("/app/partner/login")
+
     }
-    setIsLoading(false)
+    else {
+       toast({
+        variant: "destructive",
+        title: respone?.message,
+        description: respone?.message,
+      });
+      setIsLoading(false);
+    }
   };
 
   
@@ -120,12 +140,12 @@ export function RegisterFormPartnert({
       className={cn('flex flex-col gap-6', className)}
       {...props}>
         
-           <h2 className='text-center'>Partner</h2>
+           <Logo/>
            <p className='text-xl font-extrabold'>Tạo tài khoản Partner mới</p>
-        <p className='line-clamp-2 text-gray-400'>Đăng chỗ nghỉ của bạn lên Traveloka và để chúng tôi giúp bạn kết nối với hàng triệu khách!</p>
+        <p className='line-clamp-3 text-gray-400'>Đăng chỗ nghỉ của bạn lên VietNam Venture và để chúng tôi giúp bạn kết nối với hàng triệu khách!</p>
       <form onSubmit={onSubmit}>
-        <div className='grid gap-2'>
-          <div className='flex flex-col gap-1'>
+        <div className='grid gap-4'>
+          <div className='flex flex-col gap-2'>
             <Label
               htmlFor='email'>
               Địa chỉ email của bạn
@@ -142,7 +162,7 @@ export function RegisterFormPartnert({
             />
           </div>
           {
-            isRegister && <div>
+            isRegister && <div className='grid gap-4'>
                   <span className='grid w-full items-center gap-1.5'>
                     <Label htmlFor='text'>Tên của bạn là ?</Label>
                     <Input
@@ -183,13 +203,13 @@ export function RegisterFormPartnert({
           }
           {
             isRegister ? 
-          <Button type='submit' disabled={isLoading} onClick={() => hanldeRegister()} className='bg-orange-500 text-white'>
+          <Button type='submit' disabled={isLoading} onClick={() => hanldeRegister()} className='bg-cyan-500 text-white'>
             {isLoading && <Loader />}
             Đăng ký tài khoản partner
           </Button> : 
-          <Button type='submit' disabled={isLoading} className='bg-orange-500 text-white'>
+          <Button type='submit' disabled={isLoading} className='bg-cyan-500 text-white'>
             {isLoading && <Loader />}
-            Next
+            Tiếp tục
           </Button>
           }
         </div>

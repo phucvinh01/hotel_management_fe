@@ -22,7 +22,6 @@ const [provinces, setProvinces] = useState([]);
 
 
   useEffect(() => {
-    // Gọi API để lấy danh sách tỉnh/thành phố
     axios.get('https://vnprovinces.pythonanywhere.com/api/provinces/?is_border=false&is_coastal=false&basic=true&limit=100')
       .then(response => {
         setProvinces(response.data.results);
@@ -33,7 +32,6 @@ const [provinces, setProvinces] = useState([]);
   }, []);
 
   useEffect(() => {
-    // Nếu tỉnh được chọn, gọi API để lấy danh sách huyện/quận
     if (selectedProvince) {
       axios.get(`https://vnprovinces.pythonanywhere.com/api/provinces/${selectedProvince}/?basic=true
 `)
@@ -56,6 +54,8 @@ const [provinces, setProvinces] = useState([]);
   const handleDistrictChange = (selectedOption:any) => {
     setSelectedDistrict(selectedOption);
   };
+
+  
   return (
         <div className='flex flex-row gap-4 w-full'>
           <Card className='w-2/3'>
@@ -67,8 +67,9 @@ const [provinces, setProvinces] = useState([]);
               <div className='space-y-1'>
                 <Label htmlFor='name'>Tên khách sạn</Label>
                 <Input
-                value={data?.Name}
-                 onChange={(e) => setFormData((prev) => ({ ...prev!, Name: e.target.value }))}
+                  required
+                  value={data?.Name}
+                  onChange={(e) => setFormData((prev) => ({ ...prev!, Name: e.target.value }))}
                   id='name'
                   type='text'
                 />
@@ -124,7 +125,7 @@ const [provinces, setProvinces] = useState([]);
                     id='strees'
                     type='text'
                     value={data?.Address}
-                 onChange={(e) => setFormData((prev) => ({ ...prev!, Address:`${e.target.value}, ${selectedDistrict}, ${selectedProvince}` }))}
+                  onChange={(e) => setFormData((prev) => ({ ...prev!, Address:`${e.target.value}` }))}
                   />
                 </div>
               </div>
@@ -135,6 +136,8 @@ const [provinces, setProvinces] = useState([]);
                  onChange={(e) => setFormData((prev) => ({ ...prev!, Telephone: e.target.value }))}
                   id='phone'
                   type='tel'
+                  maxLength={12}
+                  minLength={1}
                 />
               </div>
             </CardContent>

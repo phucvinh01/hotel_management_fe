@@ -213,7 +213,7 @@ export default function Hotel() {
 
   return (
     <main className="w-full mb-10">
-      <div className="w-full radius rounded-sm
+      <div className="w-full radius rounded-3xl
             bg-gradient-to-b from-sky-500 via-sky-600 to-blue-700" style={{ height: 320 }}>
         <div className="flex h-3/4 w-full justify-center items-center">
           <Carousel className="w-full px-3" id='slider'>
@@ -314,7 +314,7 @@ export default function Hotel() {
                   defaultValue={valueTinh} />
               </div>
               {/* modal hien thi danh sach tinh thanh */}
-              <div id='dsTinh' className={`${dsTinhState} bg-white rounded-lg w-full absolute z-10 shadow-md shadow-cyan-700`}>
+              <div id='dsTinh' className={`${dsTinhState} bg-white rounded-3xl w-full absolute z-10 shadow-md shadow-cyan-700`}>
                 {/* lich su tim kiem */}
                 <div className="bg-gray-100 w-full flex flex-row rounded-t-xl h-16 items-center">
                   <p className="pl-3 text-blue-500 text-lg font-semibold"><b>Kết quả tìm kiếm cuối cùng</b></p>
@@ -448,47 +448,47 @@ export default function Hotel() {
                     className='text-input' />
                 </div>
                 {/* modal hien thi chon so luong thanh vien */}
-                <div id='soThanhVien' className={`${dsThanhVienState} bg-white rounded-lg w-11/12 mx-auto absolute z-10 shadow-md shadow-cyan-700`}>
+                <div id='soThanhVien' className={`${dsThanhVienState} bg-white rounded-3xl w-11/12 mx-auto absolute z-10 shadow-md shadow-cyan-700`}>
                   {/* chonj dem - do du lieu vao day*/}
-                  <div className="bg-white w-full flex flex-row h-16 rounded-lg items-center" >
+                  <div className="bg-white w-full flex flex-row h-16 rounded-3xl items-center" >
                     <div className='flex flex-row w-full justify-center items-center'>
                       <p className="pl-3 w-9/12 text-gray-500 text-lg font-semibold">
                         <b>Người lớn</b></p>
-                      <button className='border-2 border-gray-400 bg-cyan-50 h-12 w-12 rounded-lg mx-1'
+                      <button className='border-2 border-gray-400 bg-cyan-50 h-12 w-12 rounded-3xl mx-1'
                         onClick={() => handleSubstractNguoiLon(event)}>-</button>
-                      <input className='border-2 border-gray-400 bg-white h-12 w-12 rounded-lg mx-1 
+                      <input className='border-2 border-gray-400 bg-white h-12 w-12 rounded-3xl mx-1 
                                             text-center focus:outline-gray-400' readOnly type='text' defaultValue={valueSoNguoiLon} />
-                      <button className='border-2 border-gray-400 bg-cyan-50 h-12 w-12 rounded-lg mx-1'
+                      <button className='border-2 border-gray-400 bg-cyan-50 h-12 w-12 rounded-3xl mx-1'
                         onClick={() => handleAddNguoiLon(event)}>+</button>
                     </div>
                   </div>
 
-                  <div className="bg-white w-full flex flex-row h-16 rounded-lg items-center" >
+                  <div className="bg-white w-full flex flex-row h-16 rounded-3xl items-center" >
                     <div className='flex flex-row w-full justify-center items-center'>
                       <p className="pl-3 w-9/12 text-gray-500 text-lg font-semibold">
                         <b>Trẻ em</b></p>
-                      <button className='border-2 border-gray-400 bg-cyan-50 h-12 w-12 rounded-lg mx-1'
+                      <button className='border-2 border-gray-400 bg-cyan-50 h-12 w-12 rounded-3xl mx-1'
                         onClick={() => handleSubstractTreEm(event)}>-</button>
-                      <input className='border-2 border-gray-400 bg-white h-12 w-12 rounded-lg mx-1 
+                      <input className='border-2 border-gray-400 bg-white h-12 w-12 rounded-3xl mx-1 
                                             text-center focus:outline-gray-400' readOnly type='text' defaultValue={valueSoTreEm} />
-                      <button className='border-2 border-gray-400 bg-cyan-50 h-12 w-12 rounded-lg mx-1'
+                      <button className='border-2 border-gray-400 bg-cyan-50 h-12 w-12 rounded-3xl mx-1'
                         onClick={() => handleAddTreEm(event)}>+</button>
                     </div>
                   </div>
 
-                  <div className="bg-white w-full flex flex-row h-16 rounded-lg items-center" >
+                  <div className="bg-white w-full flex flex-row h-16 rounded-3xl items-center" >
                     <div className='flex flex-row w-full justify-center items-center'>
                       <p className="pl-3 w-9/12 text-gray-500 text-lg font-semibold">
                         <b>Số phòng</b></p>
-                      <button className='border-2 border-gray-400 bg-cyan-50 h-12 w-12 rounded-lg mx-1'
+                      <button className='border-2 border-gray-400 bg-cyan-50 h-12 w-12 rounded-3xl mx-1'
                         onClick={() => handleSubstractPhong(event)}>-</button>
-                      <input className='border-2 border-gray-400 bg-white h-12 w-12 rounded-lg mx-1 
+                      <input className='border-2 border-gray-400 bg-white h-12 w-12 rounded-3xl mx-1 
                                             text-center focus:outline-gray-400' readOnly type='text' defaultValue={valueSoPhong} />
-                      <button className='border-2 border-gray-400 bg-cyan-50 h-12 w-12 rounded-lg mx-1'
+                      <button className='border-2 border-gray-400 bg-cyan-50 h-12 w-12 rounded-3xl mx-1'
                         onClick={() => handleAddPhong(event)}>+</button>
                     </div>
                   </div>
-                  <div className="bg-white w-full flex flex-row h-16 rounded-lg justify-end items-center
+                  <div className="bg-white w-full flex flex-row h-16 rounded-3xl justify-end items-center
                                     pr-6" >
                     <button className='font-bold text-cyan-500 text-lg'
                       onClick={() => handleCompliteMember(event)}>Xong</button>
@@ -540,7 +540,7 @@ export default function Hotel() {
 
       {/* Danh sach dia danh trong nuoc */}
       <div className='w-9/12 mx-auto flex flex-col'>
-        <h5 className='my-4'><b className='bg-blue-700 p-2 rounded-lg text-white cursor-pointer'>
+        <h5 className='my-4'><b className='bg-blue-700 p-2 rounded-3xl text-white cursor-pointer'>
           Điểm đến trong nước</b></h5>
         <div className="flex h-3/4 w-full justify-center items-center">
           <Carousel className="w-full " id='slider'>
@@ -563,7 +563,7 @@ export default function Hotel() {
 
       {/* Danh sach dia diem gan nha*/}
       <div className='w-9/12 mx-auto flex flex-col mt-5'>
-        <h5 className='my-4'><b className='bg-blue-700 p-2 rounded-lg text-white cursor-pointer'>
+        <h5 className='my-4'><b className='bg-blue-700 p-2 rounded-3xl text-white cursor-pointer'>
           Khách sạn gần đây</b></h5>
         <div className=' flex flex-row my-4'>
           {provinces.map((item) => (
@@ -610,46 +610,46 @@ export default function Hotel() {
 
       {/* Chinh sach dat phong */}
       <div className='w-9/12 mx-auto flex flex-col mt-5'>
-        <h5 className='my-4'><b className='bg-blue-700 p-2 rounded-lg text-white cursor-pointer'>
+        <h5 className='my-4'><b className='bg-blue-700 p-2 rounded-3xl text-white cursor-pointer'>
           Chính sách đặt phòng</b></h5>
         <div className="flex h-3/4 w-full justify-center items-center">
           <Carousel className="w-full " id='slider'>
             <CarouselContent className="">
               <CarouselItem key={1} className="basis-1/5">
                 <Link href={''}>
-                  <img src='/policy/MienHuyPhong.jpg' className='w-full rounded-lg'
+                  <img src='/policy/MienHuyPhong.jpg' className='w-full rounded-3xl'
                     alt={`MienHuyPhong`} />
                 </Link>
               </CarouselItem>
 
               <CarouselItem key={2} className="basis-1/5">
                 <Link href={''}>
-                  <img src='/policy/ThanhToanTaiKhachSan.jpg' className='w-full rounded-lg'
+                  <img src='/policy/ThanhToanTaiKhachSan.jpg' className='w-full rounded-3xl'
                     alt={`ThanhToanTaiKhachSan`} />
                 </Link>
               </CarouselItem>
 
               <CarouselItem key={3} className="basis-1/5">
                 <Link href={''}>
-                  <img src='/policy/DeDangDoiLich.jpg' className='w-full rounded-lg'
+                  <img src='/policy/DeDangDoiLich.jpg' className='w-full rounded-3xl'
                     alt={`DeDangDoiLich`} />
                 </Link>
               </CarouselItem>
               <CarouselItem key={4} className="basis-1/5">
                 <Link href={''}>
-                  <img src='/policy/TichXuTraveloka.jpg' className='w-full rounded-lg'
+                  <img src='/policy/TichXuTraveloka.jpg' className='w-full rounded-3xl'
                     alt={`TichXuTraveloka`} />
                 </Link>
               </CarouselItem>
               <CarouselItem key={5} className="basis-1/5">
                 <Link href={''}>
-                  <img src='/policy/ReviewChanThuc.jpg' className='w-full rounded-lg'
+                  <img src='/policy/ReviewChanThuc.jpg' className='w-full rounded-3xl'
                     alt={`ReviewChanThuc`} />
                 </Link>
               </CarouselItem>
               <CarouselItem key={6} className="basis-1/5">
                 <Link href={''}>
-                  <img src='/policy/HoTro24Tren7.jpg' className='w-full rounded-lg'
+                  <img src='/policy/HoTro24Tren7.jpg' className='w-full rounded-3xl'
                     alt={`HoTro24Tren7`} />
                 </Link>
               </CarouselItem>

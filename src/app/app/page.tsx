@@ -10,9 +10,14 @@ import CarouselVoucher from '@/components/shared/CarouselVoucher';
 import TabsCarouselHotel from '@/components/shared/TabsCarouselHotel';
 
 import { getHotelPage } from '@/service/hotel.service';
-
-export default async function Home() {
-  const dataLocationList = [
+import SectionHero from '@/components/shared/sectionHero';
+import BgGlassmorphism from '@/components/shared/BgGlassmorphism';
+import SectionSliderNewCategories from '@/components/shared/SectionSliderNewCategories';
+import { TaxonomyType } from '@/types';
+import SectionOurFeatures from '@/components/shared/SectionOurFeatures';
+import { CarouselCountry } from '@/components/shared/CarouselCountry';
+import SectionBecomeAnAuthor from '@/components/shared/SectionBecomeAnAuthor';
+ const dataLocationList = [
     {
       id: 1,
       name: 'Hồ Chí Minh',
@@ -42,56 +47,79 @@ export default async function Home() {
       name: 'Đà Nẵng',
     },
   ];
+export default async function Home() {
 
-  const dataLocationListInternal = [
-    {
-      id: 1,
-      name: 'Bangkok',
-    },
-    {
-      id: 2,
-      name: 'Seoul',
-    },
-    {
-      id: 3,
-      name: 'Tokyo',
-    },
-    {
-      id: 4,
-      name: 'Busan',
-    },
-    {
-      id: 5,
-      name: 'Bejing',
-    },
-    {
-      id: 6,
-      name: 'Bali',
-    },
-  ];
   return (
-    <main className='flex flex-col'>
-      <h2 className='text-center text-4xl font-bold text-white  py-3'>
-        Từ Đông Nam Á Đến Thế Giới, Trong Tầm Tay Bạn
-      </h2>
-      <TabHero />
-      <CarouselTrustBy />
+   <div className="nc-PageHome relative overflow-hidden">
+      {/* GLASSMOPHIN */}
+      <BgGlassmorphism />
 
-      <section className='bg-white rounded-t-2xl container flex flex-col gap-10 pb-10'>
-        <BannerSection />
-        <Discovery />
-        <DiscoveryHotel />
-        <CarouselVoucher />
-        <TabsCarouselHotel
-          title='Vi Vu Gần Nhà'
+      <div className="container relative space-y-24 mb-24 lg:space-y-28 lg:mb-28">
+        {/* SECTION HERO */}
+        <SectionHero className="pt-10 lg:pt-16 lg:pb-16" />
+
+        {/* SECTION 1 */}
+
+        <CarouselCountry/>
+
+        <SectionOurFeatures />
+
+        <TabsCarouselHotel title='Nơi lưu trú nổi bật'
           data={dataLocationList}
         />
-        <TabsCarouselHotel
-          title='Top khách sạn quốc tế'
-          data={dataLocationListInternal}
+
+         <div className="relative py-16">
+          <SectionBecomeAnAuthor />
+        </div>
+
+        {/* <TabsCarouselHotel title='Popular places to stay that Chisfis recommends for you'  data={[]} /> */}
+
+        {/* 
+
+
+       
+        <SectionHowItWork />
+
+        <div className="relative py-16">
+          <BackgroundSection className="bg-orange-50 dark:bg-black/20" />
+          <SectionSliderNewCategories
+            categories={DEMO_CATS_2}
+            categoryCardType="card4"
+            itemPerRow={4}
+            heading="Đề xuất khám phá"
+            subHeading="Popular places to stay that Chisfis recommends for you"
+            sliderStyle="style2"
+          />
+        </div> */}
+
+        {/* <SectionSubscribe2 />
+
+        <div className="relative py-16">
+          <BackgroundSection className="bg-orange-50 dark:bg-black dark:bg-opacity-20 " />
+          <SectionGridAuthorBox />
+        </div>
+
+        <SectionGridCategoryBox />
+
+        <div className="relative py-16">
+          <BackgroundSection />
+          <SectionBecomeAnAuthor />
+        </div>
+
+        <SectionSliderNewCategories
+          heading="Explore by types of stays"
+          subHeading="Explore houses based on 10 types of stays"
+          categoryCardType="card5"
+          itemPerRow={5}
         />
-      </section>
-      <ContactEmail />
-    </main>
+
+        <SectionVideos />
+
+        <div className="relative py-16">
+          <BackgroundSection />
+          <SectionClientSay />
+        </div> */}
+      </div>
+    </div>
   );
 }

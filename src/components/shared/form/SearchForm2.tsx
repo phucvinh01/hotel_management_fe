@@ -114,7 +114,7 @@ const SearchForm2 = (props: searchForm2Props) => {
 
 
     return (
-        <div className={` z-999 w-full ${scrollY > 20 ? 'fixed top-0' : ''} mb-[70px] `}>
+        <div className={` z-[999] w-full ${scrollY > 20 ? 'fixed top-0' : ''} mb-[70px] `}>
             <form
                 className='flex flex-col lg:flex-row  justify-center  items-center w-full py-6
                 bg-gradient-to-b from-sky-700 via-sky-500 to-blue-500'
@@ -143,7 +143,7 @@ const SearchForm2 = (props: searchForm2Props) => {
                         type='text'
                         id='address'
                         name='address'
-                        className='h-12 bg-blue-200 border border-blue-200 text-white text-lg rounded-lg 
+                        className='h-12 bg-blue-200 border border-blue-200 text-white text-lg rounded-3xl 
                      w-full font-bold pl-6  cursor-pointer hover:bg-white hover:text-black'
                         placeholder='Thành phố, khách sạn, điểm đến'
                         onChange={(e) =>
@@ -181,11 +181,11 @@ const SearchForm2 = (props: searchForm2Props) => {
                 <div className='w-11/12 lg:w-[30%] mx-3 my-4 lg:my-0'>
                     <DatePickerWithRange2 setRangeDay={setRangeDay} />
                 </div>
-                <div className='w-11/12 lg:w-[30%] mx-3 my-4 lg:my-0 z-99999'>
+                <div className='w-11/12 lg:w-[30%] mx-3 my-4 lg:my-0 z-[99999]'>
                     <DropdownMenu>
                         <DropdownMenuTrigger className='bg-blue-200 border font-bold border-blue-200 text-white text-lg
-                    outline outline-none text-left z-99999
-           focus:ring-blue-500 focus:border-blue-500 block w-full pl-2.5 h-[36px] rounded-lg'>
+                    outline outline-none text-left z-[99999]
+           focus:ring-blue-500 focus:border-blue-500 block w-full pl-2.5 h-[36px] rounded-3xl'>
                             {formData.amount_adult} người lớn, {formData.amount_children} Trẻ
                             em, {formData.amount_room} phòng
                         </DropdownMenuTrigger>
@@ -311,7 +311,7 @@ const SearchForm2 = (props: searchForm2Props) => {
                     <Button
                         variant={'secondary'}
                         type='submit'
-                        className='bg-white w-full h-12  rounded-lg text-blue-700'>
+                        className='bg-white w-full h-12  rounded-3xl text-blue-700'>
                         <SearchIcon color='#0000FF' />
                         Tìm khách sạn
                     </Button>
