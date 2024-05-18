@@ -14,7 +14,7 @@ const Header = () => {
   const [scrollY, setScrollY] = useState<number>(0);
   const [scroll, setScroll] = useState<boolean>(false);
   const pathname = usePathname();
-  const {user, logout} = useAuth()
+  const { user, logout } = useAuth()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -38,14 +38,13 @@ const Header = () => {
 
   return pathname !== '/app/partner' ? (
     <header
-      className={`container sticky flex gap-3 flex-col py-4 border-b mb-3 top-0 left-0 w-full z-50
-       ${
-         pathname !== '/app'
-           ? 'bg-white text-gray-900'
-           : scrollY > 20
-           ? 'bg-white shadow-lg'
-           : 'bg-transparent border-gray-200 '
-       } transition-all duration-300 ease-in-out ${pathname.includes("/register") && 'hidden'} ${pathname.includes("/login") && 'hidden'} ${pathname.includes("/forgotpassword")  && 'hidden' } ${pathname.includes("/dashbroad") && 'hidden'}`} >
+      className={`container sticky flex gap-3 flex-col py-4 border-b top-0 left-0 w-full z-50 shadow-sm shadow-slate-300
+       ${pathname !== '/app'
+          ? 'bg-white text-gray-900'
+          : scrollY > 20
+            ? 'bg-white shadow-lg'
+            : 'bg-transparent border-gray-200 '
+        } transition-all duration-300 ease-in-out ${pathname.includes("/register") && 'hidden'} ${pathname.includes("/login") && 'hidden'} ${pathname.includes("/forgotpassword") && 'hidden'} ${pathname.includes("/dashbroad") && 'hidden'}`} >
 
       <div className='w-full flex-center '>
         <div className='flex flex-1'>
@@ -75,7 +74,7 @@ const Header = () => {
       </div>
     </header>
   ) : (
-    <header  className='container sticky flex  gap-3 flex-col justify-center  py-2 top-0 left-0 w-full z-50 h-21 bg-white'>
+    <header className='container sticky flex  gap-3 flex-col justify-center  py-2 top-0 left-0 w-full z-50 h-21 bg-white'>
       <div className='flex justify-between'>
         <Logo />
         <div className='flex gap-4'>

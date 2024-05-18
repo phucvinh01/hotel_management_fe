@@ -15,18 +15,18 @@ export default function RootLayout({
 }>) {
   return (
     <ReactQueryProvider>
-    <html
-      lang='en'
-      suppressHydrationWarning={true}>
-      <body>
-        
-        <AuthProvider>
-          {children}
-          <Toaster />
-        </AuthProvider>
-      
+      <html
+        lang='en'
+        suppressHydrationWarning={true}>
+        <body className='font-sans' style={{ fontFamily: 'Tahoma, sans-serif' }}>
+
+          <AuthProvider>
+            {children}
+            <Toaster />
+          </AuthProvider>
+
         </body>
-    </html>
+      </html>
     </ReactQueryProvider>
   );
 }

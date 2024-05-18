@@ -22,11 +22,12 @@ export default function RootLayout({
     <main
       lang='en'
       suppressHydrationWarning={true}>
-        <AuthProvider>
-          <Header />
-          {children}
-          <Toaster />
-        </AuthProvider>
+      <AuthProvider>
+        <Header />
+        {children}
+        <Toaster />
+        <Footer />
+      </AuthProvider>
     </main>
   );
 }

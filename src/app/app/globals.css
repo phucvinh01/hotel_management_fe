@@ -114,6 +114,18 @@
   @apply block
 }
 
+.text-gradient {
+  background-image: linear-gradient(to right,#0258FC, #0066FF, #00EEEE);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+.text-gradient-hover {
+  background-image: linear-gradient(to right,#0033FF, #0066FF, #00FFFF);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
 /* width */
 ::-webkit-scrollbar {
   width: 10px;

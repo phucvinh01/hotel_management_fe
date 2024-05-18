@@ -146,10 +146,10 @@ export default function HotelDetail() {
         DanhGia: useRef<HTMLDivElement>(null),
     };
 
-   
+
 
     const handleGoToElement = (elementKey: string) => {
-        const targetElementRef = targetElementRefs[elementKey] ;
+        const targetElementRef = targetElementRefs[elementKey];
         if (targetElementRef.current) {
             targetElementRef.current.scrollIntoView({ behavior: 'smooth' });
         }
@@ -598,7 +598,7 @@ export default function HotelDetail() {
                                                 <img src={`/icon/${item.ImageIcon}`} className='w-8 h-8' />
                                                 <p className='text-lg text-gray-900 font-bold'>{item.Title}</p>
                                             </div>
-                                            <ul className='list-disc pl-5'>
+                                            <ul className='list-disc pl-5 font-normal'>
                                                 {item.Description?.map((jitem) => (
                                                     <li key={jitem}>{jitem}</li>
                                                 ))}
