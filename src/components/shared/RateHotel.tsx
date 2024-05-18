@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Star from "./Star";
 import URL_Enum from "@/axios/URL_Enum";
-import FormatDate from "@/service/FormatDateString";
+import FormatDate from "@/util/FormatDateString";
 import ModalImageRate from "./ModalImageRate";
 import {
     Carousel,

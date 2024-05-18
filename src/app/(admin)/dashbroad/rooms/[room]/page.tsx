@@ -1,9 +1,9 @@
 'use client';
-import { ModalAddRoom } from '../modal-add-room';
+import { ModalAddRoom } from './modal-add-room';
 import { DataTable } from '@/components/table/data-table';
 import { columns } from '@/components/table/columns';
 import DefaultLayout from '@/components/admin/Layouts/DefaultLayout';
-import { useRooms } from '@/service/query';
+import { useRooms } from '@/service/query.service';
 import Loader from '@/components/admin/common/Loader';
 
 

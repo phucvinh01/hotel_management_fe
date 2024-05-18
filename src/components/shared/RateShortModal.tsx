@@ -1,5 +1,5 @@
 import URL_Enum from "@/axios/URL_Enum";
-import FormatDate from "@/service/FormatDateString";
+import FormatDate from "@/util/FormatDateString";
 import { use, useState } from "react";
 
 

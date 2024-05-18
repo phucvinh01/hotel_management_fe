@@ -1,12 +1,11 @@
 'use client'
 
-import { Metadata } from 'next';
 import { DataTable } from '@/components/table/data-table';
 import DefaultLayout from '@/components/admin/Layouts/DefaultLayout';
 import { columns } from './columns';
 import { ModalAddTypeRoom } from './modal-add-typeroom';
-import { Loader } from 'lucide-react';
-import { useGetTypeRooms } from '@/service/query';
+import { useGetTypeRooms } from '@/service/query.service';
+import Loader from '@/components/admin/common/Loader';
 
 export default  function RoomPage({
   params,
@@ -41,7 +40,6 @@ export default  function RoomPage({
             <Loader />
           </div>
         )}
-        {error && <div>Error: {error}</div>}
         <DataTable
           columns={columns}
           data={data[0]}

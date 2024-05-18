@@ -8,56 +8,57 @@ import { formatCurrency } from "@/lib/formatCurrency"
 import { Checkbox } from "@/components/ui/checkbox"
 import { DataTableColumnHeader } from "@/components/table/data-table-column-header"
 import { labels } from "@/components/table/data/data"
-import { Badge } from "@/components/ui/badge"
 import { DataTableRowActions } from "./data-table-row-actions"
+import Badge from "@/components/shared/Badge"
 
 export const columns: ColumnDef<SelectTypeRoom>[] = [
-  {
-    id: "id",
-    header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-        className="translate-y-[2px]"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-        className="translate-y-[2px]"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
+  // {
+  //   id: "id",
+  //   header: ({ table }) => (
+  //     <Checkbox
+  //       checked={
+  //         table.getIsAllPageRowsSelected() ||
+  //         (table.getIsSomePageRowsSelected() && "indeterminate")
+  //       }
+  //       onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+  //       aria-label="Select all"
+  //       className="translate-y-[2px]"
+  //     />
+  //   ),
+  //   cell: ({ row }) => (
+  //     <Checkbox
+  //       checked={row.getIsSelected()}
+  //       onCheckedChange={(value) => row.toggleSelected(!!value)}
+  //       aria-label="Select row"
+  //       className="translate-y-[2px]"
+  //     />
+  //   ),
+  //   enableSorting: false,
+  //   enableHiding: false,
+  // },
   {
     accessorKey: "RoomName",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Tên Loại Phòng" />
     ),
-    cell: ({ row }) => <div className="w-[80px]">{row.getValue("RoomName")}</div>,
+    cell: ({ row }) => <div className="w-[100px]"><Badge name={row.getValue("RoomName")} color="blue" /></div>,
     enableSorting: false,
     enableHiding: false,
   },
   {
     accessorKey: "Price",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Giá" />
+      <DataTableColumnHeader column={column} title="Giá / Đêm" />
     ),
     cell: ({ row }) => {
       const label = labels.find((label) => label.value === row.original.Price)
 
       return (
         <div className="flex space-x-2">
-          {label && <Badge variant="outline">{label.label}</Badge>}
+          {label && label.label}
           <span className="max-w-[500px] truncate font-medium">
-            {formatCurrency(row.getValue("Price"))}
+            <Badge name={formatCurrency(row.getValue("Price"))} color="indigo"/>
+            
           </span>
         </div>
       )
@@ -73,9 +74,10 @@ export const columns: ColumnDef<SelectTypeRoom>[] = [
 
       return (
         <div className="flex space-x-2">
-          {label && <Badge variant="outline">{label.label}</Badge>}
+          {label && label.label}
           <span className="max-w-[500px] truncate font-medium">
-            {row.original.SoLuongGiuong+"/"+row.getValue("TenLoaiGiuong")}
+            <Badge name= {row.original.SoLuongGiuong+"/"+row.getValue("TenLoaiGiuong")}  color="yellow"/>
+           
           </span>
         </div>
       )
@@ -94,9 +96,10 @@ export const columns: ColumnDef<SelectTypeRoom>[] = [
 
       return (
         <div className="flex space-x-2">
-          {label && <Badge variant="outline">{label.label}</Badge>}
+          {label && label.label}
           <span className="max-w-[500px] truncate font-medium">
-            { row.getValue("total_rooms")}
+            <Badge name={ row.getValue("total_rooms")} color="purple"/>
+            
           </span>
         </div>
       )
@@ -115,9 +118,11 @@ export const columns: ColumnDef<SelectTypeRoom>[] = [
 
       return (
         <div className="flex space-x-2">
-          {label && <Badge variant="outline">{label.label}</Badge>}
+          {label && label.label}
           <span className="max-w-[500px] truncate font-medium">
-            { (row.getValue("state_room") !== null ? row.getValue("state_room"): 0)  + "/" + row.getValue("total_rooms")}
+            <Badge name={ (row.getValue("state_room") !== null ? row.getValue("state_room"): 0)  + "/" + row.getValue("total_rooms")} color={(row.getValue("state_room") !== null ? row.getValue("state_room"): 0) != row.getValue('total_rooms') ? "green" : "pink"}/>
+
+            
           </span>
         </div>
       )

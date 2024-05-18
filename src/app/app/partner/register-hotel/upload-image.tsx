@@ -78,14 +78,14 @@ const ImageUploader: React.FC<Props> = (props) => {
         </thead>
         <tbody>
           {files.map((file, index) => (
-            <tr key={file.filename}>
+            <tr key={file.filename} className='text-center'>
               <td className='border px-2 py-1 text-[11px]'> {file.filename}</td>
-              <td className='border px-2 py-1 text-[11px]'>
+              <td className='border px-2 py-1 text-[11px] grid'>
                 <Image
                   loading='lazy'
                   width={70}
                   height={70}
-                  className='object-cover rounded-3xl min-h-[70px]'
+                  className='object-cover rounded-3xl min-h-[70px] mx-auto'
                   src={URL.createObjectURL(file.file)}
                   alt={file.filename}
                 />
@@ -106,7 +106,7 @@ const ImageUploader: React.FC<Props> = (props) => {
                       );
                     }}>
                     {}
-                    <SelectTrigger className='w-[120px]'>
+                    <SelectTrigger className='w-full'>
                       {type !== 'typeroom' && index === 0 ? (
                         <SelectValue placeholder='None' />
                       ) : (
@@ -146,7 +146,7 @@ const ImageUploader: React.FC<Props> = (props) => {
                   <SelectTrigger className='w-[120px]'>
                     <SelectValue placeholder='Chọn khu vực' />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className='bg-white text-black dark:bg-black dark:text-white'>
                     <SelectGroup>
                       <SelectItem value='Phòng tắm'>Phòng tắm</SelectItem>
                       <SelectItem value='Sảnh chờ'>Sảnh chờ</SelectItem>
@@ -158,8 +158,8 @@ const ImageUploader: React.FC<Props> = (props) => {
                   </SelectContent>
                 </Select>
               </td>
-              <td>
-                <XCircle onClick={() => removeFile(file)} />
+              <td className=''>
+                <XCircle className='grid mx-auto' onClick={() => removeFile(file)} />
               </td>
             </tr>
           ))}

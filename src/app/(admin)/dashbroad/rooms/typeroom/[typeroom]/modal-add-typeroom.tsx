@@ -23,7 +23,7 @@ import { Label } from '@/components/ui/label';
 import { FormEvent, useEffect, useState } from 'react';
 import { Loader, PlusCircleIcon, PlusIcon, Wifi, XIcon } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuthContext';
-import { useCreateTypeRoom, useGetTypeRooms } from '@/service/query';
+import { useCreateTypeRoom, useGetTypeRooms } from '@/service/query.service';
 import { toast } from '@/components/ui/use-toast';
 import ImageUploader, { FileData } from '@/app/app/partner/register-hotel/upload-image';
 import { useWindowSize } from 'react-use';
@@ -78,7 +78,6 @@ export function ModalAddTypeRoom() {
     }
 
 
-    console.log(formData?.file);
     createTypeRoomMutation.mutate(formData as InsertTyperoomAndImage);
     if (createTypeRoomMutation.isPending) {
       toast({

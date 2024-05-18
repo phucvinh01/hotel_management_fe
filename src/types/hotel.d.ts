@@ -192,7 +192,13 @@ interface ITypeRoom {
 interface InsertTyperoomAndImage extends ITypeRoom {
   file: File[];
   region: string[];
-  
+}
+
+interface IMutilpleImageUpload {
+  file: File[];
+  region: string[];
+  typeroom:string,
+  hotel:string,
 }
 
 interface IRoom {
@@ -333,20 +339,20 @@ interface SelectTypeRoom {
   FloorArea: string;
   MaxQuantityMember: string;
   Price: string;
-  Voi_Tam_Dung: string;
-  Ban_Cong_San_Hien: string;
-  Khu_Vuc_Cho: string;
-  May_Lanh: string;
-  Nuoc_Nong: string;
-  Bon_Tam: string;
+  Voi_Tam_Dung: number;
+  Ban_Cong_San_Hien: number;
+  Khu_Vuc_Cho: number;
+  May_Lanh: number;
+  Nuoc_Nong: number;
+  Bon_Tam: number;
   created_at: string | null;
   updated_at: string | null;
   TenLoaiGiuong: string;
   SoLuongGiuong: string;
-  Lo_Vi_Song: string;
-  Tu_Lanh: string;
-  May_Giat: string;
-  No_Moking: string;
+  Lo_Vi_Song: number;
+  Tu_Lanh: number;
+  May_Giat: number;
+  No_Moking: number;
   total_rooms: string;
   state_room: string;
  RoomName: string,

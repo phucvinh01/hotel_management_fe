@@ -7,45 +7,10 @@ import {
   useMutation,
 } from "@tanstack/react-query";
 
-import { getRooms, getTypeRooms, insertRoom, insertTyperoom, updateRoom, updateTyperoom } from "./hotel.service";
+import { getRooms , insertRoom,  updateRoom,  } from "./hotel.service";
+import { getTypeRooms, insertTyperoom, updateTyperoom, getImageTypeRoom, uploadMultipleImage, } from "./typeroom.service";
 
-
-
-// export function useRooms(ids: (string | undefined)) {
-//   return useQuery({
-//     queryKey: ["rooms"],
-//     queryFn: () => getRooms(ids as string),
-//     placeholderData: keepPreviousData,
-//   });
-// }
-
-// export function useProjects(page: number) {
-//   return useQuery({
-//     queryKey: ["projects", { page }],
-//     queryFn: () => getProjects(page),
-//     placeholderData: keepPreviousData,
-//   });
-// }
-
-// export function useProducts() {
-//   return useInfiniteQuery({
-//     queryKey: ["products"],
-//     queryFn: getProducts,
-//     initialPageParam: 0,
-//     getNextPageParam: (lastPage, _, lastPageParam) => {
-//       if (lastPage.length === 0) {
-//         return undefined;
-//       }
-//       return lastPageParam + 1;
-//     },
-//     getPreviousPageParam: (_, __, firstPageParam) => {
-//       if (firstPageParam <= 1) {
-//         return undefined;
-//       }
-//       return firstPageParam - 1;
-//     },
-//   });
-// }
+// Query Typeroom
 
 export function useGetTypeRooms(id: string) {
   return useQuery({
@@ -68,6 +33,28 @@ export function useCreateTypeRoom() {
   });
 }
 
+export function useGetImagesTypeRoom(id: string) {
+  return useQuery({
+    queryKey: ["getImagesTypeRoom",id],
+    queryFn: () => getImageTypeRoom(id),
+    placeholderData: keepPreviousData,
+  });
+}
+
+export function useCreateImagesTypeRoom() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (data: IMutilpleImageUpload) => uploadMultipleImage(data),
+    onSuccess: async () => {
+        await queryClient.invalidateQueries({ queryKey: ['getImagesTypeRoom'] }); 
+        await queryClient.prefetchQuery({ queryKey: ['getImagesTypeRoom'] }); 
+    },
+    onError: async (error) => {
+      return "Cập nhật phòng thất bại";
+    },
+  });
+}
+
 export function useUpdateTypeRoom() {
   const queryClient = useQueryClient();
   return useMutation({
@@ -82,6 +69,8 @@ export function useUpdateTypeRoom() {
   });
 }
 
+
+// Query room
 export function useCreateRoom() {
   const queryClient = useQueryClient();
 
