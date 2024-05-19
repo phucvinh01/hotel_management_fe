@@ -17,12 +17,12 @@ type TabsCarouselHotelProps = {
 const TabsCarouselHotel = ({ title, data }: TabsCarouselHotelProps) => {
   const [province, setProvice] = useState<string>(data[0].name);
   const [dataList, setDataList] = useState<
-    IResponeCardHotel | false | undefined
+    ICardHotel[] | false | undefined
   >();
 
   useEffect(() => {
     const callApi = async () => {
-      const respone: IResponeCardHotel | false | undefined =
+      const respone: ICardHotel[] | false | undefined =
         await getHotelsByProvince(province);
       setDataList(respone);
     };
@@ -32,7 +32,7 @@ const TabsCarouselHotel = ({ title, data }: TabsCarouselHotelProps) => {
   return (
     <div className='space-y-4'>
       <Heading
-        className='text-2xl font-extrabold text-black'
+        className='text-lg font-extrabold text-black'
         desc={
           'Khám phá những bài viết nổi bật nhất về mọi chủ đề của cuộc sống.'
         }>
@@ -56,7 +56,7 @@ const TabsCarouselHotel = ({ title, data }: TabsCarouselHotelProps) => {
           <TabsContent
             key={item.id}
             value={item.name}>
-            <CarouselHotelVietNam listData={dataList && dataList.hotels} />
+            <CarouselHotelVietNam listData={dataList && dataList} />
           </TabsContent>
         ))}
       </Tabs>

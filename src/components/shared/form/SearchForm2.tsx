@@ -14,6 +14,7 @@ import {
 import { FormEvent, useEffect, useRef, useState } from 'react';
 import { DateRange } from 'react-day-picker';
 import { DatePickerWithRange2 } from './DayRangePicker2';
+import Link from 'next/link';
 
 const dropDownData: SuggestLocationSearch[] = [
     {
@@ -336,11 +337,11 @@ const SearchForm2 = (props: searchForm2Props) => {
                 p-3 transition ease-in-out duration-500`} onClick={() => { handleGoToElement('DanhGia') }}><b>Đánh giá</b></p>
                 </div>
                 <div className='flex flex-row w-4/12 justify-end items-center py-1 px-5'>
-                    <a href='#' className='flex flex-row justify-end items-center'> <p className=' text-xl p-3 font-bold text-cyan-500'>Lên đầu trang</p>
+                    <Link href='#' className='flex flex-row justify-end items-center'> <p className=' text-xl p-3 font-bold text-cyan-500'>Lên đầu trang</p>
                         <span ><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-chevron-bar-up text-cyan-500 font-bold" viewBox="0 0 16 16">
                             <path fill-rule="evenodd" d="M3.646 11.854a.5.5 0 0 0 .708 0L8 8.207l3.646 3.647a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 0 0 0 .708M2.4 5.2c0 .22.18.4.4.4h10.4a.4.4 0 0 0 0-.8H2.8a.4.4 0 0 0-.4.4" />
                         </svg></span>
-                    </a>
+                    </Link>
 
 
                 </div>

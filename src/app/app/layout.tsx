@@ -20,14 +20,10 @@ export default function RootLayout({
   return (
 
     <main
-      lang='en'
-      suppressHydrationWarning={true}>
-      <AuthProvider>
+      >
         <Header />
         {children}
-        <Toaster />
         <Footer />
-      </AuthProvider>
     </main>
   );
 }

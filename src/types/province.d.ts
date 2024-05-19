@@ -10,3 +10,8 @@ interface IProvince {
     hotels: IHotel[] | null;
     totalHotel?: number;
 }
+
+interface IResultGetProvice {
+    status: number,
+    result: IProvince[]
+}

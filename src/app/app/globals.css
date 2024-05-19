@@ -24,7 +24,7 @@
  
     --accent: 210 40% 96.1%;
     --accent-foreground: 222.2 47.4% 11.2%;
- 
+    
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
@@ -75,7 +75,7 @@
     @apply text-gray-500 font-medium text-lg;
   }
   .icon-input {
-    @apply absolute bg-gray-500 h-full flex flex-row items-center
+    @apply absolute bg-cyan-500 h-full flex flex-row items-center
     justify-center rounded-l-xl w-10;
   }
   .text-input {

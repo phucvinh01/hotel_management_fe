@@ -17,10 +17,10 @@ const SectionOurFeatures: FC<SectionOurFeaturesProps> = ({
 }) => {
   return (
     <div
-      className={`rounded-lg shadow-lg shadow-gray-500 nc-SectionOurFeatures relative flex flex-col items-center ${type === "type1" ? "lg:flex-row" : "lg:flex-row-reverse"
+      className={`rounded-lg nc-SectionOurFeatures relative flex flex-col items-center ${type === "type1" ? "lg:flex-row" : "lg:flex-row-reverse"
         } ${className}`}
       data-nc-id="SectionOurFeatures"
-      style={{ backgroundImage: "url('/hotel/saigon19052024.jpg')", backgroundRepeat: 'no-repeat' }}>
+      >
       <div className="flex-grow p-3 rounded-lg">
         <Image src={rightImg} alt={'rightImg'} width={750} height={650} className="rounded-lg" />
       </div>

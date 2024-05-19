@@ -65,9 +65,9 @@ export const getOneHotelById = async (
 
 export const getHotelsByProvince = async (
   province: string,
-): Promise<IHotel | false | undefined> => {
+): Promise<ICardHotel[] | false | undefined> => {
   try {
-    const response = await http.get<IHotel>(
+    const response = await http.get<ICardHotel[]>(
       `hotel/hotels-by-province?province=${province}`,
     );
     if (response.status === 200) {
@@ -115,7 +115,6 @@ export const insertTyperoom = async (body: TypeRoom | undefined, id: string): Pr
 
 export async function uploadImage(image: File, typeRoom: InsertResult, region: string): Promise<boolean> {
   try {
-    // Tạo FormData chứa dữ liệu cần uploadid_hotel
     const formData = new FormData();
     formData.append('image', image);
     formData.append('id_hotel', typeRoom.hotel_id);
@@ -143,7 +142,6 @@ export const insertRoom = async (body: Room | undefined, id: string, index: numb
     }
   } catch (error) {
     return false;
-    throw error;
   }
 };
 

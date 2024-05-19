@@ -46,7 +46,7 @@ interface ICardHotel {
   Address: string;
   FileName: string;
   IsActive: number
-  min_price: number;
+  min_price: string;
   total_reviews: number;
   average_rating?: number | undefined;
 }
