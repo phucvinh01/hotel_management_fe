@@ -145,13 +145,13 @@ const ModallistImagessHotel = (props: IProps) => {
                         <CarouselContent className="">
                             {listImagesTemp?.map((item, index) => (
                                 <CarouselItem key={item.id} className="basis-1/5">
-                                    <img src={`${URL_Enum.BaseURL_Image}${item.FileName}`}
+                                    <img src={`${item.FileName}`}
                                         alt={item.FileName} className={`w-full
                                                 h-[70px] rounded-3xl object-cover cursor-pointer
                                                 ${indexImageModal === index ? 'border border-b-2 border-blue-700' : ''}`}
                                         onClick={() => {
                                             setIndexImageModal(index);
-                                            setImageModalCurrent(URL_Enum.BaseURL_Image + listImagesTemp[index].FileName);
+                                            setImageModalCurrent(listImagesTemp[index].FileName);
                                         }} />
                                 </CarouselItem>
                             ))}

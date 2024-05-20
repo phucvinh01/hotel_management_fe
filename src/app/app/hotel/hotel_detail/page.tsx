@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 'use client';
 import URL_Enum from '@/axios/URL_Enum';
 import DetailRoom from '@/components/shared/DetailRoom';
@@ -939,7 +940,7 @@ export default function HotelDetail() {
                       className='w-full relative cursor-pointer'
                       onClick={() => handleStateModalListImagesChange(true, 0)}>
                       <img
-                        src={`${URL_Enum.BaseURL_Image}${item.FirstImage}`}
+                        src={`${item.FirstImage}`}
                         className='w-full h-[150px] rounded-3xl '
                       />
                       <p

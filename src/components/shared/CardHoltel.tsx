@@ -12,7 +12,7 @@ type CardHotelProps = {
 
 const CardHoltel = ({ item, className }: CardHotelProps) => {
   return (
-    <Link href={`/hotel/hotel_detail?id=${item.id}`}>
+    <Link href={`/app/hotel/hotel_detail?id=${item.id}`}>
       <Card className={`border-none p-0 space-y-2 ${className}`}>
         <div className='relative'>
           <Image
