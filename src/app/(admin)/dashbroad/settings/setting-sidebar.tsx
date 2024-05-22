@@ -31,7 +31,7 @@ export function SidebarNav({ className, items, ...props }: SidebarNavProps) {
           className={cn(
            
             pathname === item.href
-              ? "bg-gray-700 hover:bg-gray-700"
+              ? "bg-cyan-500"
               : "hover:bg-transparent hover:underline",
             "justify-start p-3  rounded-3xl"
           )}

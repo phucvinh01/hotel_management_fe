@@ -7,15 +7,11 @@ import FormTypeRoom from './form-typeroom';
 import FormAddNewForm from './form-add-room';
 import { toast } from '@/components/ui/use-toast';
 import ImageUploader, { FileData } from './upload-image';
-import ImageUploaderSingle from './upload-single';
 import _ from 'lodash';
 import Image from 'next/image';
 import {
   insertHotel,
   InsertResult,
-  insertRooms,
-  insertTyperoom,
-  insertTyperooms,
   uploadImage,
 } from '@/service/hotel.service';
 import { useAuth } from '@/hooks/useAuthContext';
@@ -35,6 +31,8 @@ import {
   TimerOffIcon,
 } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
+import { insertTyperooms } from '@/service/typeroom.service';
+import { insertRooms } from '@/service/room.service';
 
 export function RegisterNewHotelForm() {
   const [currentStep, setCurrentStep] = useState<string>('main');
@@ -53,16 +51,22 @@ export function RegisterNewHotelForm() {
     try {
       setIsLoading(true);
 
+      
+
       const id_hotel = await insertHotel(dataHotel);
+      const res = await uploadImage(filesImageHotel[0].file,{id:"None",
+        hotel_id:id_hotel as string
+      },"Ảnh bìa");
       let id_typeroom: string | false | undefined = '';
       if (id_hotel) {
         for (const typeRoom of dataTypeRoom) {
           const typeId = await insertTyperooms(typeRoom, id_hotel);
           id_typeroom = typeId && typeId.id;
+          
           if (typeId) {
             for (const fileImage of filesImageHotel) {
               if (fileImage.typeroom === typeRoom.Name) {
-                if (fileImage.regions === '') {
+                if (fileImage.regions === null) {
                   const res = await uploadImage(
                     fileImage.file,
                     typeId as InsertResult,
