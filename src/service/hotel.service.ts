@@ -1,3 +1,16 @@
+// import {
+//   ApiGetPageResponse,
+//   Hotel,
+//   HotelResponse,
+//   ICardHotel,
+//   IOneHotel,
+//   IResponeCardHotel,
+//   IUploadCoverImagePayload,
+//   IUploadCoverImageResult,
+//   Room,
+//   SelectRoomsResult,
+//   TypeRoom,
+// } from '@/types/hotel';
 import http from '../axios/http';
 import axios, { AxiosInstance, AxiosError } from 'axios';
 
@@ -36,16 +49,51 @@ export const getHotelPage = async (
   return false;
 };
 
-export const getHotel = async (
-  id: string,
-): Promise<HotelResponse | undefined> => {
+export const getHotel = async (id: string): Promise<HotelResponse[]> => {
   try {
-    const response = await http.get<HotelResponse>(`/hotel/get-hotel?id=${id}`);
+    const response = await http.get<HotelResponse[]>(
+      `/hotel/get-hotel?id=${id}`,
+    );
     if (response.status === 200) {
       return response.data;
     }
+    return [];
   } catch (error) {
-    throw error;
+    return [];
+  }
+};
+
+export interface IHotel {
+  id: string;
+  Name: string;
+  Address: string;
+  Telephone: string;
+  Description?: string;
+  LocationDetail?: string;
+  IsActive?: number;
+  TimeCheckIn: string;
+  TimeCheckOut: string;
+  created_at?: string;
+  updated_at?: string;
+  Type?: string;
+  Province_Id?: string;
+  StarRate?: number; // | null;
+  province?: IProvince;
+}
+
+export const updateHotel = async (
+  body: HotelResponse,
+): Promise<boolean | undefined> => {
+  try {
+    const response = await http.put<boolean>(`/hotel/update-hotel`, body);
+    if (response.status === 200) {
+      if (response.data) {
+        return true;
+      }
+      return false;
+    }
+  } catch (error) {
+    return false;
   }
 };
 
@@ -58,7 +106,6 @@ export const getOneHotelById = async (
       return response.data;
     }
   } catch (error) {
-    throw error;
     return false;
   }
 };
@@ -88,22 +135,27 @@ export const insertHotel = async (
   body: Hotel | undefined,
 ): Promise<string | false | undefined> => {
   try {
-    console.log('insertHotel');
     const response = await http.post<InsertResult>(`/hotel/insert-hotel`, body);
     if (response.status === 200) {
       return response.data.id;
     }
+    if (response.status === 500) {
+      return false;
+    }
   } catch (error) {
-    throw error;
     return false;
   }
 };
 
-
-export const insertTyperoom = async (body: TypeRoom | undefined, id: string): Promise<InsertResult | false | undefined> => {
+export const insertTyperoom = async (
+  body: TypeRoom | undefined,
+  id: string,
+): Promise<InsertResult | false | undefined> => {
   try {
-
-    const response = await axios.post<InsertResult>(`/hotel/insert-typeroom`, { ...body, "HotelId": id });
+    const response = await axios.post<InsertResult>(`/hotel/insert-typeroom`, {
+      ...body,
+      HotelId: id,
+    });
     if (response.status === 200) {
       return response.data;
     }
@@ -113,7 +165,11 @@ export const insertTyperoom = async (body: TypeRoom | undefined, id: string): Pr
   }
 };
 
-export async function uploadImage(image: File, typeRoom: InsertResult, region: string): Promise<boolean> {
+export async function uploadImage(
+  image: File,
+  typeRoom: InsertResult,
+  region: string,
+): Promise<boolean> {
   try {
     const formData = new FormData();
     formData.append('image', image);
@@ -133,9 +189,17 @@ export async function uploadImage(image: File, typeRoom: InsertResult, region: s
   }
 }
 
-export const insertRoom = async (body: Room | undefined, id: string, index: number): Promise<InsertResult | false | undefined> => {
+export const insertRoom = async (
+  body: Room | undefined,
+  id: string,
+  index: number,
+): Promise<InsertResult | false | undefined> => {
   try {
-    const response = await axios.post<InsertResult>(`/room/insert-room`, { ...body, "typeRoom_id": id, "name_room": `${body?.RoomName} ${index} ` });
+    const response = await axios.post<InsertResult>(`/room/insert-room`, {
+      ...body,
+      typeRoom_id: id,
+      name_room: `${body?.RoomName} ${index} `,
+    });
 
     if (response.status === 200) {
       return response.data;
@@ -202,9 +266,13 @@ export const updateRoom = async (body: Room): Promise<boolean | undefined> => {
 };
 
 //TanVND
-export const getHotelsByProvinceId = async (provinceId: string): Promise<IResponeCardHotel | false | undefined> => {
+export const getHotelsByProvinceId = async (
+  provinceId: string,
+): Promise<IResponeCardHotel | false | undefined> => {
   try {
-    const response = await http.get<IResponeCardHotel>(`hotel/get-list-by-province-id?id=${provinceId}`);
+    const response = await http.get<IResponeCardHotel>(
+      `hotel/get-list-by-province-id?id=${provinceId}`,
+    );
     if (response.status === 200) {
       return response.data;
     }
@@ -214,11 +282,17 @@ export const getHotelsByProvinceId = async (provinceId: string): Promise<IRespon
   }
 };
 
-export const searchListHotelWithParam = async (p_province: string, p_totalnight: string,
-  p_totalmember: string, p_totalmemberchild: string, p_timereceive: string, p_totalroom: string)
-  : Promise<IHotel | false | undefined> => {
+export const searchListHotelWithParam = async (
+  p_province: string,
+  p_totalnight: string,
+  p_totalmember: string,
+  p_totalmemberchild: string,
+  p_timereceive: string,
+  p_totalroom: string,
+): Promise<IHotel | false | undefined> => {
   try {
-    const response = await http.get<IHotel>(`hotel/search?province=${p_province}&totalnight=${p_totalnight}&
+    const response =
+      await http.get<IHotel>(`hotel/search?province=${p_province}&totalnight=${p_totalnight}&
       totalmember=${p_totalmember}&totalmemberchild=${p_totalmemberchild}
       &timereceive=${p_timereceive}&totalroom=${p_totalroom}`);
     if (response.status === 200) {
@@ -230,11 +304,40 @@ export const searchListHotelWithParam = async (p_province: string, p_totalnight:
   }
 };
 
-
-
-
-
-
-
-
-
+export const updateImageCover = async (
+  body: IUploadCoverImagePayload,
+): Promise<IUploadCoverImageResult> => {
+  const res = await axios.post<IUploadCoverImageResult>(
+      `http://localhost:8000/api/update-cover-image-hotel`,
+      body,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          'X-Requested-With': 'XMLHttpRequest',
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Credentials': 'true',
+        },
+      },
+    );
+  if (res.status === 400) {
+    return {
+      success: false,
+      mga: 'ẢNH KHÔNG ĐÚNG ĐỊNH DẠNG',
+    };
+  } else if (res.status === 500) {
+    return {
+      success: false,
+      mga: 'LỖI SEVER',
+    };
+  } else if (res.status === 200) {
+    return {
+      success: true,
+      mga: 'UPDATE THÀNH CÔNG',
+    };
+  } else {
+    return {
+      success: false,
+      mga: 'LỖI SEVER',
+    };
+  }
+};

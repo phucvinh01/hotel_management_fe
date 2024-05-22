@@ -7,8 +7,10 @@ import {
   useMutation,
 } from "@tanstack/react-query";
 
-import { getRooms , insertRoom,  updateRoom,  } from "./hotel.service";
 import { getTypeRooms, insertTyperoom, updateTyperoom, getImageTypeRoom, uploadMultipleImage, } from "./typeroom.service";
+import { getRooms, insertRoom, updateRoom } from "./room.service";
+import { getHotel, IHotel, updateHotel } from "./hotel.service";
+import { HotelResponse, IMutilpleImageUpload, InsertTyperoomAndImage, Room, SelectTypeRoom } from "@/types/hotel";
 
 // Query Typeroom
 
@@ -106,3 +108,29 @@ export function useUpdateRoom() {
     },
   });
 }
+
+//Query hotel 
+
+export function useGetHotel(id: string) {
+  return useQuery({
+    queryKey: ["hotel",id],
+    queryFn: () => getHotel(id),
+    placeholderData: keepPreviousData,
+    refetchOnWindowFocus: true,
+  });
+}
+
+export function useUpdateHotel() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (data: HotelResponse) => updateHotel(data),
+    onSuccess: async () => {
+        await queryClient.invalidateQueries({ queryKey: ['hotel'] }); 
+        await queryClient.prefetchQuery({ queryKey: ['hotel'] }); 
+    },
+    onError: async (error) => {
+      return "Cập nhật phòng thất bại";
+    },
+  });
+}
+

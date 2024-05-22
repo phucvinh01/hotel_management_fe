@@ -4,8 +4,9 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select'
 import axios from 'axios'
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { FileData } from './upload-image';
+
 
 type formHotelInfoProps = {
   setFormData:Dispatch<SetStateAction<Hotel | undefined>>,
@@ -19,24 +20,25 @@ const [provinces, setProvinces] = useState([]);
   const [selectedProvince, setSelectedProvince] = useState<any>();
   const [districts, setDistricts] = useState([]);
   const [selectedDistrict, setSelectedDistrict] = useState<any>();
+  const [address, setAddress] = useState<string>("");
 
 
   useEffect(() => {
-    axios.get('https://vnprovinces.pythonanywhere.com/api/provinces/?is_border=false&is_coastal=false&basic=true&limit=100')
+    axios.get('http://localhost:8000/api/address/provices')
       .then(response => {
-        setProvinces(response.data.results);
+        setProvinces(response.data);
       })
       .catch(error => {
         console.error('Error fetching provinces:', error);
       });
   }, []);
 
+
   useEffect(() => {
     if (selectedProvince) {
-      axios.get(`https://vnprovinces.pythonanywhere.com/api/provinces/${selectedProvince}/?basic=true
-`)
+      axios.get(`http://localhost:8000/api/address/provices/district?id=${selectedProvince.code}`)
         .then(response => {
-          setDistricts(response.data.districts);
+          setDistricts(response.data);
         })
         .catch(error => {
           console.error('Error fetching districts:', error);
@@ -54,6 +56,14 @@ const [provinces, setProvinces] = useState([]);
   const handleDistrictChange = (selectedOption:any) => {
     setSelectedDistrict(selectedOption);
   };
+
+  const handleChange = (e:ChangeEvent<HTMLInputElement>) => {
+
+    setAddress(e.target.value);
+    const fullAddress = e.target.value + ", " + selectedDistrict.name+ ", " + selectedProvince.name ;
+    console.log(fullAddress);
+    setFormData((prev) => ({ ...prev!, Address:fullAddress}))
+  }
 
   
   return (
@@ -78,8 +88,7 @@ const [provinces, setProvinces] = useState([]);
                 <div>
                   <Label htmlFor='city'>Thành phố</Label>
                   <Select name='city' 
-                  value={selectedProvince}
-                  onValueChange={(e) =>handleProvinceChange(e)}>
+                    onValueChange={(e) =>handleProvinceChange(e)}>
                     <SelectTrigger className='w-full'>
                       <SelectValue />
                     </SelectTrigger>
@@ -89,7 +98,7 @@ const [provinces, setProvinces] = useState([]);
                         {
                           provinces.map((item:any, index:number) => {
                             return (
-                              <SelectItem key={index} value={item.id}>{item.name}</SelectItem>
+                              <SelectItem key={index} value={item}>{item.name}</SelectItem>
                             )
                           })
                           }
@@ -100,7 +109,6 @@ const [provinces, setProvinces] = useState([]);
                 <div>
                   <Label htmlFor='district'>Huyện</Label>
                   <Select name='district'
-                  value={selectedDistrict}
                   onValueChange={(e) =>handleDistrictChange(e)}>
                     <SelectTrigger className='w-full'>
                       <SelectValue  />
@@ -111,7 +119,7 @@ const [provinces, setProvinces] = useState([]);
                         {
                           districts.map((item:any, index:number) => {
                             return (
-                              <SelectItem key={index} value={item.id}>{item.name}</SelectItem>
+                              <SelectItem key={index} value={item}>{item.name}</SelectItem>
                             )
                           })
                           }
@@ -124,8 +132,8 @@ const [provinces, setProvinces] = useState([]);
                   <Input
                     id='strees'
                     type='text'
-                    value={data?.Address}
-                  onChange={(e) => setFormData((prev) => ({ ...prev!, Address:`${e.target.value}` }))}
+                    value={address}
+                    onChange={(e) => handleChange(e)}
                   />
                 </div>
               </div>
@@ -159,7 +167,7 @@ const [provinces, setProvinces] = useState([]);
             <div className='space-y-1'>
               <Label htmlFor='time-checkout'>Thời gian check-out</Label>
               <Input
-              value={data?.TimeCheckOut}
+                value={data?.TimeCheckOut}
 
                  onChange={(e) => setFormData((prev) => ({ ...prev!, TimeCheckOut: e.target.value }))}
                 type='time'
@@ -170,31 +178,7 @@ const [provinces, setProvinces] = useState([]);
           
         </Card>
 
-          {/* <Card className='w-1/2'>
-            <CardHeader className='flex flex-row justify-between items-center'>
-              <CardTitle>Thông tin liên hệ</CardTitle>
-            </CardHeader >
-            <CardContent className='space-y-2'>
-              <div className='space-y-1'>
-                <Label htmlFor='fullname'>Họ và tên</Label>
-                <Input
-                  id='fullname'
-                  defaultValue='Pedro Duarte'
-                />
-              </div>
-              <div className='space-y-1'>
-                <Label htmlFor='email-contact'>Địa chỉ email</Label>
-                <Input id='email-contact' />
-              </div>
-              <div className='space-y-1'>
-                <Label htmlFor='phone-contact'>Số điện thoại</Label>
-                <Input
-                  id='phone-contact'
-                  type='tel'
-                />
-              </div>
-            </CardContent>
-          </Card> */}
+          
         </div>
   )
 }

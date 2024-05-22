@@ -169,9 +169,15 @@ const FormTypeRoom = ({
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
-                    <SelectItem value='single'>Đơn</SelectItem>
-                    <SelectItem value='couple'>Đôi</SelectItem>
-                  </SelectGroup>
+                  <SelectItem value={'Single'}>Single</SelectItem>
+                  <SelectItem value={'Double'}>Double</SelectItem>
+                  <SelectItem value={'Queen'}>Queen</SelectItem>
+                  <SelectItem value={'King'}>King</SelectItem>
+                  <SelectItem value={'Superking'}>Super king</SelectItem>
+                  <SelectItem value={'Murphy'}>Murphy</SelectItem>
+                  <SelectItem value={'Bunk'}>Bunk</SelectItem>
+                  <SelectItem value={'Round'}>Round</SelectItem>
+                </SelectGroup>
                 </SelectContent>
               </Select>
             </div>
