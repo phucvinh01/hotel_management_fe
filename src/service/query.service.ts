@@ -10,7 +10,6 @@ import {
 import { getTypeRooms, insertTyperoom, updateTyperoom, getImageTypeRoom, uploadMultipleImage, } from "./typeroom.service";
 import { getRooms, insertRoom, updateRoom } from "./room.service";
 import { getHotel, IHotel, updateHotel } from "./hotel.service";
-import { HotelResponse, IMutilpleImageUpload, InsertTyperoomAndImage, Room, SelectTypeRoom } from "@/types/hotel";
 
 // Query Typeroom
 

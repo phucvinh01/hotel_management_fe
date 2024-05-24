@@ -154,6 +154,7 @@ export const loginWithAdministrator = async (
 ): Promise<LoginAdminResult | undefined> => {
   try {
     const data = await axios.post(`/login-administrator`, formData);
+    console.log(data);
     if (data.status === 200) {
         return {
           user:data.data,
@@ -165,7 +166,7 @@ export const loginWithAdministrator = async (
          return {
           user:null,
           success:false,
-          message:"Email không tồn tại, bạn cần đăng ký"
+          message:"DON'T HAVE ACCOUNT"
         };
       }
       else if(data.status == PHONE) {

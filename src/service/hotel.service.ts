@@ -128,23 +128,21 @@ export const getHotelsByProvince = async (
 
 export type InsertResult = {
   id: string;
+  message?:string;
   hotel_id: string;
+  status?:boolean;
 };
 
 export const insertHotel = async (
-  body: Hotel | undefined,
-): Promise<string | false | undefined> => {
-  try {
+  body: Hotel,
+): Promise<InsertResult | undefined> => {
     const response = await http.post<InsertResult>(`/hotel/insert-hotel`, body);
     if (response.status === 200) {
-      return response.data.id;
+      return response.data;
     }
     if (response.status === 500) {
-      return false;
+      return response.data;
     }
-  } catch (error) {
-    return false;
-  }
 };
 
 export const insertTyperoom = async (

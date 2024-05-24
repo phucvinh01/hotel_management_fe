@@ -126,7 +126,7 @@ export function RegisterFormPartnert({
     else {
        toast({
         variant: "destructive",
-        title: respone?.message,
+        title:  "Erorr",
         description: respone?.message,
       });
       setIsLoading(false);
@@ -175,6 +175,8 @@ export function RegisterFormPartnert({
                   <span className='grid w-full items-center gap-1.5'>
                     <Label htmlFor='setPhone'>Số điện thoại của bạn ?</Label>
                     <Input
+                     min={0}
+                      maxLength={10}
                       onChange={(e) => setPhone(e.target.value as string)}
                       className='w-full'
                       type='tel'

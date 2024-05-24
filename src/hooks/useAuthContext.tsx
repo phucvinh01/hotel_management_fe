@@ -108,11 +108,13 @@ export function AuthProvider({ children }: Props) {
             }
           }
     }
-    else {
+    else if(respone?.message === "DON'T HAVE ACCOUNT") {
       toast({
         variant:"destructive",
-        title: respone?.message
+        title: "Bạn chưa có tài khoản",
+        description: "Đang chuyển hướng sang trang đăng ký"
       })
+      router.push('/app/partner/register')
     }
 
     

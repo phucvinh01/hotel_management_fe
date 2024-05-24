@@ -140,12 +140,13 @@ const [provinces, setProvinces] = useState([]);
               <div className='space-y-1'>
                 <Label htmlFor='phone'>Số điện thoại</Label>
                 <Input
-                value={data?.Telephone}
-                 onChange={(e) => setFormData((prev) => ({ ...prev!, Telephone: e.target.value }))}
+                  value={data?.Telephone}
+                  onChange={(e) => setFormData((prev) => ({ ...prev!, Telephone: e.target.value }))}
                   id='phone'
-                  type='tel'
-                  maxLength={12}
-                  minLength={1}
+                  type='number'
+                  maxLength={10}
+                  minLength={10}
+                  max={10}
                 />
               </div>
             </CardContent>
