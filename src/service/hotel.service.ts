@@ -128,21 +128,21 @@ export const getHotelsByProvince = async (
 
 export type InsertResult = {
   id: string;
-  message?:string;
+  message?: string;
   hotel_id: string;
-  status?:boolean;
+  status?: boolean;
 };
 
 export const insertHotel = async (
   body: Hotel,
 ): Promise<InsertResult | undefined> => {
-    const response = await http.post<InsertResult>(`/hotel/insert-hotel`, body);
-    if (response.status === 200) {
-      return response.data;
-    }
-    if (response.status === 500) {
-      return response.data;
-    }
+  const response = await http.post<InsertResult[]>(`/hotel/insert-hotel`, body);
+  if (response.status === 200) {
+    return response.data[0];
+  }
+  if (response.status === 500) {
+    return response.data[0];
+  }
 };
 
 export const insertTyperoom = async (
@@ -306,17 +306,17 @@ export const updateImageCover = async (
   body: IUploadCoverImagePayload,
 ): Promise<IUploadCoverImageResult> => {
   const res = await axios.post<IUploadCoverImageResult>(
-      `http://localhost:8000/api/update-cover-image-hotel`,
-      body,
-      {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          'X-Requested-With': 'XMLHttpRequest',
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Credentials': 'true',
-        },
+    `http://localhost:8000/api/update-cover-image-hotel`,
+    body,
+    {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        'X-Requested-With': 'XMLHttpRequest',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': 'true',
       },
-    );
+    },
+  );
   if (res.status === 400) {
     return {
       success: false,
@@ -338,4 +338,39 @@ export const updateImageCover = async (
       mga: 'LỖI SEVER',
     };
   }
+};
+
+export type IGetRenvenuResutl = {
+  today: {
+    day: string;
+    revenue: string;
+    comparison: string;
+  };
+  week: {
+    from: string;
+    to: string;
+    revenue: string;
+    revenueByDay: string[];
+    comparison: string;
+  };
+  month: {
+    from: string;
+    to: string;
+    revenue: string;
+    revenueByWeek: string[];
+    comparison: string;
+  };
+  bookingByDay: string[];
+  bookingByWeek: string[];
+  bookingByMonth: string[];
+  bookingByYear: string[];
+};
+
+export const getRenvenuByHotel = async (
+  id: string | undefined,
+): Promise<IGetRenvenuResutl> => {
+  const res = await http.get<IGetRenvenuResutl>(
+    `/hotel/get-renvenu?idHotel=${id}`,
+  );
+  return res.data;
 };

@@ -1,7 +1,7 @@
 "use client";;
+import { ModalEditRoom } from "@/app/(admin)/dashbroad/rooms/[room]/_components/modal-edit-room";
 import { Row } from "@tanstack/react-table"
 
-import { ModalEditRoom } from "@/app/(admin)/dashbroad/rooms/[room]/modal-edit-room";
 
 
 interface DataTableRowActionsProps<TData> {

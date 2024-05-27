@@ -1,12 +1,11 @@
-import ECommerce from "@/components/admin/Dashboard/E-commerce";
 import { Metadata } from "next";
 import DefaultLayout from "@/components/admin/Layouts/DefaultLayout";
+import Dashbroad from "./_components/Dashbroad";
 
 
 export const metadata: Metadata = {
   title:
-    "TERA Partner",
-  description: "This is Next.js Home for TailAdmin Dashboard Template",
+    "Dashbroad for Administrator",
 };
 
 
@@ -16,7 +15,7 @@ export default async function Home() {
   return (
     <div>
       <DefaultLayout>
-        <ECommerce />
+        <Dashbroad />
       </DefaultLayout>
     </div>
   );
