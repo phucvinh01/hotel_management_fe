@@ -169,7 +169,6 @@ const [provinces, setProvinces] = useState([]);
               <Label htmlFor='time-checkout'>Thời gian check-out</Label>
               <Input
                 value={data?.TimeCheckOut}
-
                  onChange={(e) => setFormData((prev) => ({ ...prev!, TimeCheckOut: e.target.value }))}
                 type='time'
                 id='time-checkout'

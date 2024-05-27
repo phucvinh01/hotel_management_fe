@@ -5,7 +5,6 @@ import { ColumnDef } from "@tanstack/react-table"
 
 
 import { formatCurrency } from "@/lib/formatCurrency"
-import { Checkbox } from "@/components/ui/checkbox"
 import { DataTableColumnHeader } from "@/components/table/data-table-column-header"
 import { labels } from "@/components/table/data/data"
 import { DataTableRowActions } from "./data-table-row-actions"

@@ -9,7 +9,8 @@ import {
 
 import { getTypeRooms, insertTyperoom, updateTyperoom, getImageTypeRoom, uploadMultipleImage, } from "./typeroom.service";
 import { getRooms, insertRoom, updateRoom } from "./room.service";
-import { getHotel, IHotel, updateHotel } from "./hotel.service";
+import { getHotel, getRenvenuByHotel, IHotel, updateHotel } from "./hotel.service";
+import { getBookings } from "./_booking.service";
 
 // Query Typeroom
 
@@ -110,6 +111,16 @@ export function useUpdateRoom() {
 
 //Query hotel 
 
+export function useGetRenvenuHotel(id: string | undefined) {
+  return useQuery({
+    queryKey: ["renvenuHotel",id],
+    queryFn: () => getRenvenuByHotel(id),
+    placeholderData: keepPreviousData,
+    refetchOnWindowFocus: true,
+  });
+}
+
+
 export function useGetHotel(id: string) {
   return useQuery({
     queryKey: ["hotel",id],
@@ -133,3 +144,16 @@ export function useUpdateHotel() {
   });
 }
 
+
+//Booking
+
+
+
+export function useGetBooking(idHotel: string) {
+  return useQuery({
+    queryKey: ["useGetBooking",idHotel],
+    queryFn: () => getBookings(idHotel),
+    placeholderData: keepPreviousData,
+    refetchOnWindowFocus: true,
+  });
+}

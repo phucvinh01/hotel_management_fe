@@ -3,12 +3,11 @@
 import { ColumnDef } from "@tanstack/react-table"
 
 
-import { labels, priorities, statuses } from "./data/data"
-import { DataTableColumnHeader } from "./data-table-column-header"
-import { DataTableRowActions } from "./data-table-row-actions"
-import { Checkbox } from "../ui/checkbox"
-import Badge from './../shared/Badge';
+import { labels } from "../../../../../../components/table/data/data";
+import { DataTableColumnHeader } from "../../../../../../components/table/data-table-column-header"
+import Badge from '../../../../../../components/shared/Badge';
 import { formatCurrency } from "@/lib/formatCurrency"
+import { DataTableRowActions } from "./data-table-row-actions";
 
 export const columns: ColumnDef<SelectRoomsResult>[] = [
   {

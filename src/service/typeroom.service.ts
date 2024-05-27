@@ -75,7 +75,6 @@ export const insertTyperooms = async (
       return response.data;
     }
   } catch (error) {
-    throw error;
     return false;
   }
 };

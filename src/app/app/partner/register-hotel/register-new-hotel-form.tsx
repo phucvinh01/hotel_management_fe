@@ -53,7 +53,7 @@ export function RegisterNewHotelForm() {
 
       const id_hotel = await insertHotel(dataHotel as Hotel);
      
-
+      console.log(id_hotel);
       if (id_hotel && id_hotel?.status) {
         const res = await uploadImage(
           filesImageHotel[0].file,
@@ -157,7 +157,7 @@ export function RegisterNewHotelForm() {
           description: id_hotel?.message,
           variant: 'destructive',
         });
-        setIsLoading(true);
+        setIsLoading(false);
       }
     } catch (error) {
       throw error;
