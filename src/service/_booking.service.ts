@@ -14,6 +14,13 @@ export type IResultGetBookings = {
   member_count: number;
 };
 
+export type IUpdateStatusBooking = {
+  confirm_by:string,
+  id_booking: string,
+  status: number
+  message?:string
+}
+
 export const getBookings = async (
   idHotel: string,
 ): Promise<IResultGetBookings[] | undefined> => {
@@ -26,3 +33,14 @@ export const getBookings = async (
     console.log(error);
   }
 };
+
+export const updateStatusBooking = async (body:IUpdateStatusBooking): Promise<IUpdateStatusBooking | undefined> => {
+  try {
+    const result = await http.put<IUpdateStatusBooking>(`/update-state-booking`, body);
+    if(result.status === 200) {
+      return result.data
+    }
+  } catch (error :any) {
+    return error
+  }
+}
