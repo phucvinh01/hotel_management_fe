@@ -48,11 +48,9 @@ const Dashbroad: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className='text-2xl font-bold'>
-              {formatCurrency(renvenu?.today.comparison as string)}
+              {formatCurrency(renvenu?.today.revenue as string)}
             </div>
-            <p className='text-xs text-muted-foreground'>
-              {renvenu?.today.comparison}% so với hôm qua
-            </p>
+          
           </CardContent>
         </Card>
         <Card>
@@ -76,9 +74,7 @@ const Dashbroad: React.FC = () => {
             <div className='text-2xl font-bold'>
               {formatCurrency(renvenu?.month.revenue as string)}
             </div>
-            <p className='text-xs text-muted-foreground'>
-              {renvenu?.month.comparison}% so với tháng trước
-            </p>
+           
           </CardContent>
         </Card>
         <Card>
@@ -102,9 +98,7 @@ const Dashbroad: React.FC = () => {
             <div className='text-2xl font-bold'>
               {formatCurrency(renvenu?.week.revenue as string)}
             </div>
-            <p className='text-xs text-muted-foreground'>
-              {renvenu?.week.comparison}% so với tuần trước
-            </p>
+           
           </CardContent>
         </Card>
         <Card>
