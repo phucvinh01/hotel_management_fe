@@ -5,9 +5,25 @@ import { DataTableColumnHeader } from "@/components/table/data-table-column-head
 import { labels } from "@/components/table/data/data"
 import { IResultGetBookings } from "@/service/_booking.service"
 import { ColumnDef } from "@tanstack/react-table"
+import { DataTableRowActions } from "./data-table-row-actions"
 
 
-
+const getColorByBookingStatus = (status:string) => {
+  switch (status) {
+    case 'Đã xác nhận':
+      return 'blue'
+    case 'Yêu cầu hủy':
+      return 'pink';
+    case 'Đã hủy':
+      return 'red';
+    case 'Checked out':
+      return 'gray';
+    case 'Đang ở':
+      return 'green';
+    default:
+      return 'purple';
+  }
+};
 
 export const columns: ColumnDef<IResultGetBookings>[] = [
   {
@@ -94,6 +110,7 @@ export const columns: ColumnDef<IResultGetBookings>[] = [
         <div className="flex space-x-2">
           {label && label.label}
          <span className="max-w-[500px] truncate font-medium">
+          
             <Badge name={row.getValue("check_in_date")} color="purple"/>
 
           </span>
@@ -140,7 +157,7 @@ export const columns: ColumnDef<IResultGetBookings>[] = [
         <div className="flex space-x-2">
           {label && label.label}
          <span className="max-w-[500px] truncate font-medium">
-            <Badge name={row.getValue("created_at")} color="purple"/>
+            <Badge name={row.getValue("created_at")} />
 
           </span>
         </div>
@@ -163,7 +180,7 @@ export const columns: ColumnDef<IResultGetBookings>[] = [
         <div className="flex space-x-2">
           {label && label.label}
          <span className="max-w-[500px] truncate font-medium">
-            <Badge name={row.getValue("booking_status")} color="purple"/>
+            <Badge name={row.getValue("booking_status")} color={getColorByBookingStatus(row.getValue("booking_status"))}/>
 
           </span>
         </div>
@@ -176,6 +193,6 @@ export const columns: ColumnDef<IResultGetBookings>[] = [
   },
   {
     id: "actions",
-    // cell: ({ row }) => <DataTableRowActions row={row} />,
+    cell: ({ row }) => <DataTableRowActions row={row} />,
   },
 ]

@@ -360,10 +360,7 @@ export type IGetRenvenuResutl = {
     revenueByWeek: string[];
     comparison: string;
   };
-  bookingByDay: string[];
-  bookingByWeek: string[];
-  bookingByMonth: string[];
-  bookingByYear: string[];
+  booking_rate_typeroom: string[];
 };
 
 export const getRenvenuByHotel = async (

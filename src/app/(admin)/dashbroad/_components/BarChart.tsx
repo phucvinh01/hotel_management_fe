@@ -20,6 +20,8 @@ const BarChartComponent = ({ series }: { series: IGetRenvenuResutl | undefined }
 
   const todayFormatted = formatDate(currentDate);
 
+  console.table(series?.month.revenueByWeek)
+
   return (
     <Card>
       <CardContent className='p-4'>
@@ -48,7 +50,7 @@ const BarChartComponent = ({ series }: { series: IGetRenvenuResutl | undefined }
                 <XAxis
                   dataKey='name'
                   stroke='#888888'
-                  fontSize={12}
+                  fontSize={14}
                   tickLine={false}
                   axisLine={false}
                 />
@@ -60,7 +62,7 @@ const BarChartComponent = ({ series }: { series: IGetRenvenuResutl | undefined }
                   tickFormatter={(value) => `$${value}`}
                 />
                 <Bar
-                  dataKey='total'
+                  dataKey='data'
                   fill='currentColor'
                   radius={[4, 4, 0, 0]}
                   className='fill-primary'
@@ -88,7 +90,7 @@ const BarChartComponent = ({ series }: { series: IGetRenvenuResutl | undefined }
                   tickFormatter={(value) => `$${value}`}
                 />
                 <Bar
-                  dataKey='total'
+                  dataKey='data'
                   fill='currentColor'
                   radius={[4, 4, 0, 0]}
                   className='fill-primary'
