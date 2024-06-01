@@ -12,6 +12,14 @@ export type IResultGetBookings = {
   created_at: string;
   booking_status: string;
   member_count: number;
+  members: [
+            {
+                BookHotelId: string,
+                FullName: string,
+                DateOfBirth: string,
+                Sex: number
+            },
+        ]
 };
 
 export type IUpdateStatusBooking = {

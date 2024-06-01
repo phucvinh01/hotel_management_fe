@@ -40,7 +40,10 @@ export function AlertComfrim({data}:AlertComfrimProp) {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button variant="outline"><Check color="green"/></Button>
+        <div className='px-2 py-1 bg-cyan-500 rounded-3xl border hover:cursor-pointer hover:outline-2 flex gap-3'>
+             <span>Xác nhận</span> <Check color="green"/>
+          </div>
+        
       </AlertDialogTrigger>
       <AlertDialogContent className="bg-white dark:bg-black rounded-xl text-black dark:text-white">
         <AlertDialogHeader>
