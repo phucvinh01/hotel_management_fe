@@ -25,6 +25,7 @@ import { useAuth } from '@/hooks/useAuthContext';
 import { Textarea } from '@/components/ui/textarea';
 import { toast } from '@/components/ui/use-toast';
 import { useCreateRoom, useGetTypeRooms } from '@/service/query.service';
+import { AVAILABLE, EMPTY, INAVAILABLE, NOT_EMPTY } from '@/constant';
 
 export function ModalAddRoom() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -129,8 +130,8 @@ export function ModalAddRoom() {
               </SelectTrigger>
               <SelectContent className='bg-white text-black dark:bg-black dark:text-white'>
                 <SelectGroup>
-                  <SelectItem value={'0'}>Trống</SelectItem>
-                  <SelectItem value={'1'}>Đang thuê</SelectItem>
+                  <SelectItem value={'0'}>{EMPTY}</SelectItem>
+                  <SelectItem value={'1'}>{NOT_EMPTY}</SelectItem>
                 </SelectGroup>
               </SelectContent>
             </Select>

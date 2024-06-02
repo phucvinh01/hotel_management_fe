@@ -81,7 +81,7 @@ interface Rate {
 interface Room {
   id?: string;
   TypeRoomId?: string;
-  State?: string;
+  State?: number;
   TimeRecive?: string;
   TimeLeave?: string;
   Gift?: string;
@@ -97,7 +97,6 @@ interface Room {
   RoomName?: string;
   Bao_Gom_Thue_Va_Phi?: number;
   quannity?: number
-
   typeroom?: ITypeRoom;
 }
 

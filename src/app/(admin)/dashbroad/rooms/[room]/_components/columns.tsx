@@ -8,6 +8,7 @@ import { DataTableColumnHeader } from "../../../../../../components/table/data-t
 import Badge from '../../../../../../components/shared/Badge';
 import { formatCurrency } from "@/lib/formatCurrency"
 import { DataTableRowActions } from "./data-table-row-actions";
+import { AVAILABLE, EMPTY, INAVAILABLE, NOT_EMPTY } from "@/constant";
 
 export const columns: ColumnDef<SelectRoomsResult>[] = [
   {
@@ -50,7 +51,7 @@ export const columns: ColumnDef<SelectRoomsResult>[] = [
         <div className="flex space-x-2">
           {label && label.label}
           <span className="max-w-[500px] truncate font-medium">
-          <Badge name={  row.getValue("State") === 0 ? "Trống" : "Đang được thuê"} color={row.getValue("State") === 1 ? "green" : "gray"}/>
+          <Badge name={  row.getValue("State") === AVAILABLE ? EMPTY : NOT_EMPTY } color={row.getValue("State") === AVAILABLE ? "gray" : "green"}/>
           </span>
         </div>
       )

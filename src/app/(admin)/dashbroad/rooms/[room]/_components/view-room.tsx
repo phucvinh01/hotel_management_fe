@@ -1,5 +1,16 @@
 import Badge from '@/components/shared/Badge';
+import { AVAILABLE, EMPTY, NOT_EMPTY } from '@/constant';
 import React from 'react';
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
 
 type ViewRoomProps = {
   room: Room;
@@ -12,8 +23,8 @@ const ViewRoom = ({ room, typerooms, className }: ViewRoomProps) => {
     <div className={`grid gird-col-12  p-4 border-t ${className}`}>
       <div className='col-span-12 flex justify-end items-center'>
         <Badge
-          name={room.State === 0 ? 'Trống' : 'Đang được thuê'}
-          color={room.State === 0 ? 'gray' : 'green'}
+          name={room.State === AVAILABLE ? EMPTY : NOT_EMPTY}
+          color={room.State === AVAILABLE ? 'gray' : 'green'}
         />
       </div>
       <div className='mt-4 col-span-6 space-y-3'>
@@ -31,24 +42,7 @@ const ViewRoom = ({ room, typerooms, className }: ViewRoomProps) => {
           <dd className='font-bold text-[14px]'>{room.Discount}</dd>
         </dl>
       </div>
-      <div className='mt-4 col-span-6 space-y-3'>
-        <h3 className='text-sm font-bold'>Thông tin thuê</h3>
-        <dl className='grid grid-cols-2 gap-4'>
-          <dt className='text-gray-600'>Trạng thái:</dt>
-          <dd className='font-bold text-[14px]'>
-            {room.State === 0 ? 'Trống' : 'Đang được thuê'}
-          </dd>
-          <dt className='text-gray-600'>Người thuê:</dt>
-          <dd className='font-bold text-[14px]'></dd>{' '}
-          <dt className='text-gray-600'>Số ngày thuê: </dt>
-          <dd className='font-bold text-[14px]'>{''}</dd>
-          <dt className='text-gray-600'>Thời gian đến:</dt>
-          <dd className='font-bold text-[14px]'>{room.TimeRecive}</dd>
-          <dt className='text-gray-600'>Thời gian đi:</dt>
-          <dd className='font-bold text-[14px]'>{room.TimeLeave}</dd>{' '}
-        </dl>
-      </div>
-      <div className='mt-4 col-span-12'>
+      <div className='mt-4 col-span-6'>
         <h3 className='text-sm font-bold'>Tiện ích</h3>
         <ul className='list-disc pl-4 mt-2'>
           <li hidden={room.Wifi === 0}>{room.Wifi === 1 ? 'Wifi' : ''}</li>
@@ -65,6 +59,45 @@ const ViewRoom = ({ room, typerooms, className }: ViewRoomProps) => {
             {room.Hinh_Thuc_Thanh_Toan === 1 ? 'Thanh toán online' : ''}
           </li>
         </ul>
+      </div>
+      <div className='mt-4 col-span-12 space-y-3'>
+        <h3 className='text-sm font-bold'>Thông tin thuê</h3>
+        <Table>
+          <TableHeader>
+            <TableRow className='w-full border-b bg-gray-200'>
+              <TableHead className='text-left py-2 px-4 text-gray-600'>
+                Trạng thái
+              </TableHead>
+              <TableHead className='text-left py-2 px-4 text-gray-600'>
+                Người thuê
+              </TableHead>
+              <TableHead className='text-left py-2 px-4 text-gray-600'>
+                Số ngày thuê
+              </TableHead>
+              <TableHead className='text-left py-2 px-4 text-gray-600'>
+                Thời gian đến
+              </TableHead>
+              <TableHead className='text-left py-2 px-4 text-gray-600'>
+                Thời gian đi
+              </TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            <TableRow className='w-full border-b'>
+              <TableCell className='font-bold text-[14px] py-2 px-4'>
+                {room.State === AVAILABLE ? EMPTY : NOT_EMPTY}
+              </TableCell>
+              <TableCell className='font-bold text-[14px] py-2 px-4'></TableCell>
+              <TableCell className='font-bold text-[14px] py-2 px-4'></TableCell>
+              <TableCell className='font-bold text-[14px] py-2 px-4'>
+                {room.TimeRecive}
+              </TableCell>
+              <TableCell className='font-bold text-[14px] py-2 px-4'>
+                {room.TimeLeave}
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
       </div>
     </div>
   );

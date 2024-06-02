@@ -11,6 +11,7 @@ import {
 import { Checkbox } from '@/components/ui/checkbox';
 
 import React, { Dispatch, Fragment, SetStateAction } from 'react'
+import { EMPTY, NOT_EMPTY } from '@/constant';
 
 type FormEditRoomProps = {
     room:Room,
@@ -90,9 +91,8 @@ const stateValue = room.State === 1 ? '1' : '0'
                   </SelectTrigger>
                   <SelectContent className='bg-white dark:bg-black dark:text-white'>
                     <SelectGroup>
-                      <SelectItem value='0'>Trống</SelectItem>
-                      <SelectItem value='1'>Đang thuê</SelectItem>
-                      <SelectItem value='1'>Bảo trì</SelectItem>
+                      <SelectItem value='0'>{EMPTY}</SelectItem>
+                      <SelectItem value='1'>{NOT_EMPTY}</SelectItem>
                     </SelectGroup>
                   </SelectContent>
                 </Select>
