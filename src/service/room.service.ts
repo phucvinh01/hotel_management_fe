@@ -1,5 +1,5 @@
-import http from "@/axios/http";
-import { InsertResult } from "./hotel.service";
+import http from '@/axios/http';
+import { InsertResult } from './hotel.service';
 
 export const insertRooms = async (
   body: Room | undefined,
@@ -71,5 +71,47 @@ export const updateRoom = async (body: Room): Promise<boolean | undefined> => {
   } catch (error) {
     console.error('Error fetching rooms:', error);
     return false;
+  }
+};
+
+export type IgetRoomAvailability = {
+  hotelId: string;
+  start_date: string;
+  end_date: string;
+};
+
+export type IAvailability = {
+  date: string;
+  status: number;
+  booking_id: string;
+  guest_id: string;
+  check_in_date: string;
+  check_out_date: string;
+  booking_status: string;
+};
+export type IgetRoomAvailabilityResult = {
+  room_id: string;
+  room_name: string;
+  type_name: string;
+  type_price: number;
+  hotel_name: string;
+  availability: IAvailability[];
+};
+
+export const getRoomAvailability = async (
+  body: IgetRoomAvailability,
+): Promise<IgetRoomAvailabilityResult[] | undefined> => {
+  try {
+    const response = await http.get<IgetRoomAvailabilityResult[]>(
+      `/room/room-availability?hotelId=${body.hotelId}&start_date=${body.start_date}&end_date=${body.end_date}`,
+    );
+    if (response.status === 200) {
+      return response.data;
+    } else {
+      throw new Error(`Error fetching rooms: Status ${response.status}`);
+    }
+  } catch (error) {
+    console.error('Error fetching rooms:', error);
+    throw error; 
   }
 };

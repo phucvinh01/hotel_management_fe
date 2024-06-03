@@ -195,6 +195,16 @@ const id = getHotelId();
                         <ul className='mb-5.5 mt-4 flex flex-col gap-2.5 pl-6'>
                           <li>
                             <Link
+                              href={`/dashbroad/rooms/calendar-availability`}
+                              className={`group relative text-sm flex items-center gap-2.5 rounded-3xl px-4 font-medium text-bodydark2 duration-300 ease-in-out ${
+                                pathname === '/rooms' &&
+                                'text-white'
+                              }`}>
+                              Calendar
+                            </Link>
+                          </li>
+                          <li>
+                            <Link
                               href={`/dashbroad/rooms/${id}`}
                               className={`group relative text-sm flex items-center gap-2.5 rounded-3xl px-4 font-medium text-bodydark2 duration-300 ease-in-out ${
                                 pathname === '/rooms' &&
@@ -233,7 +243,6 @@ const id = getHotelId();
                   </span>
                 </Link>
               </li>
-
               <li>
                 <Link
                   href='/dashbroad/customer'
@@ -247,8 +256,6 @@ const id = getHotelId();
                   </span>
                 </Link>
               </li>
-
-
               <li>
                 <Link
                   href='/dashbroad/support'
