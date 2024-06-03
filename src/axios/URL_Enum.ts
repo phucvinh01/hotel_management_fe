@@ -8,4 +8,4 @@ enum URL_Enum {
     BaseURL_Rate = BaseURL + 'images/rate/',
     BaseURL_Image_Icon = BaseURL + 'images/icon/'
 }
-export default URL_Enum;
+export default URL_Enum;    

@@ -3,6 +3,7 @@ enum LocalStoreEnum {
     TOTAL_OLD_MEMBER = 'TotalOldMember',
     TOTAL_CHILD_MEMBER = 'TotalChildMember',
     START_DATE = 'StartDate',
-    TOTAL_ROOM = 'TotalRoom'
+    TOTAL_ROOM = 'TotalRoom',
+    IGUEST = 'IGuest',
 }
 export default LocalStoreEnum;

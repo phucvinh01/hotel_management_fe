@@ -27,6 +27,7 @@ export default function HotelDetail() {
     const [rateShortModaState, setRateShortModaState] = useState<boolean>(false);
     const [rateItem, setRateItem] = useState<IRate>();
     const [hotel, setHotel] = useState<IHotel>();
+    const [listRate, setListRate] = useState<IRate[]>([]);
     const [diadiemlancan, setDiadiemlancan] = useState<IDiaDiemLanCan[]>([]);
     const [avgRate, setAvgRate] = useState<number>(0);
     const [avgRateText, setAvgRateText] = useState<'Chưa có đánh giá' | 'Trung bình' | 'Tốt' | 'Ấn tượng'>('Chưa có đánh giá');
@@ -45,6 +46,7 @@ export default function HotelDetail() {
                 setHotel(response.data.result);
 
                 if (response.data.result.rates) {
+                    setListRate(response.data.result.rates);
                     var sumRate = 0;
 
                     response.data.result.rates.map((item: IRate) => {
@@ -674,8 +676,9 @@ export default function HotelDetail() {
 
                     </div>
                     {/* danh gia cua khach */}
-                    <RateHotel listRate={hotel.rates} avgRate={avgRate} avgRateText={avgRateText}
-                        targetElementRefTongQuan={targetElementRefs.DanhGia} />
+                    <RateHotel listRate={listRate} avgRate={avgRate} avgRateText={avgRateText}
+                        targetElementRefTongQuan={targetElementRefs.DanhGia}
+                        hotelId={`${hotel.id}`} setListRate={setListRate} />
 
                     {/* final bay  */}
                     <div className='my-3 w-full lg:w-10/12 flex flex-col lg:flex-row flex-wrap rounded-3xl h-[320px] items-end'>
@@ -714,7 +717,8 @@ export default function HotelDetail() {
                         <p className='text-2xl font-semibold text-gray-900'>
                             <b>Không tìm thấy những gì bạn cần?</b></p>
                         <button className='px-3 py-4 text-2xl font-bold text-white
-                            bg-blue-400 rounded-3xl my-3'>Tìm cơ sở lưu trú khác tại {hotel.province?.DisplayName}</button>
+                            bg-blue-400 rounded-3xl my-3'
+                            onClick={() => { route.push(`/app/hotel/search?provinceid=${hotel.Province_Id}`) }}>Tìm cơ sở lưu trú khác tại {hotel.province?.DisplayName}</button>
                     </div>
 
 

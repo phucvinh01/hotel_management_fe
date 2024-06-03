@@ -75,7 +75,7 @@
     @apply text-gray-500 font-medium text-lg;
   }
   .icon-input {
-    @apply absolute bg-gray-500 h-full flex flex-row items-center
+    @apply absolute bg-slate-50 h-full flex flex-row items-center border border-gray-300
     justify-center rounded-l-xl w-10;
   }
   .text-input {

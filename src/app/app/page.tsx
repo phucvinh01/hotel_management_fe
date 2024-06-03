@@ -121,78 +121,60 @@ export default function Home() {
     generateDsDate();
   }, [startDate]);
   const handleShowHideDsTinh = (): void => {
-    useEffect(() => {
-      if (allowShowHide === true) {
-        setDsTinhState('block');
-        setAllowShowHide(false);
-      }
-    }, [])
+    if (allowShowHide === true) {
+      setDsTinhState('block');
+      setAllowShowHide(false);
+    }
   }
   const handleShowHideDsDem = (): void => {
-    useEffect(() => {
-      if (allowShowHide === true) {
-        setDsDemState('block');
-        setAllowShowHide(false);
-      }
-    }, [])
+    if (allowShowHide === true) {
+      setDsDemState('block');
+      setAllowShowHide(false);
+    }
   }
   const handleShowHideChosenMember = (): void => {
-    useEffect(() => {
-      if (allowShowHide === true) {
-        setDsThanhVienState('block');
-        setAllowShowHide(false);
-      }
-    }, [])
+    if (allowShowHide === true) {
+      setDsThanhVienState('block');
+      setAllowShowHide(false);
+    }
   }
   const handleSelectedTinh = (tenTinh: string): void => {
-    useEffect(() => {
-      setValueTinh(tenTinh);
-      setDsTinhState('hidden');
-      setAllowShowHide(true);
-    }, [])
+    setValueTinh(tenTinh);
+    setDsTinhState('hidden');
+    setAllowShowHide(true);
 
   }
   const handleSelectedDem = (soDem: string): void => {
-    useEffect(() => {
-      setValueSoDem(soDem);
-      setDsDemState('hidden');
-      setAllowShowHide(true);
-    }, [])
+    setValueSoDem(soDem);
+    setDsDemState('hidden');
+    setAllowShowHide(true);
 
   }
   const handleCompliteMember = (e?: Event) => {
-    useEffect(() => {
-      if (e) { e.preventDefault(); }
-      setValueNguoiLonTreEmPhong(valueSoNguoiLon + ' Người lớn, ' + valueSoTreEm + ' Trẻ em, ' + valueSoPhong + ' Phòng');
-      setDsThanhVienState('hidden');
-      setAllowShowHide(true);
-    }, [])
+    if (e) { e.preventDefault(); }
+    setValueNguoiLonTreEmPhong(valueSoNguoiLon + ' Người lớn, ' + valueSoTreEm + ' Trẻ em, ' + valueSoPhong + ' Phòng');
+    setDsThanhVienState('hidden');
+    setAllowShowHide(true);
 
   }
   const handleAddNguoiLon = (e?: Event) => {
-    useEffect(() => {
-      if (e) { e.preventDefault(); }
-      if (valueSoNguoiLon > 0 && valueSoNguoiLon < 20) {
-        setValueSoNguoiLon(valueSoNguoiLon + 1);
-      }
-    }, [])
+    if (e) { e.preventDefault(); }
+    if (valueSoNguoiLon > 0 && valueSoNguoiLon < 20) {
+      setValueSoNguoiLon(valueSoNguoiLon + 1);
+    }
   }
   const handleSubstractNguoiLon = (e?: Event) => {
-    useEffect(() => {
-      if (e) { e.preventDefault(); }
-      if (valueSoNguoiLon > 1) {
-        setValueSoNguoiLon(valueSoNguoiLon - 1);
-      }
-    }, [])
+    if (e) { e.preventDefault(); }
+    if (valueSoNguoiLon > 1) {
+      setValueSoNguoiLon(valueSoNguoiLon - 1);
+    }
   }
 
   const handleAddTreEm = (e?: Event) => {
-    useEffect(() => {
-      if (e) { e.preventDefault(); }
-      if (valueSoTreEm < valueSoNguoiLon * 3) {
-        setValueSoTreEm(valueSoTreEm + 1);
-      }
-    }, [])
+    if (e) { e.preventDefault(); }
+    if (valueSoTreEm < valueSoNguoiLon * 3) {
+      setValueSoTreEm(valueSoTreEm + 1);
+    }
   }
   const handleSubstractTreEm = (e?: Event) => {
     if (e) { e.preventDefault(); }
@@ -201,21 +183,14 @@ export default function Home() {
   }
 
   const handleAddPhong = (e?: Event) => {
-    useEffect(() => {
-      if (e) { e.preventDefault(); }
-      if (valueSoPhong < valueSoNguoiLon && valueSoPhong < 8) { setValueSoPhong(valueSoPhong + 1); }
-    }, [])
-
+    if (e) { e.preventDefault(); }
+    if (valueSoPhong < valueSoNguoiLon && valueSoPhong < 8) { setValueSoPhong(valueSoPhong + 1); }
   }
   const handleSubstractPhong = (e?: Event) => {
-    useEffect(() => {
-      if (e) { e.preventDefault(); }
-      if (valueSoPhong > 1) {
-        setValueSoPhong(valueSoPhong - 1);
-      }
-    }, [])
-
-
+    if (e) { e.preventDefault(); }
+    if (valueSoPhong > 1) {
+      setValueSoPhong(valueSoPhong - 1);
+    }
   }
   const [provinces, setProvinces] = useState<IProvince[]>([]);
   const [selectedProvinceOption, setSelectedProvinceOption] = useState<string>('');
@@ -239,7 +214,7 @@ export default function Home() {
 
   return (
     <main className="w-full mb-10 p-3">
-      <div className="w-full radius rounded-3xl mt-1 shadow-md shadow-blue-500
+      <div className="w-full radius mt-1 shadow-md shadow-blue-500
             bg-gradient-to-b from-sky-500 via-sky-600 to-blue-700" style={{ height: 320 }}>
         <div className="flex h-3/4 w-full justify-center items-center">
           <Carousel className="w-full px-3" id='slider'>

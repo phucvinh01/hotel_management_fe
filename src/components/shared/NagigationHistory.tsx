@@ -1,24 +1,66 @@
 "use client"
-import { useState } from "react";
+import URL_Enum from "@/axios/URL_Enum";
+import { useAuth } from "@/hooks/useAuthContext";
+import axios from "axios";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
 interface IProps {
     pageName: string,
     setPageName: (pageName: string) => void,
 }
 const NavigationHistory = (props: IProps) => {
+    const { user, logout } = useAuth();
+    const route = useRouter();
+    const searchParam = useSearchParams();
     const { pageName, setPageName } = props;
+    const [modalErr, setModalErr] = useState<boolean>(false);
+    const [userGuest, setUserGuest] = useState<IGuest>();
     enum PageEnum {
         ThongBao = 'ThongBao',
         LichSu = 'LichSu',
         TaiKhoan = 'TaiKhoan',
         DangXuat = 'DangXuat'
     }
-    return (<div className="w-full bg-cyan-50 flex flex-col p-3 rounded-lg font-semibold text-xl border border-cyan-700">
-        <div className="flex flex-col w-full">
-            {/* <img/> */}
+
+    setPageName(searchParam.get('page') == 'notify' ? PageEnum.ThongBao :
+        searchParam.get('page') == 'history' ? PageEnum.LichSu :
+            searchParam.get('page') == 'account' ? PageEnum.TaiKhoan : PageEnum.DangXuat);
+
+
+    useEffect(() => {
+        console.log('user', user);
+        const fetchUser = (url: string) => {
+            axios.get(url).then((response) => {
+                console.log('room', response.data.result);
+                if (response.data.result === 'NOT_FOUND') { setModalErr(false); }
+                else {
+                    setUserGuest(response.data.result);
+                }
+                setUserGuest(response.data.result);
+            }).catch((err) => { console.log(err); })
+                .finally(() => { })
+        }
+        fetchUser(URL_Enum.BaseURL_Api + 'guest/get-one-by-email?email=' + user?.email);
+
+    }, []);
+
+    return (<div className="w-full text-gray-600 bg-cyan-50 flex flex-col p-3 rounded-lg font-semibold text-xl border border-cyan-700">
+        <div className="flex flex-row justify-start items-center w-full border-b ">
+            <img src={`${URL_Enum.BaseURL_Avarta}${userGuest?.Avarta != undefined ? userGuest.Avarta
+                : 'AvartaDefault.jpg'
+                }`} className="w-24 h-24 rounded-full" />
+            <div className="flex flex-col ">
+                <p>{userGuest?.Name}</p>
+                <p className="text-sm">{userGuest?.EmailContact}</p>
+            </div>
+
         </div>
-        <div className={`${pageName == PageEnum.ThongBao ? 'text-blue-500' : 'text-gray-900'} w-full flex flex-row justify-start items-center cursor-pointer hover:scale-95 my-2`}
-            onClick={() => { setPageName(PageEnum.ThongBao) }}>
+        <div className={`${pageName == PageEnum.ThongBao ? 'text-blue-500' : 'text-gray-600'} w-full flex flex-row justify-start items-center cursor-pointer hover:scale-95 my-2`}
+            onClick={() => {
+                setPageName(PageEnum.ThongBao);
+                route.push('/app/hotel/lichsu?page=notify');
+            }}>
             <span >
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-bell text-blue-500 font-bold" viewBox="0 0 16 16">
                     <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2M8 1.918l-.797.161A4 4 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4 4 0 0 0-3.203-3.92zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5 5 0 0 1 13 6c0 .88.32 4.2 1.22 6" />
@@ -27,8 +69,11 @@ const NavigationHistory = (props: IProps) => {
             Thông báo
         </div>
 
-        <div className={`${pageName == PageEnum.LichSu ? 'text-blue-500' : 'text-gray-900'} w-full flex flex-row justify-start items-center cursor-pointer hover:scale-95 my-2`}
-            onClick={() => { setPageName(PageEnum.LichSu) }}>
+        <div className={`${pageName == PageEnum.LichSu ? 'text-blue-500' : 'text-gray-600'} w-full flex flex-row justify-start items-center cursor-pointer hover:scale-95 my-2`}
+            onClick={() => {
+                setPageName(PageEnum.LichSu);
+                route.push('/app/hotel/lichsu?page=history');
+            }}>
             <span >
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-card-checklist text-blue-500 font-bold" viewBox="0 0 16 16">
                     <path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2z" />
@@ -38,8 +83,11 @@ const NavigationHistory = (props: IProps) => {
             Lịch sử đặt phòng
         </div>
 
-        <div className={`${pageName == PageEnum.TaiKhoan ? 'text-blue-500' : 'text-gray-900'} w-full flex flex-row justify-start items-center cursor-pointer hover:scale-95 my-2`}
-            onClick={() => { setPageName(PageEnum.TaiKhoan) }}>
+        <div className={`${pageName == PageEnum.TaiKhoan ? 'text-blue-500' : 'text-gray-600'} w-full flex flex-row justify-start items-center cursor-pointer hover:scale-95 my-2`}
+            onClick={() => {
+                setPageName(PageEnum.TaiKhoan);
+                route.push('/app/hotel/lichsu?page=account');
+            }}>
             <span >
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-gear-fill  text-blue-500 font-bold" viewBox="0 0 16 16">
                     <path d="M9.405 1.05c-.413-1.4-2.397-1.4-2.81 0l-.1.34a1.464 1.464 0 0 1-2.105.872l-.31-.17c-1.283-.698-2.686.705-1.987 1.987l.169.311c.446.82.023 1.841-.872 2.105l-.34.1c-1.4.413-1.4 2.397 0 2.81l.34.1a1.464 1.464 0 0 1 .872 2.105l-.17.31c-.698 1.283.705 2.686 1.987 1.987l.311-.169a1.464 1.464 0 0 1 2.105.872l.1.34c.413 1.4 2.397 1.4 2.81 0l.1-.34a1.464 1.464 0 0 1 2.105-.872l.31.17c1.283.698 2.686-.705 1.987-1.987l-.169-.311a1.464 1.464 0 0 1 .872-2.105l.34-.1c1.4-.413 1.4-2.397 0-2.81l-.34-.1a1.464 1.464 0 0 1-.872-2.105l.17-.31c.698-1.283-.705-2.686-1.987-1.987l-.311.169a1.464 1.464 0 0 1-2.105-.872zM8 10.93a2.929 2.929 0 1 1 0-5.86 2.929 2.929 0 0 1 0 5.858z" />
@@ -48,8 +96,12 @@ const NavigationHistory = (props: IProps) => {
             Tài khoản
         </div>
         <hr />
-        <div className={`${pageName == PageEnum.DangXuat ? 'text-blue-500' : 'text-gray-900'} w-full flex flex-row justify-start items-center cursor-pointer hover:scale-95 my-2`}
-            onClick={() => { setPageName(PageEnum.DangXuat) }}>
+        <div className={`${pageName == PageEnum.DangXuat ? 'text-blue-500' : 'text-gray-600'} w-full flex flex-row justify-start items-center cursor-pointer hover:scale-95 my-2`}
+            onClick={() => {
+                setPageName(PageEnum.DangXuat);
+                logout();
+                route.push('/');
+            }}>
             <span >
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-power text-blue-500 font-bold" viewBox="0 0 16 16">
                     <path d="M7.5 1v7h1V1z" />

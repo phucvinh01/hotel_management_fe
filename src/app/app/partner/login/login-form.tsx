@@ -12,19 +12,20 @@ import { loginWithAdministrator } from '@/service/auth.service';
 import { useAuth } from '@/hooks/useAuthContext';
 import Logo from '@/components/shared/Logo';
 
-interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
+interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> { }
 
 export function LoginFormPartnert({ className, ...props }: UserAuthFormProps) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [email, setEmail] = React.useState<string>("");
   const [password, setPassword] = React.useState<string>("");
-  const {loginAdministrator} = useAuth()
+  const { loginAdministrator } = useAuth();
+  const [guest, setGuest] = React.useState<IGuest>();
 
 
   async function onSubmit(event: React.SyntheticEvent) {
     event.preventDefault();
     setIsLoading(true);
-    loginAdministrator(email,password)
+    loginAdministrator(email, password);
     setTimeout(() => {
       setIsLoading(false);
     }, 3000);
@@ -34,7 +35,7 @@ export function LoginFormPartnert({ className, ...props }: UserAuthFormProps) {
     <div
       className={cn('flex flex-col gap-6', className)}
       {...props}>
-      <Logo/>
+      <Logo />
       <p className='text-xl font-extrabold'>Chào mừng trở lại!</p>
       <p className='line-clamp-2 text-gray-400'>
         Đăng nhập để quản lý chỗ ở của bạn từ kiểm tra đặt phòng đến quản lý
@@ -77,7 +78,7 @@ export function LoginFormPartnert({ className, ...props }: UserAuthFormProps) {
           </Button>
 
           <div className='h-[1px] border border-dashed'>
-        </div>
+          </div>
         </div>
         <p className='text-sm text-gray-700'>
           Bạn chưa là partner?{' '}
