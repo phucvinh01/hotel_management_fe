@@ -1,3 +1,4 @@
+import { EMPTY, NOT_EMPTY } from "@/constant"
 import { ArrowDownIcon, ArrowRightIcon, ArrowUpIcon, CheckCircleIcon, CircleIcon, CrossIcon, MessageCircleQuestionIcon, WatchIcon } from "lucide-react"
 
 
@@ -18,13 +19,13 @@ export const labels = [
 
 export const statuses = [
   {
-    value: "Trống",
-    label: "Trống",
+    value: EMPTY,
+    label: EMPTY,
     icon: MessageCircleQuestionIcon,
   },
   {
-    value: "Đang được thuê",
-    label: "Đang được thuê",
+    value: NOT_EMPTY,
+    label: NOT_EMPTY,
     icon: CrossIcon,
   },
 ]

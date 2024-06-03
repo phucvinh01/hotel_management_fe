@@ -34,3 +34,24 @@ export const dataLocationList = [
     name: 'Đà Nẵng',
   },
 ];
+
+
+
+//STATE BOOKING
+export const WATTING_COMFRIM = 0
+export const COMFRIMED = 1
+export const STAYING = 2
+export const CHECKED_OUT = 3
+export const REQUIED_CANCEL = 4
+export const CANCELED = 5
+
+
+//STATE ROOM
+export const AVAILABLE = 0
+export const INAVAILABLE = 1
+export const EMPTY = "Trống"
+export const NOT_EMPTY = "Đang được thuê"
+
+
+
+
