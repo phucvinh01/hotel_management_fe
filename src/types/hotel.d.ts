@@ -311,8 +311,13 @@ interface IBooking {
   ConfirmAt: Date | null,
   created_at: Date | null,
   updated_at: Date | null,
+  GiftCode: string,
+  GiftCodePrice: number,
+  VAT: number,
+  TypePay: string,
 
-  members: IMemberBooking[]
+  members: IMemberBooking[],
+  room: IRoom | null
 }
 
 interface IHotelImage {

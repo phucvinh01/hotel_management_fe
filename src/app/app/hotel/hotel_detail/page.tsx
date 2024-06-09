@@ -23,6 +23,90 @@ import { Button } from '@/components/ui/button';
 import { MapPin, StarIcon } from 'lucide-react';
 
 export default function HotelDetail() {
+// <<<<<<< VNDT082
+    const searchParams = useSearchParams();
+    const route = useRouter();
+    const [loadingState, setLoadingState] = useState<boolean>(true);
+    const [showDescript, setShowDescript] = useState<boolean>(false);
+    const [currentScreen, setCurrentScreen] = useState<string>('TongQuan');
+    const [rateShortModaState, setRateShortModaState] = useState<boolean>(false);
+    const [rateItem, setRateItem] = useState<IRate>();
+    const [hotel, setHotel] = useState<IHotel>();
+    const [listRate, setListRate] = useState<IRate[]>([]);
+    const [diadiemlancan, setDiadiemlancan] = useState<IDiaDiemLanCan[]>([]);
+    const [avgRate, setAvgRate] = useState<number>(0);
+    const [avgRateText, setAvgRateText] = useState<'Chưa có đánh giá' | 'Trung bình' | 'Tốt' | 'Ấn tượng'>('Chưa có đánh giá');
+    const arrHienThiGia = ['Mỗi phòng mỗi đêm (bao gồm thuế và phí)', 'Mỗi phòng mỗi đêm (chưa bao gồm thuế và phí)',
+        'Tổng giá (bao gồm thuế và phí)', 'Tổng giá (chưa bao gồm thuế và phí)']
+    const [hienThiGia, setHienThiGia] = useState<string>('Mỗi phòng mỗi đêm (bao gồm thuế và phí)');
+    const [dsHienThiGiaState, setDsHienThiGiaState] = useState<boolean>(false);//mac dinh an danh sach 
+    useEffect(() => {
+        if (searchParams.get('id') == null
+            || searchParams.get('id') == ''
+            || searchParams.get('id') == undefined)
+            route.push('/app/hotel');
+        const fecthData = (url: string) => {
+            setLoadingState(true);
+            axios.get(url).then((response) => {
+                setHotel(response.data.result);
+
+                if (response.data.result.rates) {
+                    setListRate(response.data.result.rates);
+                    var sumRate = 0;
+
+                    response.data.result.rates.map((item: IRate) => {
+                        sumRate += item.Rating;
+                    });
+                    setAvgRate(Number((sumRate / response.data.result.rates.length).toFixed(1)));
+                    if ((sumRate / response.data.result.rates.length) < 7)
+                        setAvgRateText('Trung bình');
+                    else if ((sumRate / response.data.result.rates.length) < 8)
+                        setAvgRateText('Tốt');
+                    else
+                        setAvgRateText('Ấn tượng');
+                }
+
+            }).catch((error) => { console.log(error) })
+                .finally(() => {
+                    setLoadingState(false)
+                });
+        }
+        fecthData(URL_Enum.BaseURL_Api + 'hotel/get-one-by-id?id=' + searchParams.get('id'));
+    }, []);
+    useEffect(() => {
+        setLoadingState(true);
+        const fetchData = (url: string) => {
+            axios.get(url).then((response) => {
+                setDiadiemlancan(response.data.result);
+                console.log('diadiemlancan', response.data.result);
+            }).catch((error) => console.log('loi load diadiemlancan', error))
+                .finally(() => { setLoadingState(false) });
+        }
+        fetchData(URL_Enum.BaseURL_Api + 'diadiemlancan/get-list-by-id?id=' + searchParams.get('id'));
+    }, [])
+    // const getListConvenientByTypeRoomId = (typeRoomId: string): IConvenient[] => {
+    //     var listConvenient: IConvenient[] = []
+    //     hotel?.convenients?.map((item) => {
+    //         if (item.id === typeRoomId) {
+    //             listConvenient.push(item);
+    //         }
+    //     });
+    //     return listConvenient;
+    // }
+    const getListImageByTypeRoomId = (typeRoomId: string): IHotelImage[] => {
+        var listImage: IHotelImage[] = [];
+        ;
+        hotel?.images.map((item) => {
+            //listImage.push(item);
+            if (item.TypeRoom?.split(';')[0] === typeRoomId) {
+                listImage.push(item);
+            }
+        });
+        return listImage;
+    }
+    const [modalListImagesState, setModalListImagesState] = useState<boolean>(false);
+    const [currentImageModal, setCurrentImageModal] = useState<number>(0);
+// =======
   const searchParams = useSearchParams();
   const route = useRouter();
   const [loadingState, setLoadingState] = useState<boolean>(true);
@@ -59,6 +143,7 @@ export default function HotelDetail() {
         .get(url)
         .then((response) => {
           setHotel(response.data.result);
+// >>>>>>> main
 
           if (response.data.result.rates) {
             var sumRate = 0;
@@ -1063,6 +1148,17 @@ export default function HotelDetail() {
                   </p>
                 </div>
 
+<!-- <<<<<<< VNDT082 -->
+                    </div>
+                    {/* danh gia cua khach */}
+                    <RateHotel listRate={listRate} avgRate={avgRate} avgRateText={avgRateText}
+                        targetElementRefTongQuan={targetElementRefs.DanhGia}
+                        hotelId={`${hotel.id}`} setListRate={setListRate} />
+
+                    {/* final bay  */}
+                    <div className='my-3 w-full lg:w-10/12 flex flex-col lg:flex-row flex-wrap rounded-3xl h-[320px] items-end'>
+                        <div className='my-3 w-full flex flex-col lg:flex-row flex-wrap rounded-3xl relative h-[210px]'>
+<!-- ======= -->
                 <div className='flex flex-rowpy-1 font-semibold overflow-hidden py-1'>
                   <p className='w-4/12'>Thời gian nhận/trả phòng:</p>
                   <p className='w-8/12'>
@@ -1070,6 +1166,7 @@ export default function HotelDetail() {
                     Từ {hotel.TimeCheckIn} - Trước {hotel.TimeCheckOut}
                   </p>
                 </div>
+<!-- >>>>>>> main -->
 
                 <div className='flex flex-rowpy-1 font-semibold bg-slate-50 overflow-hidden py-1'>
                   <p className='w-4/12'>Điểm đến phổ biến:</p>
@@ -1084,6 +1181,35 @@ export default function HotelDetail() {
                   </p>
                 </div>
 
+<!-- <<<<<<< VNDT082 -->
+                                <img />
+                            </div>
+                        </div>
+                    </div>
+                    <div className='w-10/12 flex flex-col justify-center items-start bg-cyan-100 p-3 border-l-2 border-blue-700'>
+                        <div className='flex flex-row justify-center items-center mb-2'>
+                            <span>
+                                <svg className="w-6 h-6 text-blue-500 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                                    <path fill-rule="evenodd" d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm9.408-5.5a1 1 0 1 0 0 2h.01a1 1 0 1 0 0-2h-.01ZM10 10a1 1 0 1 0 0 2h1v3h-1a1 1 0 1 0 0 2h4a1 1 0 1 0 0-2h-1v-4a1 1 0 0 0-1-1h-2Z" clip-rule="evenodd" />
+                                </svg>
+                            </span>
+                            <p className='text-2xl font-bold text-blue-500'>Miễn trừ trách nhiệm</p>
+                        </div>
+                        <p className='text-lg font-semibold text-gray-900'>
+                            <b>Miễn trừ trách nhiệm:</b>
+                            Khách sạn có trách nhiệm bảo đảm tính chính xác của tất cả các hình ảnh thể hiện.
+                            Hệ thống không chịu trách nhiệm đối với bất kỳ sai lệch nào về mặt hình ảnh.</p>
+                    </div>
+
+                    <div className='w-10/12 flex flex-col justify-center items-center my-12'>
+
+                        <p className='text-2xl font-semibold text-gray-900'>
+                            <b>Không tìm thấy những gì bạn cần?</b></p>
+                        <button className='px-3 py-4 text-2xl font-bold text-white
+                            bg-blue-400 rounded-3xl my-3'
+                            onClick={() => { route.push(`/app/hotel/search?provinceid=${hotel.Province_Id}`) }}>Tìm cơ sở lưu trú khác tại {hotel.province?.DisplayName}</button>
+                    </div>
+<!-- ======= -->
                 <div className='flex flex-rowpy-1 font-semibold  overflow-hidden py-1'>
                   <p className='w-4/12'>Bữa ăn sáng</p>
                   <p className='w-8/12'>Phụ thuộc vào phòng bạn chọn</p>
@@ -1098,6 +1224,7 @@ export default function HotelDetail() {
             avgRateText={avgRateText}
             targetElementRefTongQuan={targetElementRefs.DanhGia}
           />
+// >>>>>>> main
 
           {/* final bay  */}
           <div className='my-3 w-full lg:w-10/12 flex flex-col lg:flex-row flex-wrap rounded-3xl h-[320px] items-end'>

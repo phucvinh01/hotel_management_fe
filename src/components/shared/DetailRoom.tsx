@@ -766,6 +766,34 @@ const DetailRoom = (props: IProps) => {
                 </div>
               )}
             </div>
+            {/* //modal chi tiet phong */}
+
+            <div className={`w-full ${modalState ? 'block' : 'hidden'} h-full flex z-[999999]
+          fixed inset-0 justify-center items-center`} style={{ background: 'rgb(0 0 0 / 85%)' }}>
+                <div className="w-9/12 h-[90%] flex flex-row rounded-2xl
+                bg-black opacity-100">
+                    {/* danh sach hinh anh */}
+                    <div className="flex  flex-col w-8/12">
+                        <div className="flex flex-row w-full relative">
+                            <p className="font-bold text-2xl text-white my-2 p-3">{typeRoom.Name}</p>
+                            <button className="absolute right-5 top-5" onClick={() => handleShowModal()}>
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="text-white w-8 h-8">
+                                    <path fillRule="evenodd" d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z" clipRule="evenodd" />
+                                </svg>
+
+                            </button>
+                        </div>
+                        {/* hinh anh dai dien  */}
+                        <div className="flex flex-row relative items-center">
+                            <img src={imageModalCurrent}
+                                className="w-11/12 h-[390px] ml-4 rounded-3xl" />
+                            <button className="bg-black opacity-50 w-9 h-9 absolute text-center
+                            justify-center items-center flex text-white left-2 ml-3 rounded-full"
+                                onClick={() => handlePreviousImage()}>
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
+                                    <path fillRule="evenodd" d="M7.72 12.53a.75.75 0 0 1 0-1.06l7.5-7.5a.75.75 0 1 1 1.06 1.06L9.31 12l6.97 6.97a.75.75 0 1 1-1.06 1.06l-7.5-7.5Z" clipRule="evenodd" />
+                                </svg>
+
 
             {/* coppy */}
           </div>

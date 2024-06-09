@@ -17,10 +17,10 @@ import Link from 'next/link';
 
 type UserNavProps = {
   user: any,
-  logout: () => void ;
+  logout: () => void;
 }
 
-export function UserNav({user,logout}:UserNavProps) {
+export function UserNav({ user, logout }: UserNavProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -53,22 +53,23 @@ export function UserNav({user,logout}:UserNavProps) {
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem>
-            <Link href={'/app/me'}>Profile</Link>
+            <Link href={'/app/hotel/lichsu?page=account'}>Trang cá nhân</Link>
             <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
           </DropdownMenuItem>
           <DropdownMenuItem>
-            Billing
+            <Link href={'/app/hotel/lichsu?page=history'}>Lịch sử đặt phòng</Link>
             <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
           </DropdownMenuItem>
           <DropdownMenuItem>
-            Settings
+            <Link href={'/app/hotel/lichsu?page=account'}>Cài đặt</Link>
+
             <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
           </DropdownMenuItem>
-          <DropdownMenuItem>New Team</DropdownMenuItem>
+          {/* <DropdownMenuItem>New Team</DropdownMenuItem> */}
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={() => logout()}>
-          Log out
+          Đăng xuất
           <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
         </DropdownMenuItem>
       </DropdownMenuContent>

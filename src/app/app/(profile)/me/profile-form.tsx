@@ -63,7 +63,7 @@ const profileFormSchema = z.object({
     })
     .min(12)
     .max(12)
-  })
+})
 
 
 type ProfileFormValues = z.infer<typeof profileFormSchema>;
@@ -97,10 +97,10 @@ export function ProfileForm() {
       username: userInfo?.Name,
       cccd: userInfo?.CCCD,
       day: splitDay?.day,
-      month:splitDay?.month,
-      year:splitDay?.year,
+      month: splitDay?.month,
+      year: splitDay?.year,
       sex: userInfo?.Sex === 0 ? "Nam" : "Nữ"
-      
+
     },
   });
 
@@ -164,7 +164,7 @@ export function ProfileForm() {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className='space-y-8'>
+        className='space-y-8 w-full'>
         <FormField
           control={form.control}
           name='username'
@@ -173,7 +173,7 @@ export function ProfileForm() {
               <FormLabel>Tên đầy đủ</FormLabel>
               <FormControl>
                 <Input
-                defaultValue={user?.name}
+                  defaultValue={user?.name}
 
                   {...field}
                 />
@@ -198,7 +198,7 @@ export function ProfileForm() {
                   defaultValue={userInfo?.Name}>
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder='Giới tính' defaultValue={userInfo?.Sex === 0 ? "Nam": "Nữ"}/>
+                      <SelectValue placeholder='Giới tính' defaultValue={userInfo?.Sex === 0 ? "Nam" : "Nữ"} />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
@@ -286,7 +286,7 @@ export function ProfileForm() {
                     defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder='Năm'  defaultValue={splitDay?.year} />
+                        <SelectValue placeholder='Năm' defaultValue={splitDay?.year} />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -313,15 +313,15 @@ export function ProfileForm() {
               <FormLabel>Căn cước công dân của bạn là gì </FormLabel>
               <FormControl>
                 <Input
-                defaultValue={userInfo?.CCCD}
+                  defaultValue={userInfo?.CCCD}
                   placeholder='shadcn'
                   {...field}
                 />
               </FormControl>
               <FormDescription>Căn cước công dân gắn chíp</FormDescription>
-              </FormItem>
+            </FormItem>
           )
-        }/>
+          } />
         <Button type='submit' variant={'secondary'} className='button-primary'>Cập nhật</Button>
       </form>
     </Form>

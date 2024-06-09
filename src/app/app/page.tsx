@@ -110,6 +110,83 @@ export default function Home() {
     };
     generateListDate();
   }, [startDate]);
+// <<<<<<< VNDT082
+//   const handleShowHideDsTinh = (): void => {
+//     if (allowShowHide === true) {
+//       setDsTinhState('block');
+//       setAllowShowHide(false);
+//     }
+//   }
+//   const handleShowHideDsDem = (): void => {
+//     if (allowShowHide === true) {
+//       setDsDemState('block');
+//       setAllowShowHide(false);
+//     }
+//   }
+//   const handleShowHideChosenMember = (): void => {
+//     if (allowShowHide === true) {
+//       setDsThanhVienState('block');
+//       setAllowShowHide(false);
+//     }
+//   }
+//   const handleSelectedTinh = (tenTinh: string): void => {
+//     setValueTinh(tenTinh);
+//     setDsTinhState('hidden');
+//     setAllowShowHide(true);
+
+//   }
+//   const handleSelectedDem = (soDem: string): void => {
+//     setValueSoDem(soDem);
+//     setDsDemState('hidden');
+//     setAllowShowHide(true);
+
+//   }
+//   const handleCompliteMember = (e?: Event) => {
+//     if (e) { e.preventDefault(); }
+//     setValueNguoiLonTreEmPhong(valueSoNguoiLon + ' Người lớn, ' + valueSoTreEm + ' Trẻ em, ' + valueSoPhong + ' Phòng');
+//     setDsThanhVienState('hidden');
+//     setAllowShowHide(true);
+
+//   }
+//   const handleAddNguoiLon = (e?: Event) => {
+//     if (e) { e.preventDefault(); }
+//     if (valueSoNguoiLon > 0 && valueSoNguoiLon < 20) {
+//       setValueSoNguoiLon(valueSoNguoiLon + 1);
+//     }
+//   }
+//   const handleSubstractNguoiLon = (e?: Event) => {
+//     if (e) { e.preventDefault(); }
+//     if (valueSoNguoiLon > 1) {
+//       setValueSoNguoiLon(valueSoNguoiLon - 1);
+//     }
+//   }
+
+//   const handleAddTreEm = (e?: Event) => {
+//     if (e) { e.preventDefault(); }
+//     if (valueSoTreEm < valueSoNguoiLon * 3) {
+//       setValueSoTreEm(valueSoTreEm + 1);
+//     }
+//   }
+//   const handleSubstractTreEm = (e?: Event) => {
+//     if (e) { e.preventDefault(); }
+//     if (valueSoTreEm > 0) { setValueSoTreEm(valueSoTreEm - 1); }
+
+//   }
+
+//   const handleAddPhong = (e?: Event) => {
+//     if (e) { e.preventDefault(); }
+//     if (valueSoPhong < valueSoNguoiLon && valueSoPhong < 8) { setValueSoPhong(valueSoPhong + 1); }
+//   }
+//   const handleSubstractPhong = (e?: Event) => {
+//     if (e) { e.preventDefault(); }
+//     if (valueSoPhong > 1) {
+//       setValueSoPhong(valueSoPhong - 1);
+//     }
+//   }
+//   const [provinces, setProvinces] = useState<IProvince[]>([]);
+//   const [selectedProvinceOption, setSelectedProvinceOption] = useState<string>('');
+//   // Trạng thái lưu giữ giá trị radio button dia danh được chọn
+// =======
   const handleShowListProvices = (): void => {
     if (allowShowHide === true) {
       setIsShowProvice('block');
@@ -206,6 +283,7 @@ export default function Home() {
   const [provinces, setProvinces] = useState<IProvince[] | undefined>([]);
   const [selectedProvinceOption, setSelectedProvinceOption] =
     useState<string>('');
+
   useEffect(() => {
     const getProvices = async () => {
       const res = await GetListProvinceDefault();
@@ -223,6 +301,35 @@ export default function Home() {
   };
 
   return (
+// <<<<<<< VNDT082
+    <main className="w-full mb-10 p-3">
+      <div className="w-full radius mt-1 shadow-md shadow-blue-500
+            bg-gradient-to-b from-sky-500 via-sky-600 to-blue-700" style={{ height: 320 }}>
+        <div className="flex h-3/4 w-full justify-center items-center">
+          <Carousel className="w-full px-3" id='slider'>
+            <CarouselContent className="">
+              <CarouselItem key={0} className="basis-3/5">
+                <div className="w-full h-full ml-32 flex flex-col items-center justify-center">
+                  <p className=" w-11/12 text-2xl text-gray-200 font-bold my-5">
+                    Tìm & đặt phòng khách sạn giá rẻ chỉ với 3 bước đơn giản!
+                  </p>
+                  <p className="w-11/12 text-2xl text-gray-200  ">
+                    Khám phá ngay những ưu đãi tốt nhất dành cho bạn tại Traveloka!
+
+                  </p>
+                </div>
+              </CarouselItem>
+              {listContryImg.map((item) => (
+                <CarouselItem
+                  key={item.id}
+                  className='basis-1/4'>
+                  <Image
+                    src={item.url}
+                    alt={item.url}
+                    width={300}
+                    height={120}
+                    className='rounded-xl object-cover'
+<!-- ======= -->
     <main className='px-6'>
       <div className='container mx-auto flex flex-col gap-6'>
         <SectionHero className='pt-10 lg:pt-16 lg:pb-16' />
@@ -244,6 +351,7 @@ export default function Home() {
                     placeholder='Chọn địa điểm của bạn'
                     className='text-input'
                     value={valueProvince}
+<!-- >>>>>>> main -->
                   />
                 </div>
                 {/* modal hien thi danh sach tinh thanh */}

@@ -36,6 +36,8 @@ const GenerateId = (tableName: 'bookinghotel' | 'convenienthotel' | 'diadiemlanc
         return 'Pro' + strDate;
     else if (tableName == 'room')
         return 'R' + strDate;
+    else if (tableName == 'ratehotel')
+        return 'Ra' + strDate;
     else if (tableName == 'staff')
         return 'S' + strDate;
     else if (tableName == 'typeroom')

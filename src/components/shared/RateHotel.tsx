@@ -10,12 +10,15 @@ import {
     CarouselNext,
     CarouselPrevious,
 } from "@/components/ui/carousel"
+import FormRateHotel from "./form/FormRateHotel";
 
 interface IProps {
     listRate?: IRate[];
+    setListRate: (listRate: IRate[]) => void;
     avgRate: number;
     avgRateText: string;
     targetElementRefTongQuan: React.RefObject<HTMLDivElement>;
+    hotelId: string;
 }
 interface MucDoHaiLong {
     soLuong: number;
@@ -28,14 +31,20 @@ interface DichVu {
     text: 'Dịch vụ' | 'Thoải mái' | 'Sạch sẽ';
 }
 const RateHotel = (props: IProps) => {
+    const [rateStar, setRateStar] = useState<number>(0);
+    const [rateConvenient, setRateConvenient] = useState<number>(0);
+    const [rateService, setRateService] = useState<number>(0);
+    const [rateClearnUp, setRateClearnUp] = useState<number>(0);
+
+
     const [modalImageRateState, setModalImageRateState] = useState<boolean>(false);
     const [filterRateExistImage, setFilterRateExistImage] = useState<boolean>(true);
-    const { listRate, avgRate, avgRateText, targetElementRefTongQuan } = props;
-    const [listRateTemp, setListRateTemp] = useState<IRate[]>(listRate ? listRate : []);
+    const { listRate, avgRate, avgRateText, targetElementRefTongQuan, hotelId, setListRate } = props;
+    const [listRateTemp, setListRateTemp] = useState<IRate[]>(listRate ? listRate.slice(0, 3) : []);
     const [haiLong, setHaiLong] = useState<MucDoHaiLong[]>([]);
     const [dichVu, setDichVu] = useState<DichVu[]>([]);
-    const arrFilterRate = ['Tất cả', 'Gần đây nhất', 'Điểm (Từ cao đến thấp)', 'Điểm (từ thấp đến cao)']
-    const [hienFilterRate, setHienFilterRate] = useState<string>('Tất cả');
+    const arrFilterRate = ['Tất cả', 'Top 3', 'Gần đây nhất', 'Điểm (Từ cao đến thấp)', 'Điểm (từ thấp đến cao)']
+    const [hienFilterRate, setHienFilterRate] = useState<string>('Top 3');
     const [dsFilterRateState, setDsFilterRateState] = useState<boolean>(false);//mac dinh an danh sach 
     const [listImageRateP, setListImageRateP] = useState<string[]>([]);
     const TinhMucDoDichVu = () => {
@@ -100,12 +109,12 @@ const RateHotel = (props: IProps) => {
                     }).sort((a, b) => {
                         const dateA = new Date(a.created_at);
                         const dateB = new Date(b.created_at);
-                        return dateA.getTime() - dateB.getTime();
+                        return dateB.getTime() - dateA.getTime();
                     })
                         : listRate.sort((a, b) => {
                             const dateA = new Date(a.created_at);
                             const dateB = new Date(b.created_at);
-                            return dateA.getTime() - dateB.getTime();
+                            return dateB.getTime() - dateA.getTime();
                         })
                 );
             }
@@ -128,6 +137,9 @@ const RateHotel = (props: IProps) => {
                 );
 
             }
+            else if (filter == 'Tất cả') {
+                setListRateTemp(listRate ? listRate : []);
+            }
             else {
                 setListRateTemp(
                     existImage ? listRate : listRate.filter((item) => {
@@ -138,6 +150,7 @@ const RateHotel = (props: IProps) => {
 
     }
     return (
+
         listRate && listRate.length > 0 ?
             <>
                 <div className='my-3 w-full lg:w-10/12 flex flex-col flex-wrap
@@ -231,6 +244,17 @@ const RateHotel = (props: IProps) => {
                             </div>
                         </div>
                     </div>
+
+                    <div className='my-3 w-full flex flex-col flex-wrap bg-white border border-cyan-700
+            rounded-3xl p-3'>
+                        <FormRateHotel rateStar={rateStar} setRateStar={setRateStar}
+                            rateConvenient={rateConvenient} setRateConvenient={setRateConvenient}
+                            rateService={rateService} setRateService={setRateService}
+                            rateClearnUp={rateClearnUp} setRateClearnUp={setRateClearnUp}
+                            hotelId={`${hotelId}`} listRate={listRate}
+                            setListRate={setListRate} setListRateTemp={setListRateTemp} />
+                    </div>
+
                     {/* filter */}
                     <div className=' flex flex-col rounded-lg justify-start items-start pl-4
                 py-4'><p className='text-lg font-medium text-gray-900'>Sắp xếp</p>
@@ -311,10 +335,10 @@ const RateHotel = (props: IProps) => {
                                         <Carousel className="w-full" id='slider'>
                                             <CarouselContent className="">
                                                 {item.HinhAnh.split(';').map((jitem, index) => (
-                                                    <CarouselItem key={index} className="basis-1/5">
+                                                    <CarouselItem key={index} className="basis-1/3">
                                                         <img src={`${URL_Enum.BaseURL_Rate}${jitem}`}
                                                             alt={jitem} className={`w-full
-                                                h-[70px] rounded-3xl object-cover cursor-pointer`}
+                                                h-[120px] rounded-lg object-cover cursor-pointer`}
                                                             onClick={() => {
                                                                 item.HinhAnh ? setListImageRateP(item.HinhAnh.split(';'))
                                                                     : setListImageRateP([])
@@ -340,8 +364,19 @@ const RateHotel = (props: IProps) => {
         bg-slate-100 rounded-3xl p-3'>
                     <p className="text-2xl text-gray-900"><b>Đánh giá từ khách</b></p>
                     <p className="text-xl text-gray-900 font-semibold">Khách sạn chưa có thông tin đánh giá từ khách hàng.</p>
+
+                    <div className='my-3 w-full flex flex-col flex-wrap bg-white border border-cyan-700
+            rounded-3xl p-3'>
+                        <FormRateHotel rateStar={rateStar} setRateStar={setRateStar}
+                            rateConvenient={rateConvenient} setRateConvenient={setRateConvenient}
+                            rateService={rateService} setRateService={setRateService}
+                            rateClearnUp={rateClearnUp} setRateClearnUp={setRateClearnUp}
+                            hotelId={`${hotelId}`} listRate={[]}
+                            setListRate={setListRate} setListRateTemp={setListRateTemp} />
+                    </div>
                 </div>
             </>
+
     );
 
 }

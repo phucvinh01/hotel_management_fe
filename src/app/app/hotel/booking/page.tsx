@@ -8,13 +8,16 @@ import CalculateTotalDay from "@/service/CalculateTotalDay";
 import FormatDateDDD from "@/service/FormatDateDDD";
 import FormatDate from "@/service/FormatDateString";
 import FormatStringToDate from "@/service/FormatStringToDate";
+import { createBookingHotel } from "@/service/bookinghotel.service";
 import GenerateId from "@/service/generateId";
 import { getAvartaHotelByIdHotel } from "@/service/images.service";
+import { getOnePosterByGiftCode } from "@/service/poster.service";
+import BookingHotel_Model from "@/types/booking.class";
 import axios from "axios";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 
-import { useEffect, useRef, useState } from "react";
+import { ReactEventHandler, useEffect, useRef, useState } from "react";
 
 const todoGetPriceDiscoun = (price: number, discount: number): number => {
     return price - price * discount / 100;
@@ -40,52 +43,230 @@ interface IProps {
     QuantityRoom: number;
 }
 const Booking = () => {
+    const IdBooking = GenerateId("bookinghotel");
+    const [modalErr, setModalErr] = useState<boolean>(false);
+    const [modalQuestionYN, setModalQuestionYN] = useState<boolean>(false);
+    const [typePay, setTypePay] = useState<boolean>(false);
+    const [modalErrValue, setModalErrValue] = useState<string>('');
+    const [userGuest, setUserGuest] = useState<IGuest>();
     const TotalRoom = (typeof localStorage !== 'undefined') ? localStorage.getItem(LocalStoreEnum.TOTAL_ROOM) : 1;
-    console.log('TotalRoom', TotalRoom);
+    const getIGuest = () => {
+        const IGusetStorage = (typeof localStorage !== undefined) ? localStorage.getItem(LocalStoreEnum.IGUEST) : null;
+        console.log('IGusetStorage', IGusetStorage)
+        if (IGusetStorage != null) {
+            let jsonIGuest = JSON.parse(IGusetStorage);
+            setUserGuest(jsonIGuest.result)
+            console.log('userGuest', userGuest)
+        }
+        else {
+            setModalErr(true)
+            setModalErrValue('Bạn chưa đăng nhập, vui lòng đăng nhập để tiếp tục.')
+        }
+    }
+    useEffect(() => {
+        getIGuest();
+    }, [])
+
+
     const { user, logout } = useAuth();
+
     const route = useRouter();
     const searchParams = useSearchParams();
     const [modalChinhSachDoiHuyState, setModalChinhSachDoiHuyState] = useState<boolean>(false);
     // const { room_id } = router.query;
     //const { roomId, QuantityMember, QuantityRoom } = props;
     const [room, setRoom] = useState<IRoom>();
-    const [modalErr, setModalErr] = useState<boolean>(false);
-    const [modalErrValue, setModalErrValue] = useState<string>('');
 
-    const [userGuest, setUserGuest] = useState<IGuest>();
-    const [loadingBookingState, setLoadingBookingState] = useState<boolean>(true);
+    const [loadingBookingState, setLoadingBookingState] = useState<boolean>(false);
     const [stepState, setStepState] = useState<1 | 2 | 3>(1);
     const [avartaHotel, setAvartaHotel] = useState<IHotelImage>();
 
     const [totalPrice, setTotalPrice] = useState<number>(0);
     const [totalDay, setTotalDay] = useState<number>(0);
 
+    const [discountCode, setDisountCode] = useState<string>("");
+    const [discountState, setDiscountState] = useState<boolean>(false);
+    const [discountValue, setDiscountValue] = useState<number>(0);
+    const [discountCanUse, setDiscountCanUse] = useState<boolean>(false);
+    const [discountMessage, setDiscountMessage] = useState<string>('');
+    const [discountModel, setDiscountModel] = useState<IPoster>();
+    const [discountPrice, setDiscountPrice] = useState<number>(0);
+
+
+    const [note, setNote] = useState<string>('');
     const [listMember, setListMember] = useState<IMemberBooking[]>([]);
 
     const [memberName, setMemberName] = useState<string>('')
     const [memberBirth, setMemberBirth] = useState<string | null>(null);
     const [memberGender, setMemberGender] = useState<boolean>(true);
+    const [totalPriceActual, setTotalPriceActual] = useState<number>(totalPrice);
 
-
-    const IdBooking = GenerateId("bookinghotel");
-
-    useEffect(() => {
-        console.log('user', user);
-        const fetchUser = (url: string) => {
-            setLoadingBookingState(true);
-            axios.get(url).then((response) => {
-                console.log('room', response.data.result);
-                if (response.data.result === 'NOT_FOUND') { setModalErr(false); }
-                else {
-                    setUserGuest(response.data.result);
+    const handleGetDiscountValue = (data: IPoster) => {
+        const currentDate = new Date();
+        if (data?.EndDate != undefined) {
+            const hanGiamGia = new Date(data.EndDate)
+            console.log('thoi han mgg', hanGiamGia)
+            console.log('ngay hien tai', currentDate)
+            if (hanGiamGia >= currentDate) {
+                setDiscountCanUse(true);
+                if (data.SubstractWithPercent == true) {
+                    setDiscountState(true);
+                    setDiscountValue(data.GiftCodePercent)
+                    setDiscountMessage('Bạn được giảm ' + data.GiftCodePercent + '% vào tổng giá hóa đơn')
+                    setTotalPrice(totalPriceActual - totalPriceActual * data.GiftCodePercent / 100)
+                    setDiscountPrice(totalPriceActual * data.GiftCodePercent / 100)
                 }
-                setUserGuest(response.data.result);
-            }).catch((err) => { console.log(err); })
-                .finally(() => { setLoadingBookingState(false); })
-        }
-        fetchUser(URL_Enum.BaseURL_Api + 'guest/get-one-by-email?email=' + user?.email);
+                else {
+                    setDiscountState(false);
+                    setDiscountValue(data.GiftCodePrice)
+                    setTotalPrice(totalPriceActual - data.GiftCodePrice)
+                    setDiscountMessage('Bạn được giảm' + (data.GiftCodePrice.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })) + ' vào tổng giá hóa đơn')
+                    setDiscountPrice(data.GiftCodePrice)
+                }
+            }
+            else {
+                setTotalPrice(totalPriceActual)
+                setDiscountMessage('Mã giảm giá hết hạn sử dụng.')
+            }
 
-    }, []);
+        }
+        else {
+            setTotalPrice(totalPriceActual)
+            setDiscountCanUse(true)
+            setDiscountValue(0)
+            setDiscountMessage('Mã giảm giá không tồn tại, vui lòng thử lại.')
+        }
+    }
+
+
+
+    const handleGoToStep2 = () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+        if (userGuest == undefined || userGuest == null) {
+            setModalErrValue("Tài khoản không xác định vui lòng đăng nhâp và thực hiện lại");
+            setModalErr(true);
+        }
+        else if (totalDay == 0) {
+            setModalErrValue("Số ngày đặt phòng phải lớn hơn bằng 1");
+            setModalErr(true);
+        }
+        // else if ()
+        setStepState(2);
+    }
+    useEffect(() => {
+        const response = getOnePosterByGiftCode(discountCode);
+        response.then((data) => {
+            console.log('iposter', data);
+        }).catch((err) => { console.log('errr', err) })
+    }, [discountCode])
+
+    const [message, setMessage] = useState<string>('')
+    const [resultBooking, setResultBooking] = useState<IBooking>()
+    const handlePayByHand = async () => {
+        event?.preventDefault();
+        let thueVAT = room?.Bao_Gom_Thue_Va_Phi ? 0 : totalPriceActual * 8 / 100;
+        if (userGuest != undefined && room != undefined) {
+            let newBookingHotel: BookingHotel_Model = {
+                id: IdBooking,
+                GuestId: userGuest?.id,
+                RoomId: room?.id,
+                ConfirmBy: '',
+                CreateDate: new Date(),
+                Price: totalPrice,
+                Gift: room.Gift,
+                Discount: discountValue,
+                State: false,
+                Notes: note,
+                TypePay: 'Thanh toán trực tiếp',
+                TimeRecive: room.TimeRecive,
+                TimeLeave: room.TimeLeave,
+                ConfirmAt: new Date(),
+                created_at: new Date(),
+                updated_at: new Date(),
+                GiftCode: discountCode,
+                GiftCodePrice: discountPrice,
+                VAT: thueVAT,
+                members: listMember,
+                room: null
+            }
+            setLoadingBookingState(true);
+            const bookingResult = await createBookingHotel(newBookingHotel)
+                .then((response) => {
+                    console.log('response', response)
+                    setMessage(response.data.message);
+                    setResultBooking(response.data.result);
+
+                }).catch((err) => {
+                    setModalErrValue(err)
+                    setModalErr(true);
+                })
+                .finally(() => { setLoadingBookingState(false) });
+        }
+    }
+    const handlePayByVNPay = () => {
+        event?.preventDefault();
+        let thueVAT = room?.Bao_Gom_Thue_Va_Phi ? 0 : totalPriceActual * 8 / 100;
+        if (userGuest != undefined && room != undefined) {
+            let newBookingHotel: BookingHotel_Model = {
+                id: IdBooking,
+                GuestId: userGuest?.id,
+                RoomId: room?.id,
+                ConfirmBy: null,
+                CreateDate: new Date(),
+                Price: totalPrice,
+                Gift: room.Gift,
+                Discount: discountValue,
+                State: false,
+                Notes: note,
+                TypePay: 'Thanh toán VNPay',
+                TimeRecive: room.TimeRecive,
+                TimeLeave: room.TimeLeave,
+                ConfirmAt: null,
+                created_at: new Date(),
+                updated_at: new Date(),
+                GiftCode: discountCode,
+                GiftCodePrice: discountPrice,
+                VAT: thueVAT,
+                members: listMember,
+                room: null
+            }
+
+
+        }
+    }
+
+    const handlePay = (typePay: number) => {
+        if (typePay == 1) {
+            handlePayByHand();
+        }
+        else {
+            handlePayByVNPay();
+        }
+    }
+
+
+
+
+    // useEffect(() => {
+    //     console.log('user', user);
+    //     const fetchUser = (url: string) => {
+    //         setLoadingBookingState(true);
+    //         axios.get(url).then((response) => {
+    //             console.log('room', response.data.result);
+    //             if (response.data.result === 'NOT_FOUND') { setModalErr(false); }
+    //             else {
+    //                 setUserGuest(response.data.result);
+    //             }
+    //             setUserGuest(response.data.result);
+    //         }).catch((err) => { console.log(err); })
+    //             .finally(() => { setLoadingBookingState(false); })
+    //     }
+    //     fetchUser(URL_Enum.BaseURL_Api + 'guest/get-one-by-email?email=' + user?.email);
+
+    // }, []);
     useEffect(() => {
         if (searchParams.get('room_id') == null
             || searchParams.get('room_id') == ''
@@ -105,6 +286,11 @@ const Booking = () => {
                         new Date(response.data.result.TimeLeave)) * (response.data.result.typeroom.Price
                             - response.data.result.typeroom.Price * response.data.result.Discount / 100
                         )) * Number.parseInt(TotalRoom != null ? TotalRoom.toString() : '1'));
+                    setTotalPriceActual((CalculateTotalDay(new Date(response.data.result.TimeRecive),
+                        new Date(response.data.result.TimeLeave)) * (response.data.result.typeroom.Price
+                            - response.data.result.typeroom.Price * response.data.result.Discount / 100
+                        )) * Number.parseInt(TotalRoom != null ? TotalRoom.toString() : '1'));
+
                 }
 
                 //search avarta hotel
@@ -137,19 +323,20 @@ const Booking = () => {
             const member: IMemberBooking = {
                 id: GenerateId('memberbookhotel'), BookHotelId: IdBooking,
                 FullName: memberName, DateOfBirth: FormatStringToDate(memberBirth ?? '', '-', 'YMD'), Sex: memberGender,
-                created_at: null, updated_at: null
+                created_at: new Date(), updated_at: new Date()
             }
             setListMember([...listMember, member]);
         }
-        console.log('ddddd', memberBirth)
     }
+
+
 
     return (
         <main className="w-full h-full flex justify-center items-center bg-slate-50">
-            {/* <Loading modalState={loadingBookingState} /> */}
+            <Loading modalState={loadingBookingState} />
             {room != undefined ? <div className="mb-8 w-full flex flex-col justify-center
              items-center">
-                <div className="fixed top-[90px] z-50 w-full flex flex-row h-22 py-1.5 bg-slate-300 justify-center items-center">
+                <div className="fixed top-[90px] z-40 w-full flex flex-row h-22 py-1.5 bg-slate-300 justify-center items-center">
                     <div className="w-4/12">
                         <p className="font-semibold ml-32">ĐẶT PHÒNG</p>
 
@@ -157,6 +344,7 @@ const Booking = () => {
                     <div className="w-8/12 flex flex-row items-center justify-end font-semibold mr-5">
                         <p className={`w-7 h-7 rounded-full flex justify-center items-center mx-2
                         ${stepState === 1 ? 'bg-blue-500 text-slate-50' : 'bg-gray-100'}`}
+                            onClick={() => { stepState == 2 ? setStepState(1) : null }}
                         >1</p>
                         <p className={`h-10 rounded-full flex justify-center items-center
                         ${stepState === 1 ? 'text-blue-500 ' : 'text-gray-900'}`}
@@ -175,7 +363,7 @@ const Booking = () => {
                         >Gửi phiếu xác nhận</p>
                     </div>
                 </div>
-                <div className="w-full  mt-[20px] bg-slate-100 flex justify-center items-center">
+                <div className="w-full  mt-[23px] bg-slate-100 flex justify-center items-center">
                     <div className="w-10/12">
                         <p className="text-2xl my-3"><b>Đặt phòng của bạn</b></p>
                         <p className="text-gray-500 font-semibold text-lg">Hãy đảm bảo tất cả thông tin chi tiết trên trang này đã chính
@@ -189,227 +377,334 @@ const Booking = () => {
 
                                 <form className="w-full flex flex-row justify-start items-start
                                 p-3 bg-white rounded-lg flex-wrap">
-                                    <p className="w-full text-xl font-semibold text-gray-900">Thông tin người đặt</p>
-                                    <div className="w-1/2 flex flex-col pr-2">
-                                        <div className="w-full flex justify-start items-center text-lg my-2">
-                                            <span className="w-4/12 flex flex-row ">Họ và tên <span className="text-danger">*</span>:</span>
-                                            <input type="text" name="hoten" value={userGuest?.Name} readOnly
-                                                className="w-8/12 h-[22px] outline outline-cyan-400 px-2 rounded-md mx-1
-                                                cursor-not-allowed text-lg " id="hoten" />
-                                        </div>
 
-                                        <div className="w-full flex justify-start items-center text-lg my-2">
-                                            <span className="w-4/12 flex flex-row">Số điện thoại <span className="text-danger">*</span>:</span>
-                                            <input type="text" name="hoten" value={userGuest?.TelephoneContact} readOnly
-                                                className="w-8/12 h-[22px] outline outline-cyan-400 px-2 rounded-md mx-1
-                                                cursor-not-allowed text-lg" id="hoten" />
-                                        </div>
-                                    </div>
+                                    <div className={`${stepState == 1 ? 'block' : 'hidden'} w-full flex flex-row justify-start items-start
+                                p-3 bg-white rounded-lg flex-wrap`} >
+                                        <p className="w-full text-xl font-semibold text-gray-900">Thông tin người đặt</p>
+                                        <div className="w-1/2 flex flex-col pr-2">
+                                            <div className="w-full flex justify-start items-center text-lg my-2">
+                                                <span className="w-4/12 flex flex-row ">Họ và tên <span className="text-red-500">*</span>:</span>
+                                                <input type="text" name="hoten" value={userGuest?.Name} readOnly
+                                                    className="w-8/12 h-[22px] border border-cyan-400 px-2 rounded-sm mx-1
+                                                     focus:outline-cyan-500 focus:outline cursor-not-allowed text-lg " id="hoten" />
+                                            </div>
 
-                                    <div className="w-1/2 flex flex-col pl-2">
-                                        <div className="w-full flex justify-start items-center text-lg my-2">
-                                            <span className="w-4/12 flex flex-row ">Email <span className="text-danger">*</span>:</span>
-                                            <input type="email" name="hoten" value={userGuest?.EmailContact} readOnly
-                                                className="w-8/12 h-[22px] outline outline-cyan-400 px-2 rounded-md mx-1
-                                                cursor-not-allowed text-lg " id="hoten" />
-                                        </div>
-
-                                        <div className="w-full flex justify-start items-center text-lg my-2">
-                                            <span className="w-4/12 flex flex-row">Ghi chú:</span>
-                                            <input type="text" name="hoten" placeholder="Thêm ghi chú..."
-                                                className="w-8/12 h-[22px] outline outline-cyan-400 px-2 rounded-md mx-1
-                                                cursor-pointer text-lg" id="hoten" />
-                                        </div>
-
-
-                                    </div>
-                                    <p className="w-full text-xl font-semibold text-gray-900">Thêm người đi cùng</p>
-                                    <div className="flex w-full flex-row flex-wrap">
-                                        <div className="w-4/12 flex flex-col justify-start items-start text-lg my-2 px-2">
-                                            <span className="w-full flex flex-row ">Họ tên <span className="text-danger">*</span>:</span>
-                                            <input type="text" name="subhoten" placeholder="Nhập họ tên người đi cùng.."
-                                                className="w-full h-[22px] outline outline-cyan-400 px-2 rounded-md mx-1
-                                                cursor-pointer text-lg "
-                                                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                                                    setMemberName(event.target.value);
-                                                }} />
-                                        </div>
-
-                                        <div className="w-4/12 flex flex-col justify-start items-start text-lg my-2 px-2">
-                                            <span className="w-full flex flex-row ">Ngày sinh:</span>
-                                            <input type="date" name="subhoten" placeholder="Nhập họ tên người đi cùng.."
-                                                className="w-full h-[22px] outline outline-cyan-400 px-2 rounded-md mx-1
-                                                cursor-pointer text-lg "
-                                                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                                                    setMemberBirth(event.target.value);
-                                                }} />
-                                        </div>
-
-                                        <div className="w-4/12 flex flex-col justify-start items-start text-lg my-2 px-2">
-                                            <span className="w-full flex flex-row ">Giới tính <span className="text-danger">*</span>:</span>
-                                            <div className="flex flex-row">
-                                                <input type="radio" id="raNam" name="memberGender" value="1"
-                                                    checked={memberGender == true} className="w-12"
-                                                    onChange={() => {
-                                                        setMemberGender(false);
-                                                    }} />
-                                                <label htmlFor="raNam" className="ml-1">Nam</label>
-                                                <input type="radio" id="raNu" name="memberGender" value="0"
-                                                    checked={memberGender == false} className="w-12 ml-4"
-                                                    onChange={() => {
-                                                        setMemberGender(false);
-                                                    }} />
-                                                <label htmlFor="raNu" className="ml-1">Nữ</label>
+                                            <div className="w-full flex justify-start items-center text-lg my-2">
+                                                <span className="w-4/12 flex flex-row">SDT<span className="text-red-500">*</span>:</span>
+                                                <input type="text" name="hoten" value={userGuest?.TelephoneContact} readOnly
+                                                    className="w-8/12 h-[22px] border border-cyan-400 px-2 rounded-sm mx-1
+                                                    focus:outline-cyan-500 focus:outline
+                                               cursor-not-allowed text-lg " id="hoten" />
                                             </div>
                                         </div>
-                                        <div className="w-full flex justify-end items-end text-lg my-2 ">
-                                            <button className="w-4/12 py-1 bg-blue-500 rounded-lg text-white font-bold"
-                                                onClick={() => { handleAddMember(event) }}>Thêm</button>
-                                        </div>
-                                        <p className="w-full text-xl font-semibold text-gray-900">Danh sách người đi cùng</p>
-                                        <div className="w-full flex justify-start items-end text-lg my-2 ">
-                                            {listMember != undefined && listMember.length > 0
-                                                ? <table className="w-full table-auto order-collapse border border-green-800">
-                                                    <thead className="bg-green-100">
-                                                        <th className="border border-green-600 w-1/12">STT</th>
-                                                        <th className="border border-green-600 w-4/12">Họ tên</th>
-                                                        <th className="border border-green-600 w-4/12">Ngày sinh</th>
-                                                        <th className="border border-green-600 w-2/12">Giới tính</th>
-                                                        <th className="border border-green-600 w-1/12"></th>
-                                                    </thead>
-                                                    <tbody>
-                                                        {listMember.map((item, index) => (
-                                                            <tr className="hover:bg-green-100">
-                                                                <td className="px-1 border border-green-600 w-1/12">{index}</td>
-                                                                <td className="px-1 border border-green-600 w-4/12">{item.FullName}</td>
-                                                                <td className="px-1 border border-green-600 w-4/12">{FormatDate(item.DateOfBirth)?.split(' ')[0]}</td>
-                                                                <td className="px-1 border border-green-600 w-2/12">{item.Sex ? 'Nam' : 'Nữ'}</td>
-                                                                <td className="border border-green-600 w-1/12 pl-[15px]">
-                                                                    <span className="cursor-pointer" onClick={() => {
-                                                                        setListMember(listMember =>
-                                                                            listMember.filter((fitem, findex) => { return findex != index }))
-                                                                    }}>
-                                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-x-square-fill text-danger hover:scale-105" viewBox="0 0 16 16">
-                                                                            <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm3.354 4.646L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 1 1 .708-.708" />
-                                                                        </svg>
-                                                                    </span>
-                                                                </td>
-                                                            </tr>
-                                                        ))}
-                                                    </tbody>
-                                                </table> : <p>Chưa có người ở cùng, hãy thêm nếu bạn có người đi cùng.</p>}
+
+                                        <div className="w-1/2 flex flex-col pl-2">
+                                            <div className="w-full flex justify-start items-center text-lg my-2">
+                                                <span className="w-4/12 flex flex-row ">Email <span className="text-red-500">*</span>:</span>
+                                                <input type="email" name="hoten" value={userGuest?.EmailContact} readOnly
+                                                    className="w-8/12 h-[22px] border border-cyan-400 px-2 rounded-sm mx-1
+                                                    focus:outline-cyan-500 focus:outline cursor-not-allowed text-lg  " id="hoten" />
+                                            </div>
+
+                                            <div className="w-full flex justify-start items-center text-lg my-2">
+                                                <span className="w-4/12 flex flex-row">Ghi chú:</span>
+                                                <input type="text" name="hoten" placeholder="Thêm ghi chú..."
+                                                    className="w-8/12 h-[22px] border border-cyan-400 px-2 rounded-sm mx-1
+                                                    focus:outline-cyan-500 focus:outline cursor-not-allowed text-lg " id="hoten"
+                                                    onChange={(event) => { setNote(event.target.value) }} />
+                                            </div>
+
 
                                         </div>
+                                        <p className="w-full text-xl font-semibold text-gray-900">Thêm người đi cùng</p>
+                                        <div className="flex w-full flex-row flex-wrap">
+                                            <div className="w-4/12 flex flex-col justify-start items-start text-lg my-2 px-2">
+                                                <span className="w-full flex flex-row ">Họ tên <span className="text-red-500">*</span>:</span>
+                                                <input type="text" name="subhoten" placeholder="Nhập họ tên người đi cùng.."
+                                                    className="w-8/12 h-[22px] border border-cyan-400 px-2 rounded-sm mx-1
+                                                    focus:outline-cyan-500 focus:outline
+                                               cursor-not-allowed text-lg "
+                                                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                                                        setMemberName(event.target.value);
+                                                    }} />
+                                            </div>
 
-                                        {/* git code */}
-                                        <div className="w-full flex flex-row justify-center items-center text-lg my-2 
+                                            <div className="w-4/12 flex flex-col justify-start items-start text-lg my-2 px-2">
+                                                <span className="w-full flex flex-row ">Ngày sinh:</span>
+                                                <input type="date" name="subhoten" placeholder="Nhập họ tên người đi cùng.."
+                                                    className="w-8/12 h-[22px] border border-cyan-400 px-2 rounded-sm mx-1
+                                                    focus:outline-cyan-500 focus:outline
+                                               cursor-not-allowed text-lg "
+                                                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                                                        setMemberBirth(event.target.value);
+                                                    }} />
+                                            </div>
+
+                                            <div className="w-4/12 flex flex-col justify-start items-start text-lg my-2 px-2">
+                                                <span className="w-full flex flex-row ">Giới tính <span className="text-red-500">*</span>:</span>
+                                                <div className="flex flex-row">
+                                                    <input type="radio" id="raNam" name="memberGender" value="1"
+                                                        checked={memberGender == true} className="w-12"
+                                                        onChange={() => {
+                                                            setMemberGender(false);
+                                                        }} />
+                                                    <label htmlFor="raNam" className="ml-1">Nam</label>
+                                                    <input type="radio" id="raNu" name="memberGender" value="0"
+                                                        checked={memberGender == false} className="w-12 ml-4"
+                                                        onChange={() => {
+                                                            setMemberGender(false);
+                                                        }} />
+                                                    <label htmlFor="raNu" className="ml-1">Nữ</label>
+                                                </div>
+                                            </div>
+                                            <div className="w-full flex justify-end items-end text-lg my-2 ">
+                                                <button className="w-4/12 py-1 bg-blue-500 rounded-lg text-white font-bold"
+                                                    onClick={() => { handleAddMember(event) }}>Thêm</button>
+                                            </div>
+                                            <p className="w-full text-xl font-semibold text-gray-900">Danh sách người đi cùng</p>
+                                            <div className="w-full flex justify-start items-end text-lg my-2 ">
+                                                {listMember != undefined && listMember.length > 0
+                                                    ? <table className="w-full table-auto order-collapse border border-green-800">
+                                                        <thead className="bg-green-100">
+                                                            <th className="border border-green-600 w-1/12">STT</th>
+                                                            <th className="border border-green-600 w-4/12">Họ tên</th>
+                                                            <th className="border border-green-600 w-4/12">Ngày sinh</th>
+                                                            <th className="border border-green-600 w-2/12">Giới tính</th>
+                                                            <th className="border border-green-600 w-1/12"></th>
+                                                        </thead>
+                                                        <tbody>
+                                                            {listMember.map((item, index) => (
+                                                                <tr className="hover:bg-green-100">
+                                                                    <td className="px-1 border border-green-600 w-1/12">{index}</td>
+                                                                    <td className="px-1 border border-green-600 w-4/12">{item.FullName}</td>
+                                                                    <td className="px-1 border border-green-600 w-4/12">{FormatDate(item.DateOfBirth)?.split(' ')[0]}</td>
+                                                                    <td className="px-1 border border-green-600 w-2/12">{item.Sex ? 'Nam' : 'Nữ'}</td>
+                                                                    <td className="border border-green-600 w-1/12 pl-[15px]">
+                                                                        <span className="cursor-pointer" onClick={() => {
+                                                                            setListMember(listMember =>
+                                                                                listMember.filter((fitem, findex) => { return findex != index }))
+                                                                        }}>
+                                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-x-square-fill text-red-500 hover:scale-105" viewBox="0 0 16 16">
+                                                                                <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm3.354 4.646L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 1 1 .708-.708" />
+                                                                            </svg>
+                                                                        </span>
+                                                                    </td>
+                                                                </tr>
+                                                            ))}
+                                                        </tbody>
+                                                    </table> : <p>Chưa có người ở cùng, hãy thêm nếu bạn có người đi cùng.</p>}
+
+                                            </div>
+
+                                            {/* git code */}
+                                            <div className="w-full flex flex-row justify-center items-center text-lg my-2 
                                         bg-cyan-100 py-3 px-2 rounded-lg">
-                                            <div className="w-4/12 flex flex-col"><p className="w-full flex flex-row mx-1 text-lg ">Nhập mã giảm giá</p>
-                                                <span className="w-full flex flex-row mx-1 font-semibold text-danger text-xs">Nhập mã giảm giá nếu có</span></div>
-                                            <input type="text" id="gitCode" name="gitCode"
-                                                className="w-8/12 h-[22px] outline outline-cyan-400 px-2 rounded-md mx-1
-                                                      cursor-pointer text-lg "
-                                                placeholder="Nhập mã giảm giá" />
+                                                <div className="w-4/12 flex flex-col"><p className="w-full flex flex-row mx-1 text-lg ">Nhập mã giảm giá</p>
+                                                    <span className="w-full flex flex-row mx-1 font-semibold text-red-500 text-xs">Nhập mã giảm giá nếu có</span></div>
 
-                                        </div>
+                                                <div className="w-8/12">
+                                                    <div className="relative flex flex-row items-center">
+                                                        <input type="text"
+                                                            placeholder="Nhập mã giảm giá"
+                                                            value={discountCode}
+                                                            onChange={(event) => {
+                                                                setDisountCode(event.target.value)
+                                                                if (event.target.value.length == 0) {
+                                                                    setDiscountMessage('')
+                                                                    setDiscountCanUse(false)
+                                                                    setDiscountValue(0)
+                                                                    setTotalPrice(totalPriceActual)
+                                                                }
+                                                            }}
+                                                            className='pl-2 bg-gray-50 border border-cyan-400 text-gray-900 
+                                                            text-lg rounded-xl  block w-full p-2.5 font-medium focus:outline focus:outline-cyan-500' />
+                                                        <span className="absolute bg-cyan-400 h-full flex flex-row items-center border border-cyan-400
+                                                        justify-center rounded-r-xl w-12 right-0"
+                                                            onClick={() => {
+                                                                setDiscountMessage('Đang kiểm tra...')
+                                                                const response = getOnePosterByGiftCode(discountCode);
+                                                                response.then((data) => {
+                                                                    setDiscountModel(data);
+                                                                    if (data != undefined) {
+                                                                        handleGetDiscountValue(data);
+                                                                    }
+                                                                    else {
+                                                                        setDiscountMessage('Mã giảm giá không tồn tại, vui lòng thử lại.')
+                                                                    }
+                                                                    console.log('iposter', data);
+                                                                }).catch((err) => { console.log('errr', err) })
+                                                            }}>
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-search" viewBox="0 0 16 16">
+                                                                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
+                                                            </svg>
+                                                        </span>
+                                                    </div>
+                                                    <span className="w-full flex flex-row mx-1 font-semibold text-red-500 text-xs">
+                                                        {discountMessage}</span>
 
-                                        {/* gia */}
-                                        <div className="w-full flex flex-row justify-start items-start text-lg my-2 
+                                                </div>
+                                            </div>
+
+                                            {/* gia */}
+                                            <div className="w-full flex flex-row justify-start items-start text-lg my-2 
                                         bg-cyan-100 py-3 px-2 rounded-lg flex-wrap">
-                                            <p className="w-full text-xl font-bold text-gray-900 underline">Chi tiết giá</p>
-                                            <span className="w-full flex flex-row mx-1 font-semibold text-cyan-500 text-sm">
-                                                <span>
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-info-circle-fill text-cyan-500" viewBox="0 0 16 16">
-                                                        <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2" />
-                                                    </svg>
+                                                <p className="w-full text-xl font-bold text-gray-900 underline">Chi tiết giá</p>
+                                                <span className="w-full flex flex-row mx-1 font-semibold text-cyan-500 text-sm">
+                                                    <span>
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-info-circle-fill text-cyan-500" viewBox="0 0 16 16">
+                                                            <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2" />
+                                                        </svg>
+                                                    </span>
+                                                    Thuế và phí là các khoản được chúng tôi chuyển trả cho khách sạn. Mọi thắc mắc về thuế và hóa đơn, vui lòng tham khảo Điều khoản và Điều kiện của chúng tôi để được giải đáp
                                                 </span>
-                                                Thuế và phí là các khoản được chúng tôi chuyển trả cho khách sạn. Mọi thắc mắc về thuế và hóa đơn, vui lòng tham khảo Điều khoản và Điều kiện của chúng tôi để được giải đáp
-                                            </span>
 
-                                            {/* gia phong */}
-                                            <div className="w-1/2 flex flex-col">
-                                                <p className="font-semibold mr-1 text-lg text-gray-800 ">Giá phòng</p>
-                                                <p>
-                                                    <span className="font-semibold mr-1 text-lg text-gray-800 ">
-                                                        (x{TotalRoom} Phòng)
-                                                    </span>
-                                                    <span className="font-semibold mr-1 text-lg text-gray-800 ">
-                                                        {room.typeroom?.Name}, (x{totalDay}Đêm)
-                                                    </span>
-                                                </p>
-                                            </div>
-                                            <div className="w-1/2 flex flex-col">
-                                                <p className="font-semibold mr-1 text-lg text-transparent ">_</p>
-                                                <p>
-                                                    <span className="font-semibold mr-1 text-lg text-gray-800 ">
-                                                        {room.typeroom?.Price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
-                                                        (x{totalDay})
-                                                        = {((room.typeroom?.Price ?? 0) * totalDay * Number.parseInt(TotalRoom ? TotalRoom.toString() : '1')).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
-                                                    </span>
-                                                </p>
-                                            </div>
-
-                                            {/* thue vat */}
-                                            {room.Bao_Gom_Thue_Va_Phi ? <span className="w-full font-semibold mr-1 text-lg text-red-500 ">
-                                                Đã bao gồm thuế VAT(8%)
-                                            </span> :
-                                                <div className="w-full flex flex-row my-2">
-                                                    <p className="w-1/2 font-semibold mr-1 text-lg text-gray-800 ">Giá chưa bao gồm VAT, bạn phải trả thêm:
-                                                        <br /><label className="text-sm text-danger">VAT = 8% giá trị phiếu đặt</label></p>
-                                                    <p className="w-1/2 font-semibold mr-1 text-lg text-gray-800 ">
-                                                        {(totalPrice * 8 / 100).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
+                                                {/* gia phong */}
+                                                <div className="w-1/2 flex flex-col">
+                                                    <p className="font-semibold mr-1 text-lg text-gray-800 ">Giá phòng</p>
+                                                    <p>
+                                                        <span className="font-semibold mr-1 text-lg text-gray-800 ">
+                                                            (x{TotalRoom} Phòng)
+                                                        </span>
+                                                        <span className="font-semibold mr-1 text-lg text-gray-800 ">
+                                                            {room.typeroom?.Name}, (x{totalDay}Đêm)
+                                                        </span>
                                                     </p>
-                                                </div>}
+                                                </div>
+                                                <div className="w-1/2 flex flex-col">
+                                                    <p className="font-semibold mr-1 text-lg text-transparent ">_</p>
+                                                    <p>
+                                                        <span className="font-semibold mr-1 text-lg text-gray-800 ">
+                                                            {room.typeroom?.Price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
+                                                            (x{totalDay})
+                                                            = {((room.typeroom?.Price ?? 0) * totalDay * Number.parseInt(TotalRoom ? TotalRoom.toString() : '1')).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
+                                                        </span>
+                                                    </p>
+                                                </div>
 
-                                            {/* gia phong co khuyen mai */}
-                                            {room.Discount > 0 ?
-                                                <><div className="w-1/2 flex flex-col my-2">
-                                                    <p className="font-semibold mr-1 text-lg text-gray-800 ">Giá phòng sau giảm giá</p>
-                                                    <span className="font-semibold mr-1 text-lg text-red-500 ">
-                                                        Phòng được giảm: {room.Discount}%
+                                                {/* thue vat */}
+                                                {room.Bao_Gom_Thue_Va_Phi ? <span className="w-full font-semibold mr-1 text-lg text-red-500 ">
+                                                    Đã bao gồm thuế VAT(8%)
+                                                </span> :
+                                                    <div className="w-full flex flex-row my-2">
+                                                        <p className="w-1/2 font-semibold mr-1 text-lg text-gray-800 ">Giá chưa bao gồm VAT, bạn phải trả thêm:
+                                                            <br /><label className="text-sm text-red-500">VAT = 8% giá trị phiếu đặt</label></p>
+                                                        <p className="w-1/2 font-semibold mr-1 text-lg text-gray-800 ">
+                                                            {(totalPrice * 8 / 100).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
+                                                        </p>
+                                                    </div>}
+
+                                                {/* gia phong co khuyen mai */}
+                                                {room.Discount > 0 ?
+                                                    <><div className="w-1/2 flex flex-col my-2">
+                                                        <p className="font-semibold mr-1 text-lg text-gray-800 ">Giá phòng sau giảm giá</p>
+                                                        <span className="font-semibold mr-1 text-lg text-red-500 ">
+                                                            Phòng được giảm: {room.Discount}%
+                                                        </span>
+                                                    </div>
+                                                        <div className="w-1/2 flex flex-col my-2">
+                                                            <p>
+                                                                <span className="font-bold mr-1 text-2xl text-red-500 ">
+                                                                    = {(totalPrice).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
+                                                                </span>
+                                                            </p>
+                                                        </div></>
+                                                    : null}
+
+                                                {/* Gift code neu co */}
+                                                {discountCanUse == true ?
+                                                    <><div className="w-1/2 flex flex-col my-2">
+                                                        <p className="font-semibold mr-1 text-lg text-gray-800 ">Giảm giá từ GIFT-CODE</p>
+                                                        <span className="font-semibold mr-1 text-[9px] text-red-500 mt-[-10px]">
+                                                            Được tính vào tổng giá trị hóa đơn
+                                                        </span>
+                                                    </div>
+                                                        <div className="w-1/2 flex flex-col my-2">
+                                                            <p>
+                                                                <span className="font-bold mr-1 text-2xl text-red-500 ">
+                                                                    = {discountState ? discountValue + '%' :
+                                                                        discountValue.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
+                                                                </span>
+                                                            </p>
+                                                        </div></>
+                                                    : null}
+
+                                                {/* gia phong phai tra */}
+                                                <div className="w-1/2 flex flex-col">
+                                                    <p className="font-semibold mr-1 text-lg text-gray-800 ">Giá phòng phải thanh toán</p>
+                                                </div>
+                                                <div className="w-1/2 flex flex-col">
+                                                    <span className="font-bold mr-1 text-2xl text-red-500 ">
+                                                        = {room.Bao_Gom_Thue_Va_Phi ?
+                                                            totalPrice.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })
+                                                            : (totalPrice + (totalPrice * 8 / 100)).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
                                                     </span>
                                                 </div>
-                                                    <div className="w-1/2 flex flex-col my-2">
-                                                        <p>
-                                                            <span className="font-bold mr-1 text-2xl text-red-500 ">
-                                                                = {(totalPrice).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
-                                                            </span>
-                                                        </p>
-                                                    </div></>
-                                                : null}
 
-                                            {/* gia phong phai tra */}
-                                            <div className="w-1/2 flex flex-col">
-                                                <p className="font-semibold mr-1 text-lg text-gray-800 ">Giá phòng phải thanh toán</p>
+                                                {/* and form dat */}
+                                                <p className="font-bold mr-1 text-lg w-full flex flex-row justify-center items-center my-2 text-cyan-500 ">
+                                                    <span>
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-clock-history text-cyan-600" viewBox="0 0 16 16">
+                                                            <path d="M8.515 1.019A7 7 0 0 0 8 1V0a8 8 0 0 1 .589.022zm2.004.45a7 7 0 0 0-.985-.299l.219-.976q.576.129 1.126.342zm1.37.71a7 7 0 0 0-.439-.27l.493-.87a8 8 0 0 1 .979.654l-.615.789a7 7 0 0 0-.418-.302zm1.834 1.79a7 7 0 0 0-.653-.796l.724-.69q.406.429.747.91zm.744 1.352a7 7 0 0 0-.214-.468l.893-.45a8 8 0 0 1 .45 1.088l-.95.313a7 7 0 0 0-.179-.483m.53 2.507a7 7 0 0 0-.1-1.025l.985-.17q.1.58.116 1.17zm-.131 1.538q.05-.254.081-.51l.993.123a8 8 0 0 1-.23 1.155l-.964-.267q.069-.247.12-.501m-.952 2.379q.276-.436.486-.908l.914.405q-.24.54-.555 1.038zm-.964 1.205q.183-.183.35-.378l.758.653a8 8 0 0 1-.401.432z" />
+                                                            <path d="M8 1a7 7 0 1 0 4.95 11.95l.707.707A8.001 8.001 0 1 1 8 0z" />
+                                                            <path d="M7.5 3a.5.5 0 0 1 .5.5v5.21l3.248 1.856a.5.5 0 0 1-.496.868l-3.5-2A.5.5 0 0 1 7 9V3.5a.5.5 0 0 1 .5-.5" />
+                                                        </svg>
+                                                    </span>
+                                                    Hãy giữ phòng này ngay trước khi nó tăng cao hơn!</p>
+
+                                                <button className="w-full bg-orange-500 p-2 text-white font-bold rounded-lg"
+                                                    onClick={() => {
+                                                        event?.preventDefault();
+                                                        handleGoToStep2()
+                                                    }}>Tiếp tục thanh toán</button>
+
+                                                <p className="font-semibold mr-1 text-sm my-2 text-cyan-500 text-center ">
+                                                    <span>Bằng việc tiếp tục thanh toán, bạn đã đồng ý với</span>
+                                                    <Link href="" className=" font-bold underline"> Điều khoản & Điều kiện </Link>
+                                                    <span>cũng như Chính sách quyền riêng tư của chúng tôi.</span></p>
                                             </div>
-                                            <div className="w-1/2 flex flex-col">
-                                                <span className="font-bold mr-1 text-2xl text-red-500 ">
-                                                    = {room.Bao_Gom_Thue_Va_Phi ?
-                                                        totalPrice.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })
-                                                        : (totalPrice + (totalPrice * 8 / 100)).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
-                                                </span>
-                                            </div>
-
-                                            {/* and form dat */}
-                                            <p className="font-bold mr-1 text-lg w-full flex flex-row justify-center items-center my-2 text-cyan-500 ">
-                                                <span>
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-clock-history text-cyan-600" viewBox="0 0 16 16">
-                                                        <path d="M8.515 1.019A7 7 0 0 0 8 1V0a8 8 0 0 1 .589.022zm2.004.45a7 7 0 0 0-.985-.299l.219-.976q.576.129 1.126.342zm1.37.71a7 7 0 0 0-.439-.27l.493-.87a8 8 0 0 1 .979.654l-.615.789a7 7 0 0 0-.418-.302zm1.834 1.79a7 7 0 0 0-.653-.796l.724-.69q.406.429.747.91zm.744 1.352a7 7 0 0 0-.214-.468l.893-.45a8 8 0 0 1 .45 1.088l-.95.313a7 7 0 0 0-.179-.483m.53 2.507a7 7 0 0 0-.1-1.025l.985-.17q.1.58.116 1.17zm-.131 1.538q.05-.254.081-.51l.993.123a8 8 0 0 1-.23 1.155l-.964-.267q.069-.247.12-.501m-.952 2.379q.276-.436.486-.908l.914.405q-.24.54-.555 1.038zm-.964 1.205q.183-.183.35-.378l.758.653a8 8 0 0 1-.401.432z" />
-                                                        <path d="M8 1a7 7 0 1 0 4.95 11.95l.707.707A8.001 8.001 0 1 1 8 0z" />
-                                                        <path d="M7.5 3a.5.5 0 0 1 .5.5v5.21l3.248 1.856a.5.5 0 0 1-.496.868l-3.5-2A.5.5 0 0 1 7 9V3.5a.5.5 0 0 1 .5-.5" />
-                                                    </svg>
-                                                </span>
-                                                Hãy giữ phòng này ngay trước khi nó tăng cao hơn!</p>
-
-                                            <button className="w-full bg-orange-500 p-2 text-white font-bold rounded-lg">Tiếp tục thanh toán</button>
-
-                                            <p className="font-semibold mr-1 text-sm my-2 text-cyan-500 text-center ">
-                                                <span>Bằng việc tiếp tục thanh toán, bạn đã đồng ý với</span>
-                                                <Link href="" className=" font-bold underline"> Điều khoản & Điều kiện </Link>
-                                                <span>cũng như Chính sách quyền riêng tư của chúng tôi.</span></p>
                                         </div>
                                     </div>
 
+                                    {/* chonh hinh thuc thanh toan */}
+                                    <div className={`${stepState == 2 ? 'block' : 'hidden'} w-full`} >
+                                        <p className="w-full text-xl font-semibold text-gray-900">Chọn hình thức thanh toán</p>
+                                        <div className="flex flex-row justify-center items-center">
+                                            <button className="w-3/12 bg-blue-700 border border-blue-700 mx-3 rounded-lg h-12
+                                            text-white font-semibold hover:scale-105 shadow shadow-cyan-400"
+                                                onClick={() => {
+                                                    event?.preventDefault();
+                                                    setModalErrValue(`'Xác nhận thanh toán trực tiếp, phiếu đặt: ${room.id}(${room.typeroom?.Name})`);
+                                                    setModalQuestionYN(true);
+                                                    setStepState(3);
+                                                    //handlePayByHand();
+                                                }}>Thanh toán trực tiếp</button>
+                                            <button className="w-3/12 bg-white border border-blue-700 mx-3 p-2 rounded-lg
+                                            text-white font-semibold hover:scale-105 shadow shadow-cyan-400 flex justify-center">
+                                                <img src="/logo/logo-en.webp" className="h-8" />
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    {/* Ket qua thanh toan */}
+                                    <div className={`${stepState == 3 ? 'block' : 'hidden'} w-full`} >
+                                        <p className="w-full text-xl font-semibold text-gray-900">Kết quả đặt phòng</p>
+                                        <div className="flex flex-col justify-center items-start ml-3">
+                                            {message}
+
+                                            <p>Mã phiếu đặt: {resultBooking?.id}</p>
+                                            <p>Ngày nhận phòng: {resultBooking?.TimeRecive != undefined ? FormatDateDDD(resultBooking?.TimeRecive) : null}</p>
+                                            <p>Ngày trả phòng: {resultBooking?.TimeLeave != undefined ? FormatDateDDD(resultBooking?.TimeLeave) : null}</p>
+                                            <p>Chi phí: {resultBooking?.Price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</p>
+                                            <p>Giảm giá: {resultBooking?.Discount.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</p>
+                                            <p>Hình thức thanh toán: {resultBooking?.TypePay}</p>
+                                        </div>
+
+                                        <button className="bg-blue-700 text-white px-5 py-3 rounded-md hover:scale-105"
+                                            onClick={() => {
+                                                event?.preventDefault();
+                                                route.push('/')
+                                            }}>Quay lại trang chủ</button>
+                                    </div>
 
 
                                 </form>
@@ -589,6 +884,48 @@ const Booking = () => {
                                 <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">{modalErrValue}</h3>
                                 <button data-modal-hide="popup-modal" type="button" className="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center" onClick={() => { setModalErr(false) }}>
                                     Tôi hiểu
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* modal question thanh toan */}
+                <div id="popup-modal" className={`w-full ${modalQuestionYN ? 'block' : 'hidden'} h-full flex
+            z-50 fixed inset-0 justify-center items-center`} style={{ background: 'rgb(0 0 0 / 85%)' }}>
+                    <div className="p-4 w-full max-w-md max-h-full flex justify-center items-center mb-[100px]">
+                        <div className="relative w-full bg-white rounded-lg shadow dark:bg-gray-700">
+                            <button type="button" className="absolute top-3 end-2.5 text-gray-400 bg-transparent
+                             hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex 
+                             justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                                data-modal-hide="popup-modal" onClick={() => { setModalQuestionYN(false) }}>
+                                <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                                </svg>
+                                <span className="sr-only">Close modal</span>
+                            </button>
+
+                            <div className="p-4 md:p-5 text-center">
+                                <svg className="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                </svg>
+                                <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">{modalErrValue}</h3>
+                                <button data-modal-hide="popup-modal" type="button" className="text-white bg-green-600  w-[110px]
+                                 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800
+                                  font-medium rounded-lg text-sm inline-flex items-center px-10 py-2.5 text-center mr-5 justify-center"
+                                    onClick={() => {
+                                        event?.preventDefault()
+                                        setModalQuestionYN(false)
+                                        handlePay(1)
+                                        setModalErrValue('')
+                                    }}>
+                                    Xác nhận
+                                </button>
+                                <button data-modal-hide="popup-modal" type="button" className="text-white bg-red-600 w-[110px]
+                                 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800
+                                  font-medium rounded-lg text-sm inline-flex items-center px-10 py-2.5 text-center ml-5 justify-center"
+                                    onClick={() => { setModalQuestionYN(false) }}>
+                                    Hủy
                                 </button>
                             </div>
                         </div>

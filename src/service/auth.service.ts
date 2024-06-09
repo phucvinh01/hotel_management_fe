@@ -1,7 +1,9 @@
-import { use } from 'react';
+import { use, useState } from 'react';
 import Error from 'next/error';
 import axios from '../axios/http';
 import { EMAIL, PHONE, SUCCESS } from '@/constant';
+import { getUserByEmail } from './guest.service';
+import { json } from 'stream/consumers';
 
 export const checkExistEmail = async (
   email: string
@@ -38,12 +40,12 @@ type RegisterResult = {
 }
 
 type LoginResult = {
-  user:IUser | null,
+  user: IUser | null,
   success: boolean,
   message: string,
 }
 type LoginAdminResult = {
-  user:IAdministratorHotel | null,
+  user: IAdministratorHotel | null,
   success: boolean,
   message: string,
 }
@@ -85,31 +87,37 @@ export const login = async (
     if (type === 'Email') {
       const data = await axios.post(`/login-email`, loginEmail);
       if (data.status === 200) {
+        if (loginEmail?.email != undefined) {
+          const responseGuest = await getUserByEmail(loginEmail.email);
+          localStorage.setItem('IGuest', JSON.stringify(responseGuest))
+          sessionStorage.setItem('IGuest', JSON.stringify(responseGuest))
+        }
+
         return {
-          user:data.data,
-          success:true,
-          message:"Đăng nhập thành công"
+          user: data.data,
+          success: true,
+          message: "Đăng nhập thành công"
         };
       }
-      else if(data.status = EMAIL) {
-         return {
-          user:null,
-          success:false,
-          message:"Email không tồn tại, bạn cần đăng ký"
+      else if (data.status = EMAIL) {
+        return {
+          user: null,
+          success: false,
+          message: "Email không tồn tại, bạn cần đăng ký"
         };
       }
-      else if(data.status == PHONE) {
+      else if (data.status == PHONE) {
         return {
-          user:null,
-          success:false,
-          message:"Mật khẩu không đúng, vui lòng nhập lại"
+          user: null,
+          success: false,
+          message: "Mật khẩu không đúng, vui lòng nhập lại"
         };
       }
-       else {
+      else {
         return {
-          user:null,
-          success:false,
-          message:"Lỗi sever vui lòng kiểm tra kết nối"
+          user: null,
+          success: false,
+          message: "Lỗi sever vui lòng kiểm tra kết nối"
         };
       }
     }
@@ -117,30 +125,30 @@ export const login = async (
       const data = await axios.post(`/login-phone`, loginPhone);
       if (data.status === 200) {
         return {
-          user:data.data,
-          success:true,
-          message:"Đăng nhập thành công"
+          user: data.data,
+          success: true,
+          message: "Đăng nhập thành công"
         };
       }
-      else if(data.status = EMAIL) {
-         return {
-          user:null,
-          success:false,
-          message:"Email không tồn tại, bạn cần đăng ký"
-        };
-      }
-      else if(data.status == PHONE) {
+      else if (data.status = EMAIL) {
         return {
-          user:null,
-          success:false,
-          message:"Mật khẩu không đúng, vui lòng nhập lại"
+          user: null,
+          success: false,
+          message: "Email không tồn tại, bạn cần đăng ký"
+        };
+      }
+      else if (data.status == PHONE) {
+        return {
+          user: null,
+          success: false,
+          message: "Mật khẩu không đúng, vui lòng nhập lại"
         };
       }
       else {
         return {
-          user:null,
-          success:false,
-          message:"Lỗi sever vui lòng kiểm tra kết nối"
+          user: null,
+          success: false,
+          message: "Lỗi sever vui lòng kiểm tra kết nối"
         };
       }
     }
@@ -156,6 +164,35 @@ export const loginWithAdministrator = async (
     const data = await axios.post(`/login-administrator`, formData);
     console.log(data);
     if (data.status === 200) {
+
+//       return {
+//         user: data.data,
+//         success: true,
+//         message: "Đăng nhập thành công"
+//       };
+//     }
+//     else if (data.status = EMAIL) {
+//       return {
+//         user: null,
+//         success: false,
+//         message: "Email không tồn tại, bạn cần đăng ký"
+//       };
+//     }
+//     else if (data.status == PHONE) {
+//       return {
+//         user: null,
+//         success: false,
+//         message: "Mật khẩu không đúng, vui lòng nhập lại"
+//       };
+//     }
+//     else {
+//       return {
+//         user: null,
+//         success: false,
+//         message: "Lỗi sever vui lòng kiểm tra kết nối"
+//       };
+//     }
+// =======
         return {
           user:data.data,
           success:true,

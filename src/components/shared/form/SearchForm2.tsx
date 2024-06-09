@@ -115,7 +115,7 @@ const SearchForm2 = (props: searchForm2Props) => {
 
 
     return (
-        <div className={` z-[999] w-full ${scrollY > 20 ? 'fixed top-0' : ''} mb-[70px] `}>
+        <div className={` z-20 w-full ${scrollY > 20 ? 'fixed top-0' : ''} mb-[70px] `}>
             <form
                 className='flex flex-col lg:flex-row  justify-center  items-center w-full py-6
                 bg-gradient-to-b from-sky-700 via-sky-500 to-blue-500'
