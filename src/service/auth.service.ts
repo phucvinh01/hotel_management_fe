@@ -162,34 +162,64 @@ export const loginWithAdministrator = async (
 ): Promise<LoginAdminResult | undefined> => {
   try {
     const data = await axios.post(`/login-administrator`, formData);
+    console.log(data);
     if (data.status === 200) {
-      return {
-        user: data.data,
-        success: true,
-        message: "Đăng nhập thành công"
-      };
-    }
-    else if (data.status = EMAIL) {
-      return {
-        user: null,
-        success: false,
-        message: "Email không tồn tại, bạn cần đăng ký"
-      };
-    }
-    else if (data.status == PHONE) {
-      return {
-        user: null,
-        success: false,
-        message: "Mật khẩu không đúng, vui lòng nhập lại"
-      };
-    }
-    else {
-      return {
-        user: null,
-        success: false,
-        message: "Lỗi sever vui lòng kiểm tra kết nối"
-      };
-    }
+
+//       return {
+//         user: data.data,
+//         success: true,
+//         message: "Đăng nhập thành công"
+//       };
+//     }
+//     else if (data.status = EMAIL) {
+//       return {
+//         user: null,
+//         success: false,
+//         message: "Email không tồn tại, bạn cần đăng ký"
+//       };
+//     }
+//     else if (data.status == PHONE) {
+//       return {
+//         user: null,
+//         success: false,
+//         message: "Mật khẩu không đúng, vui lòng nhập lại"
+//       };
+//     }
+//     else {
+//       return {
+//         user: null,
+//         success: false,
+//         message: "Lỗi sever vui lòng kiểm tra kết nối"
+//       };
+//     }
+// =======
+        return {
+          user:data.data,
+          success:true,
+          message:"Đăng nhập thành công"
+        };
+      }
+      else if(data.status = EMAIL) {
+         return {
+          user:null,
+          success:false,
+          message:"DON'T HAVE ACCOUNT"
+        };
+      }
+      else if(data.status == PHONE) {
+        return {
+          user:null,
+          success:false,
+          message:"Mật khẩu không đúng, vui lòng nhập lại"
+        };
+      }
+       else {
+        return {
+          user:null,
+          success:false,
+          message:"Lỗi sever vui lòng kiểm tra kết nối"
+        };
+      }
   } catch (error) {
     console.log(error);
   }

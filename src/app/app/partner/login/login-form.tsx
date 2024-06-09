@@ -46,6 +46,8 @@ export function LoginFormPartnert({ className, ...props }: UserAuthFormProps) {
           <div className='flex flex-col gap-2'>
             <Label htmlFor='email'>Địa chỉ email của bạn</Label>
             <Input
+            required
+
               id='email'
               placeholder='name@example.com'
               type='email'
@@ -59,6 +61,7 @@ export function LoginFormPartnert({ className, ...props }: UserAuthFormProps) {
           <div className='flex flex-col gap-2'>
             <Label htmlFor='email'>Mật khẩu</Label>
             <Input
+            required
               id='password'
               type='password'
               autoCorrect='off'

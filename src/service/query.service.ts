@@ -7,8 +7,10 @@ import {
   useMutation,
 } from "@tanstack/react-query";
 
-import { getRooms , insertRoom,  updateRoom,  } from "./hotel.service";
 import { getTypeRooms, insertTyperoom, updateTyperoom, getImageTypeRoom, uploadMultipleImage, } from "./typeroom.service";
+import { getRooms, insertRoom, updateRoom } from "./room.service";
+import { getHotel, getRenvenuByHotel, IHotel, updateHotel } from "./hotel.service";
+import { getBookings } from "./_booking.service";
 
 // Query Typeroom
 
@@ -104,5 +106,54 @@ export function useUpdateRoom() {
     onError: async (error) => {
       return "Cập nhật phòng thất bại";
     },
+  });
+}
+
+//Query hotel 
+
+export function useGetRenvenuHotel(id: string | undefined) {
+  return useQuery({
+    queryKey: ["renvenuHotel",id],
+    queryFn: () => getRenvenuByHotel(id),
+    placeholderData: keepPreviousData,
+    refetchOnWindowFocus: true,
+  });
+}
+
+
+export function useGetHotel(id: string) {
+  return useQuery({
+    queryKey: ["hotel",id],
+    queryFn: () => getHotel(id),
+    placeholderData: keepPreviousData,
+    refetchOnWindowFocus: true,
+  });
+}
+
+export function useUpdateHotel() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (data: HotelResponse) => updateHotel(data),
+    onSuccess: async () => {
+        await queryClient.invalidateQueries({ queryKey: ['hotel'] }); 
+        await queryClient.prefetchQuery({ queryKey: ['hotel'] }); 
+    },
+    onError: async (error) => {
+      return "Cập nhật phòng thất bại";
+    },
+  });
+}
+
+
+//Booking
+
+
+
+export function useGetBooking(idHotel: string) {
+  return useQuery({
+    queryKey: ["useGetBooking",idHotel],
+    queryFn: () => getBookings(idHotel),
+    placeholderData: keepPreviousData,
+    refetchOnWindowFocus: true,
   });
 }

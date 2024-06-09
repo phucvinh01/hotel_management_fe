@@ -63,7 +63,7 @@ export const insertTyperooms = async (
 ): Promise<InsertResult | false | undefined> => {
   try {
     const response = await axios.post<InsertResult>(
-      `/room/insert-typeroom`,
+      `http://127.0.1:8000/api/room/insert-typeroom`,
       { ...body, HotelId: id },
       {
         headers: {
@@ -75,7 +75,6 @@ export const insertTyperooms = async (
       return response.data;
     }
   } catch (error) {
-    throw error;
     return false;
   }
 };

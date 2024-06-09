@@ -1,191 +1,246 @@
-"use client"
+'use client';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { toast } from '@/components/ui/use-toast';
+import ImageUpLoader from './image-uploader';
+import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 
-import Link from "next/link"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useFieldArray, useForm } from "react-hook-form"
-import { z } from "zod"
-
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-import { Textarea } from "@/components/ui/textarea"
-import { toast } from "@/components/ui/use-toast"
+import * as z from 'zod';
+import { useAuth } from '@/hooks/useAuthContext';
+import Loader from '@/components/admin/common/Loader';
+import { useUpdateHotel } from '@/service/query.service';
+import { Hotel } from 'lucide-react';
+import { updateImageCover } from '@/service/hotel.service';
+import { Label } from '@/components/ui/label';
 
 const profileFormSchema = z.object({
-  username: z
+  name: z
     .string()
     .min(2, {
-      message: "Username must be at least 2 characters.",
+      message: 'Tên khách sạn dùng phải có ít nhất 2 ký tự.',
     })
     .max(30, {
-      message: "Username must not be longer than 30 characters.",
+      message: 'Tên khách sạn dùng không được dài hơn 30 ký tự.',
     }),
-  email: z
-    .string({
-      required_error: "Please select an email to display.",
+  Telephone: z
+    .number()
+    .min(11, {
+      message: 'Số điện thoại gồm 11 số',
     })
-    .email(),
-  bio: z.string().max(160).min(4),
-  urls: z
-    .array(
-      z.object({
-        value: z.string().url({ message: "Please enter a valid URL." }),
-      })
-    )
-    .optional(),
-})
+    .max(11, {
+      message: 'Số điện thoại gồm 11 số',
+    }),
+  Address: z.string({
+    required_error: 'Địa chỉ khách sạn không thể thiếu',
+  }),
+  Description: z.string().max(160).min(4).optional(),
+  LocationDetail: z.string().max(160).min(4).optional(),
+  TimeCheckOut: z.string(),
+  TimeCheckIn: z.string(),
+});
 
-type ProfileFormValues = z.infer<typeof profileFormSchema>
+type ProfileFormValues = z.infer<typeof profileFormSchema>;
 
 // This can come from your database or API.
-const defaultValues: Partial<ProfileFormValues> = {
-  bio: "I own a computer.",
-  urls: [
-    { value: "https://shadcn.com" },
-    { value: "http://twitter.com/shadcn" },
-  ],
-}
 
-export function ProfileHotelForm() {
-  const form = useForm<ProfileFormValues>({
-    resolver: zodResolver(profileFormSchema),
-    defaultValues,
-    mode: "onChange",
-  })
+type ProfileHotelFormProps = {
+  data: HotelResponse[] | undefined;
+  isLoading: boolean;
+};
 
-  const { fields, append } = useFieldArray({
-    name: "urls",
-    control: form.control,
-  })
+export function ProfileHotelForm({ data, isLoading }: ProfileHotelFormProps) {
+  const [file, setFile] = useState<File | null>(null);
+  const [error, setError] = useState('');
 
-  function onSubmit(data: ProfileFormValues) {
-    toast({
-      title: "You submitted the following values:",
-      description: (
-        <pre className="mt-2 w-[340px] rounded-3xl bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-    })
+  const { admin } = useAuth();
+
+  const [hotel, setHotel] = useState<HotelResponse>();
+  const [loading, setLoading] = useState<boolean>(false);
+  const useUpdate = useUpdateHotel();
+
+  const handleUpLoading = async () => {
+    const body: IUploadCoverImagePayload = {
+      file: file,
+      idImage: hotel?.idImage,
+      nameFileOld: hotel?.hotel_image,
+    };
+    const res = await updateImageCover(body);
+    if (res.success) {
+      toast({
+        title: res.mga,
+      });
+    } else {
+      toast({
+        title: res.mga,
+        variant: 'destructive',
+      });
+    }
+  };
+
+  useEffect(() => {
+    if (data) {
+      setHotel(data[0]);
+    }
+  }, [data]);
+
+  if (isLoading) {
+    return <Loader />;
+  }
+
+   const handleCheckOutChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const checkOutTime = e.target.value;
+    const checkInTime = hotel?.TimeCheckIn;
+
+    if (checkInTime && checkOutTime < checkInTime) {
+      setError('Giờ kết thúc phải lớn hơn giờ bắt đầu');
+    } else {
+      setError('');
+      setHotel((prev) => ({ ...prev!, TimeCheckOut: checkOutTime }));
+    }
+  };
+
+  const handleCheckInChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const checkInTime = e.target.value;
+    const checkOutTime = hotel?.TimeCheckOut;
+
+    if (checkOutTime && checkOutTime < checkInTime) {
+      setError('Giờ kết thúc phải lớn hơn giờ bắt đầu');
+    } else {
+      setError('');
+      setHotel((prev) => ({ ...prev!, TimeCheckIn: checkInTime }));
+    }
+  };
+
+  async function onSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setLoading(true);
+    if (hotel != undefined) {
+      const res = await useUpdate.mutateAsync(hotel);
+      if (res) {
+        toast({
+          title: ' Cập nhật thông tin thành công',
+        });
+        setLoading(false);
+      } else {
+        toast({
+          variant: 'destructive',
+          title: ' Cập nhật thông tin thất bại',
+        });
+      }
+    }
   }
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <FormField
-          control={form.control}
-          name="username"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Username</FormLabel>
-              <FormControl>
-                <Input placeholder="shadcn" {...field} />
-              </FormControl>
-              <FormDescription>
-                This is your public display name. It can be your real name or a
-                pseudonym. You can only change this once every 30 days.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
+    <form
+      onSubmit={(e) => onSubmit(e)}
+      className='space-y-6'>
+      <div className='space-y-1'>
+        <Label className='font-bold'>Tên Khách Sạn</Label>
+        <Input
+          required
+          value={hotel?.Name}
+          minLength={2}
+          maxLength={300}
+          onChange={(e) =>
+            setHotel((prev) => ({ ...prev!, Name: e.target.value }))
+          }
         />
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Email</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select a verified email to display" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  <SelectItem value="m@example.com">m@example.com</SelectItem>
-                  <SelectItem value="m@google.com">m@google.com</SelectItem>
-                  <SelectItem value="m@support.com">m@support.com</SelectItem>
-                </SelectContent>
-              </Select>
-              <FormDescription>
-                You can manage verified email addresses in your{" "}
-                <Link href="/examples/forms">email settings</Link>.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
+        <p className='text-muted text-xs'>
+          Đây là tên hiển thị công khai của khách sạn
+        </p>
+      </div>
+      <div className='space-y-1'>
+        <Label className='font-bold'>Hotline</Label>
+        <Input
+          value={hotel?.Telephone}
+          required
+          type='number'
+          minLength={11}
+          maxLength={11}
+          onChange={(e) =>
+            setHotel((prev) => ({
+              ...prev!,
+              Telephone: e.target.valueAsNumber,
+            }))
+          }
         />
-        <FormField
-          control={form.control}
-          name="bio"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Bio</FormLabel>
-              <FormControl>
-                <Textarea
-                  placeholder="Tell us a little bit about yourself"
-                  className="resize-none"
-                  {...field}
-                />
-              </FormControl>
-              <FormDescription>
-                You can <span>@mention</span> other users and organizations to
-                link to them.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
+        <p className='text-muted-foreground text-xs'>Số điện của khách sạn</p>
+      </div>
+      <div className='space-y-1'>
+        <div className='font-bold'>Địa chỉ</div>
+        <Input
+          required
+          value={hotel?.Address}
+          onChange={(e) =>
+            setHotel((prev) => ({ ...prev!, Address: e.target.value }))
+          }
         />
-        <div>
-          {fields.map((field, index) => (
-            <FormField
-              control={form.control}
-              key={field.id}
-              name={`urls.${index}.value`}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className={cn(index !== 0 && "sr-only")}>
-                    URLs
-                  </FormLabel>
-                  <FormDescription className={cn(index !== 0 && "sr-only")}>
-                    Add links to your website, blog, or social media profiles.
-                  </FormDescription>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          ))}
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            className="mt-2"
-            onClick={() => append({ value: "" })}
-          >
-            Add URL
-          </Button>
-        </div>
-        <Button type="submit">Update profile</Button>
-      </form>
-    </Form>
-  )
+        <p className='text-muted text-xs'>Địa chỉ của khách sạn</p>
+      </div>
+      <div className='space-y-1'>
+        <div className='font-bold'>Mô tả</div>
+        <Textarea
+          value={hotel?.Description}
+          onChange={(e) =>
+            setHotel((prev) => ({ ...prev!, Description: e.target.value }))
+          }
+        />
+        <p className='text-xs text-muted'>
+          Bạn có thể mô tả chút ít về khách sạn của mình
+        </p>
+      </div>
+      <div className='space-y-1'>
+        <div className='font-bold'>Mô tả về địa điểm</div>
+        <Textarea
+          value={hotel?.LocationDetail}
+          onChange={(e) =>
+            setHotel((prev) => ({ ...prev!, LocationDetail: e.target.value }))
+          }
+        />
+        <p className='text-muted text-xs'>
+          Hãy cho khách hàng biết thêm về vị trí xung quanh của bạn
+        </p>
+      </div>
+      <div className='space-y-1'>
+        <div className='font-bold'>Giờ bắt đầu làm việc</div>
+        <Input
+          onChange={(e) =>
+                       handleCheckInChange(e)
+          }
+          required
+          type='time'
+          value={hotel?.TimeCheckIn}
+        />
+      </div>
+      <div className='space-y-1'>
+        <div className='font-bold'>Giờ kết thúc làm việc</div>
+        <Input
+          onChange={(e) =>
+            handleCheckOutChange(e)
+          }
+          required
+          type='time'
+          value={hotel?.TimeCheckOut}
+        />
+      </div>
+      {error && <div className="text-red-500 font-bold text-sm">{error}</div>}
+
+      <div className='flex items-end justify-end'>
+        <Button
+          disabled={isLoading}
+          type='submit'
+          className='bg-cyan-400 font-bold'>
+          Cập nhật
+        </Button>
+      </div>
+
+      <div>Ảnh bìa</div>
+      <ImageUpLoader
+        hanldUpload={handleUpLoading}
+        defaultImageUrl={hotel?.hotel_image as string}
+        setImageFile={setFile}
+      />
+    </form>
+  );
 }

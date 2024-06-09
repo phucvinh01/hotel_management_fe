@@ -1,3 +1,4 @@
+
 interface ApiGetPageResponse {
   result: {
     current_page: number;
@@ -46,7 +47,7 @@ interface ICardHotel {
   Address: string;
   FileName: string;
   IsActive: number
-  min_price: number;
+  min_price: string;
   total_reviews: number;
   average_rating?: number | undefined;
 }
@@ -80,7 +81,7 @@ interface Rate {
 interface Room {
   id?: string;
   TypeRoomId?: string;
-  State?: string;
+  State?: number;
   TimeRecive?: string;
   TimeLeave?: string;
   Gift?: string;
@@ -96,7 +97,6 @@ interface Room {
   RoomName?: string;
   Bao_Gom_Thue_Va_Phi?: number;
   quannity?: number
-
   typeroom?: ITypeRoom;
 }
 
@@ -330,24 +330,37 @@ interface IHotelImage {
 }
 
 
-type HotelResponse = {
+interface HotelResponse  {
   id: string;
   Name: string;
   Address: string;
-  Telephone: string;
+  Telephone: number;
   Description: string;
   LocationDetail: string;
   IsActive: number;
   TimeCheckIn: string;
   TimeCheckOut: string;
-  created_at: string | null;
-  updated_at: string | null;
-  Type: string;
-  StarRate: number;
-  Province_Id: string | null;
-  number_of_room_types: string;
-  total_rooms_state_0: string
+  created_at?: string | null;
+  updated_at?: string | null;
+  interface?: string;
+  StarRate?: number;
+  Province_Id?: string | null;
+  number_of_room_interfaces?: string;
+  total_rooms_state_0?: string,
+  hotel_image:string,
+  idImage:string
 };
+
+interface IUploadCoverImagePayload {
+  file: File | null,
+  idImage: string  | undefined,
+  nameFileOld: string | undefined,
+}
+
+interface IUploadCoverImageResult {
+  success: boolean,
+  mga: string
+}
 
 interface SelectRoomsResult {
   type_name: string;

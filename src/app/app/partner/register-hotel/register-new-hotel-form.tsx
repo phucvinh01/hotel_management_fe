@@ -7,15 +7,11 @@ import FormTypeRoom from './form-typeroom';
 import FormAddNewForm from './form-add-room';
 import { toast } from '@/components/ui/use-toast';
 import ImageUploader, { FileData } from './upload-image';
-import ImageUploaderSingle from './upload-single';
 import _ from 'lodash';
 import Image from 'next/image';
 import {
   insertHotel,
   InsertResult,
-  insertRooms,
-  insertTyperoom,
-  insertTyperooms,
   uploadImage,
 } from '@/service/hotel.service';
 import { useAuth } from '@/hooks/useAuthContext';
@@ -35,6 +31,8 @@ import {
   TimerOffIcon,
 } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
+import { insertTyperooms } from '@/service/typeroom.service';
+import { insertRooms } from '@/service/room.service';
 
 export function RegisterNewHotelForm() {
   const [currentStep, setCurrentStep] = useState<string>('main');
@@ -53,93 +51,111 @@ export function RegisterNewHotelForm() {
     try {
       setIsLoading(true);
 
-      const id_hotel = await insertHotel(dataHotel);
-      let id_typeroom: string | false | undefined = '';
-      if (id_hotel) {
-        for (const typeRoom of dataTypeRoom) {
-          const typeId = await insertTyperooms(typeRoom, id_hotel);
-          id_typeroom = typeId && typeId.id;
-          if (typeId) {
-            for (const fileImage of filesImageHotel) {
-              if (fileImage.typeroom === typeRoom.Name) {
-                if (fileImage.regions === '') {
-                  const res = await uploadImage(
-                    fileImage.file,
-                    typeId as InsertResult,
-                    'None',
-                  );
-                  if (!res) {
-                    toast({
-                      variant: 'destructive',
-                      title: `Thêm hình ảnh cho  ${typeRoom.Name} thất bại`,
-                    });
-                    setIsLoading(false);
-                  }
-                } else {
-                  const res = await uploadImage(
-                    fileImage.file,
-                    typeId as InsertResult,
-                    fileImage.regions,
-                  );
-                  if (!res) {
-                    toast({
-                      variant: 'destructive',
-                      title: `Thêm hình ảnh cho  ${typeRoom.Name} thất bại`,
-                    });
-                    setIsLoading(false);
-                  }
-                }
-              }
-            }
-            for (const room of dataRooms) {
-              if (room.TypeRoomId === typeRoom.Name) {
-                if (room.quannity) {
-                  for (let index = 0; index < room.quannity; index++) {
-                    const res = await insertRooms(
-                      room,
-                      id_typeroom as string,
-                      index + 1,
+      const id_hotel = await insertHotel(dataHotel as Hotel);
+     
+      console.log(id_hotel);
+      if (id_hotel && id_hotel?.status) {
+        const res = await uploadImage(
+          filesImageHotel[0].file,
+          { id: 'None', hotel_id: id_hotel.hotel_id },
+          'Ảnh bìa',
+        );
+
+        let id_typeroom: string | false | undefined = '';
+        if (id_hotel) {
+          for (const typeRoom of dataTypeRoom) {
+            const typeId = await insertTyperooms(typeRoom, id_hotel.hotel_id);
+            id_typeroom = typeId && typeId.id;
+
+            if (typeId) {
+              for (const fileImage of filesImageHotel) {
+                if (fileImage.typeroom === typeRoom.Name) {
+                  if (fileImage.regions === null) {
+                    const res = await uploadImage(
+                      fileImage.file,
+                      typeId as InsertResult,
+                      'None',
                     );
                     if (!res) {
                       toast({
                         variant: 'destructive',
-                        title: `Thêm phòng cho  ${typeRoom.Name} thất bại`,
+                        title: `Thêm hình ảnh cho  ${typeRoom.Name} thất bại`,
+                      });
+                      setIsLoading(false);
+                    }
+                  } else {
+                    const res = await uploadImage(
+                      fileImage.file,
+                      typeId as InsertResult,
+                      fileImage.regions,
+                    );
+                    if (!res) {
+                      toast({
+                        variant: 'destructive',
+                        title: `Thêm hình ảnh cho  ${typeRoom.Name} thất bại`,
                       });
                       setIsLoading(false);
                     }
                   }
                 }
               }
+              for (const room of dataRooms) {
+                if (room.TypeRoomId === typeRoom.Name) {
+                  if (room.quannity) {
+                    for (let index = 0; index < room.quannity; index++) {
+                      const res = await insertRooms(
+                        room,
+                        id_typeroom as string,
+                        index + 1,
+                      );
+                      if (!res) {
+                        toast({
+                          variant: 'destructive',
+                          title: `Thêm phòng cho  ${typeRoom.Name} thất bại`,
+                        });
+                        setIsLoading(false);
+                      }
+                    }
+                  }
+                }
+              }
+            } else {
+              toast({
+                variant: 'destructive',
+                title: 'Thêm loại phòng thất bại',
+              });
             }
+          }
+
+          const res = await insertStaffToList(
+            id_hotel.hotel_id,
+            admin?.id_staff as string,
+          );
+
+          if (res) {
+            toast({
+              title: 'Đăng ký thành công vui lòng đăng nhập lại',
+            });
+            router.replace('/app/partner/login');
           } else {
             toast({
               variant: 'destructive',
-              title: 'Thêm loại phòng thất bại',
             });
+            setIsLoading(false);
           }
-        }
-
-        const res = await insertStaffToList(
-          id_hotel,
-          admin?.id_staff as string,
-        );
-
-        if (res) {
-          toast({
-            title: 'Đăng ký thành công vui lòng đăng nhập lại',
-          });
-          router.replace('/app/partner/login');
+          setIsLoading(false);
         } else {
           toast({
             variant: 'destructive',
+            title: 'Thêm khách sạn thất bại',
           });
           setIsLoading(false);
         }
-        setIsLoading(false);
       } else {
         toast({
+          title: 'Error',
+          description: id_hotel?.message,
           variant: 'destructive',
-          title: 'Thêm khách sạn thất bại',
         });
         setIsLoading(false);
       }
