@@ -1,4 +1,5 @@
 import DefaultLayout from '@/components/admin/Layouts/DefaultLayout';
+import { TabsManagement } from './_components/tab-managenment';
 
 export default function CalendarAvailabilityPage() {
   return (
@@ -12,6 +13,7 @@ export default function CalendarAvailabilityPage() {
             </p>
           </div>
         </div>
+        <TabsManagement/>
       </div>
     </DefaultLayout>
   );

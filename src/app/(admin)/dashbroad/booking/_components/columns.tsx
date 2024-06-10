@@ -6,19 +6,22 @@ import { labels } from "@/components/table/data/data"
 import { IResultGetBookings } from "@/service/_booking.service"
 import { ColumnDef } from "@tanstack/react-table"
 import { DataTableRowActions } from "./data-table-row-actions"
+import { CANCELED, CHECKED_OUT, COMFRIMED, REQUIED_CANCEL, STAYING, WATTING_COMFRIM } from "@/constant"
 
 
 const getColorByBookingStatus = (status:string) => {
   switch (status) {
-    case 'Đã xác nhận':
+    case WATTING_COMFRIM.toString():
       return 'blue'
-    case 'Yêu cầu hủy':
+    case REQUIED_CANCEL.toString():
       return 'pink';
-    case 'Đã hủy':
+      case COMFRIMED.toString():
+        return 'green'
+    case CANCELED.toString():
       return 'red';
-    case 'Checked out':
+    case CHECKED_OUT.toString():
       return 'gray';
-    case 'Đang ở':
+    case STAYING.toString():
       return 'green';
     default:
       return 'purple';
@@ -26,15 +29,6 @@ const getColorByBookingStatus = (status:string) => {
 };
 
 export const columns: ColumnDef<IResultGetBookings>[] = [
-  {
-    accessorKey: "booking_id",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="ID" />
-    ),
-    cell: ({ row }) => <div className="w-[80px]"><Badge name={row.getValue("booking_id")} color="blue"/></div>,
-    enableSorting: false,
-    enableHiding: false,
-  },
   {
     accessorKey: "room_type",
     header: ({ column }) => (
@@ -76,27 +70,14 @@ export const columns: ColumnDef<IResultGetBookings>[] = [
       return value.includes(row.getValue(id))
     },
   },
-  {
+   {
     accessorKey: "guest_name",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Người đặt" />
+      <DataTableColumnHeader column={column} title="Tên" />
     ),
-    cell: ({ row }) => {
-      const label = labels.find((label) => label.value === row.original.guest_name)
-
-      return (
-        <div className="flex space-x-2">
-          {label && label.label}
-         <span className="max-w-[500px] truncate font-medium">
-            <Badge name={row.getValue("guest_name")} color="purple"/>
-
-          </span>
-        </div>
-      )
-    },
-    filterFn: (row, id, value) => {
-      return value.includes(row.getValue(id))
-    },
+    cell: ({ row }) => <div className="w-[100px]"><Badge name={row.getValue("guest_name")} color="blue" /></div>,
+    enableSorting: false,
+    enableHiding: false,
   },
   {
     accessorKey: "check_in_date",
@@ -144,30 +125,7 @@ export const columns: ColumnDef<IResultGetBookings>[] = [
       return value.includes(row.getValue(id))
     },
     
-  },
-  {
-    accessorKey: "created_at",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Đặt vào" />
-    ),
-    cell: ({ row }) => {
-      const label = labels.find((label) => label.value === row.original.created_at)
-
-      return (
-        <div className="flex space-x-2">
-          {label && label.label}
-         <span className="max-w-[500px] truncate font-medium">
-            <Badge name={row.getValue("created_at")} />
-
-          </span>
-        </div>
-      )
-    },
-    filterFn: (row, id, value) => {
-      return value.includes(row.getValue(id))
-    },
-    
-  },
+  }, 
   {
     accessorKey: "booking_status",
     header: ({ column }) => (
