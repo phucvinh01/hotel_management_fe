@@ -63,8 +63,8 @@ useEffect(() => {
           defaultValue='new'
           className='w-full'>
           <TabsList className='grid w-full grid-cols-12'>
-            <TabsTrigger value='new'>Mới nhất</TabsTrigger>
-            <TabsTrigger value='all'>Tất cả</TabsTrigger>
+            <TabsTrigger className='data-[state=active]:border-white data-[state=active]:bg-cyan-400 data-[state=active]:shadow-sm' value='new'>Mới nhất</TabsTrigger>
+            <TabsTrigger className='data-[state=active]:border-white data-[state=active]:bg-cyan-400 data-[state=active]:shadow-sm' value='all'>Tất cả</TabsTrigger>
           </TabsList>
           <TabsContent value='new'>
             <Card>
