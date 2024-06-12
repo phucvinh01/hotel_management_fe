@@ -11,6 +11,7 @@ import { getTypeRooms, insertTyperoom, updateTyperoom, getImageTypeRoom, uploadM
 import { getRooms, insertRoom, updateRoom } from "./room.service";
 import { getHotel, getRenvenuByHotel, IHotel, updateHotel } from "./hotel.service";
 import { getBookings, getFrequentGuests, getPeopleStayToday } from "./_booking.service";
+import { getFullInfoUserAdmin, IInfoUserAdmin, updateFullInfoUserAdmin } from "./_user.service";
 
 // Query Typeroom
 
@@ -174,4 +175,30 @@ export function useGetPeople(idHotel: string) {
   });
 
   return [getPeopleQuery, getFrequentGuestsQuery];
+}
+
+
+// UserAdmin managenment
+
+export function useGetInfoUserAdmin(idUser: string) {
+  return useQuery({
+    queryKey: ["GetInfoUserAdmin",idUser],
+    queryFn: () => getFullInfoUserAdmin(idUser),
+    placeholderData: keepPreviousData,
+    refetchOnWindowFocus: true,
+  });
+}
+
+export function useUpdateInfoUserAdminl() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (data: IInfoUserAdmin) => updateFullInfoUserAdmin(data),
+    onSuccess: async () => {
+        await queryClient.invalidateQueries({ queryKey: ['GetInfoUserAdmin'] }); 
+        await queryClient.prefetchQuery({ queryKey: ['GetInfoUserAdmin'] }); 
+    },
+    onError: async (error) => {
+      return "Cập nhật thất bại";
+    },
+  });
 }

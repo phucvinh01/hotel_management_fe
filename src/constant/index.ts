@@ -52,6 +52,17 @@ export const INAVAILABLE = 1
 export const EMPTY = "Trống"
 export const NOT_EMPTY = "Đang được thuê"
 
+//TYPE USER
+
+export const STAFF = "Staff"
+export const GUEST = "Guest"
+export const SUPERADMIN = "SUPERADMIN"
+
+// GENDER
+
+export const MALE = "1"
+export const FEMALE = "0"
+
 
 
 
