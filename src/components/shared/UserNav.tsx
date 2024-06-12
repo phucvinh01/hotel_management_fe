@@ -13,6 +13,7 @@ import {
 } from '../ui/dropdown-menu';
 import { Button } from '../ui/button';
 import Link from 'next/link';
+import { GUEST } from '@/constant';
 
 
 type UserNavProps = {
@@ -36,7 +37,8 @@ export function UserNav({ user, logout }: UserNavProps) {
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent
+      {
+        user && user?.Type === GUEST &&  <DropdownMenuContent
         className='w-56 dark:bg-black dark:text-white text-black bg-white z-[9999999]'
         align='end'
         forceMount>
@@ -73,6 +75,8 @@ export function UserNav({ user, logout }: UserNavProps) {
           <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
         </DropdownMenuItem>
       </DropdownMenuContent>
+      }
+     
     </DropdownMenu>
   );
 }

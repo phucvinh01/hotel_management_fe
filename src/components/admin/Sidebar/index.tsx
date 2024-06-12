@@ -5,7 +5,8 @@ import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import SidebarLinkGroup from './SidebarLinkGroup';
 import { Button } from '@/components/ui/button';
-import { CalendarDaysIcon, ChevronDown, ClipboardMinusIcon, HomeIcon, LayoutDashboardIcon, MenuSquareIcon, MessageCircleIcon, SettingsIcon, Users2Icon } from 'lucide-react';
+import { CalendarDaysIcon, ChevronDown, ClipboardMinusIcon, HomeIcon, LayoutDashboardIcon, LogOutIcon, MenuSquareIcon, MessageCircleIcon, SettingsIcon, Users2Icon } from 'lucide-react';
+import { useAuth } from '@/hooks/useAuthContext';
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -15,6 +16,8 @@ interface SidebarProps {
 const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
   const [showTitle, setShowTitel] = useState<boolean>(true);
   const pathname = usePathname();
+
+  const {logout}= useAuth()
 
   const trigger = useRef<any>(null);
   const sidebar = useRef<any>(null);
@@ -110,7 +113,7 @@ const id = getHotelId();
 
       <div className=' flex flex-col   duration-300 ease-linear'>
         {/* <!-- Sidebar Menu --> */}
-        <nav className='mt-5 px-4 py-4 lg:mt-9 lg:px-3'>
+        <nav className='mt-2 px-4 py-4 lg:mt-5 lg:px-3'>
           {/* <!-- Menu Group --> */}
           <div>
             <div
@@ -124,7 +127,7 @@ const id = getHotelId();
              
             </div>
 
-            <ul className='mb-6 flex flex-col gap-8'>
+            <ul className='mb-6 flex flex-col gap-4'>
               <li                >
                <Link
                         href='/dashbroad'
@@ -277,6 +280,18 @@ const id = getHotelId();
                  <SettingsIcon />
                   <span className={`${showTitle ? 'block' : 'hidden'}`}>
                     Setting
+                  </span>
+                </Link>
+              </li>
+                <li>
+                <Link
+                href={"#"}
+                onClick={() => logout()}
+                  className={`group relative text-sm flex items-center gap-2.5 rounded-3xl px-4 py-2 font-medium text-black duration-300 ease-in-out hover:bg-cyan-400 dark:text-white dark:hover:bg-gray-900 hover:rounded-xl 
+                  }`}>
+                 <LogOutIcon />
+                  <span className={`${showTitle ? 'block' : 'hidden'}`}>
+                    Log Out
                   </span>
                 </Link>
               </li>
