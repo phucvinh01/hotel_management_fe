@@ -18,21 +18,38 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
+} from '@/components/ui/table';
+import { Separator } from '@/components/ui/separator';
 type newEvents = {
   key: string;
   title: string;
+  typeroom:string;
   start: Date;
   end: Date;
   resource: IgetRoomAvailabilityResult;
   status: number;
+  color?: string;
+  price: number;
+  guest_name: string;
+  guest_email: string;
+  guest_phone: string;
 };
+const colors = [
+  '#FF5733', '#33FF57', '#3357FF', '#F033FF', '#FF33A8',
+  '#FF8C00', '#FF4500', '#FFD700', '#ADFF2F', '#7FFF00',
+  '#00FF00', '#32CD32', '#00FA9A', '#00CED1', '#4682B4',
+  '#1E90FF', '#4169E1', '#8A2BE2', '#DA70D6', '#FF69B4',
+  '#FF1493', '#C71585', '#DB7093', '#FF6347', '#FFA07A',
+  '#CD5C5C', '#F08080', '#E9967A', '#FA8072', '#FF7F50'
+];
 
 const RoomAvailabilityCalendar = () => {
   const [events, setEvents] = useState<newEvents[]>([]);
   const [selectedEvent, setSelectedEvent] = useState<newEvents>();
   const { admin } = useAuth();
   const calendarRef = useRef<any>(null);
+
+  console.log(events);
 
   const handleSelectEvent = (info: any) => {
     setSelectedEvent(info.event);
@@ -48,13 +65,20 @@ const RoomAvailabilityCalendar = () => {
 
         if (response) {
           const newEvents = response.flatMap((room) =>
-            room.availability.map((avail) => ({
+            room.availability.map((avail,index) => ({
               key: `<span class="math-inline">\{avail\.check\_in\_date\}\-</span>{avail.check_out_date}`,
               title: room.room_name,
               start: new Date(avail.check_in_date),
               end: new Date(avail.check_out_date),
               resource: room,
               status: avail.status,
+              typeroom: room.type_name,
+              color: colors[index % colors.length],
+              price: room.type_price,
+              guest_name: room.guest_name,
+              guest_phone:room.guest_phone,
+              guest_email:room.guest_email
+
             })),
           );
           setEvents(newEvents);
@@ -75,7 +99,7 @@ const RoomAvailabilityCalendar = () => {
   useEffect(() => {
     const currentDate = new Date();
     const startDate = currentDate.toISOString().split('T')[0];
-    const endDate = startDate; // Để bắt đầu, chúng ta sẽ lấy dữ liệu cho ngày hiện tại
+    const endDate = startDate;
     fetchAvailabilityData(startDate, endDate);
   }, []);
 
@@ -95,6 +119,7 @@ const RoomAvailabilityCalendar = () => {
           events={events}
           eventClick={handleSelectEvent}
           datesSet={handleNavigate}
+          ref={calendarRef}
         />
       </div>
 
@@ -104,28 +129,31 @@ const RoomAvailabilityCalendar = () => {
           <p>
             <strong>🪟 Tên phòng:</strong> {selectedEvent.title}
           </p>
-           <p>
-            <strong>🕐 Check in :</strong> <span>{selectedEvent.start.toLocaleDateString()}</span>
+          <p>
+            <strong>🕐 Check in :</strong>{' '}
+            <span>{selectedEvent.start.toLocaleDateString()}</span>
           </p>
-           <p>
-            <strong>🕧 Check out :</strong> {selectedEvent.end.toLocaleDateString()}
+          <p>
+            <strong>🕧 Check out :</strong>{' '}
+            {selectedEvent.end.toLocaleDateString()}
           </p>
+
+          <Separator/>
+
+         
           <Table>
       <TableHeader>
         <TableRow>
-          <TableHead >Booking ID</TableHead >
-          <TableHead >Guest ID</TableHead >
-          <TableHead >Check-in Date</TableHead >
-          <TableHead >Check-out Date</TableHead >
-          <TableHead >Booking Status</TableHead >
-          <TableHead >Status</TableHead >
+          <TableHead >Tên Khách hàng</TableHead >
+          <TableHead >Email</TableHead >
+          <TableHead >Số điện thoại</TableHead >
         </TableRow>
       </TableHeader>
       <TableBody>
           <TableRow  >
-            <TableCell>{selectedEvent.resource?.room_name}</TableCell>
-            <TableCell>{selectedEvent.resource?.type_name}</TableCell>
-            <TableCell>{selectedEvent.resource?.type_price}</TableCell>
+            <TableCell>{selectedEvent.guest_name}</TableCell>
+            <TableCell>{selectedEvent.guest_email}</TableCell>
+            <TableCell>{selectedEvent.guest_phone}</TableCell>
           </TableRow>
       </TableBody>
     </Table>

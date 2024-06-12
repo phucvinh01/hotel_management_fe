@@ -88,6 +88,7 @@ export type IAvailability = {
   check_in_date: string;
   check_out_date: string;
   booking_status: string;
+
 };
 export type IgetRoomAvailabilityResult = {
   room_id: string;
@@ -95,6 +96,9 @@ export type IgetRoomAvailabilityResult = {
   type_name: string;
   type_price: number;
   hotel_name: string;
+  guest_name: string;
+  guest_email: string;
+  guest_phone: string;
   availability: IAvailability[];
 };
 
@@ -112,6 +116,6 @@ export const getRoomAvailability = async (
     }
   } catch (error) {
     console.error('Error fetching rooms:', error);
-    throw error; 
+    throw error;
   }
 };

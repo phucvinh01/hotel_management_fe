@@ -9,20 +9,39 @@ import { DataTableRowActions } from "./data-table-row-actions"
 import { CANCELED, CHECKED_OUT, COMFRIMED, REQUIED_CANCEL, STAYING, WATTING_COMFRIM } from "@/constant"
 
 
-const getColorByBookingStatus = (status:string) => {
+ export const getColorByBookingStatus = (status:number) => {
   switch (status) {
-    case WATTING_COMFRIM.toString():
+    case WATTING_COMFRIM:
       return 'blue'
-    case REQUIED_CANCEL.toString():
+    case REQUIED_CANCEL:
       return 'pink';
-      case COMFRIMED.toString():
+      case COMFRIMED:
         return 'green'
-    case CANCELED.toString():
+    case CANCELED:
       return 'red';
-    case CHECKED_OUT.toString():
+    case CHECKED_OUT:
       return 'gray';
-    case STAYING.toString():
+    case STAYING:
       return 'green';
+    default:
+      return 'purple';
+  }
+};
+
+export const getNameStatus = (status:number) => {
+  switch (status) {
+    case WATTING_COMFRIM:
+      return 'Chờ xác nhận'
+    case REQUIED_CANCEL:
+      return 'Yêu cầu hủy';
+      case COMFRIMED:
+        return 'Đã xác nhận'
+    case CANCELED:
+      return 'Đã hủy';
+    case CHECKED_OUT:
+      return 'Đã checkout ';
+    case STAYING:
+      return 'Đang ở';
     default:
       return 'purple';
   }
@@ -138,7 +157,7 @@ export const columns: ColumnDef<IResultGetBookings>[] = [
         <div className="flex space-x-2">
           {label && label.label}
          <span className="max-w-[500px] truncate font-medium">
-            <Badge name={row.getValue("booking_status")} color={getColorByBookingStatus(row.getValue("booking_status"))}/>
+            <Badge name={getNameStatus(row.getValue("booking_status"))} color={getColorByBookingStatus(row.getValue("booking_status"))}/>
 
           </span>
         </div>

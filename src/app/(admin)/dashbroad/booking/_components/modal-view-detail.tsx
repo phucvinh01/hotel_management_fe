@@ -15,6 +15,7 @@ import { AlertComfrim } from './alert-comfrim';
 import formatDate from '@/util/formatDate';
 import { formatCurrency } from '@/lib/formatCurrency';
 import { WATTING_COMFRIM } from '@/constant';
+import { getColorByBookingStatus, getNameStatus } from './columns';
 
 type ModalDetailBookingProp = {
   data: any;
@@ -27,7 +28,7 @@ export function ModalDetailBooking({ data }: ModalDetailBookingProp) {
       <DialogTrigger asChild>
         <EyeIcon />
       </DialogTrigger>
-      <DialogContent className='sm:max-w-[1025px] bg-white dark:bg-black text-black dark:text-white'>
+      <DialogContent className='font-mono sm:max-w-[1025px] bg-white dark:bg-black text-black dark:text-white'>
         <DialogHeader>
           <DialogTitle className='flex justify-between items-center'>
             <p> 🪄 Thông tin chi tiết đơn đăt hàng {booking.booking_id}</p>
@@ -41,8 +42,8 @@ export function ModalDetailBooking({ data }: ModalDetailBookingProp) {
         </DialogHeader>
         <div>
           <Badge
-            name={booking.booking_status}
-            color={booking.booking_status === 'Đã hủy' ? 'red' : 'green'}
+            name={getNameStatus(Number(booking.booking_status))}
+            color={getColorByBookingStatus(Number(booking.booking_status))}
           />
         </div>
         <div className='flex justify-between gap-2'>

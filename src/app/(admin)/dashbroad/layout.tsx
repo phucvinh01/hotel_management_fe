@@ -13,8 +13,8 @@ export default function Layout({
 }>) {
   return (
     <ReactQueryProvider>
-      <main suppressHydrationWarning={true}>
-        <div className="dark:bg-black dark:text-white">
+      <main suppressHydrationWarning={true}  className='font-sans' style={{ fontFamily: 'monospace' }}>
+        <div className="dark:bg-black dark:text-gray-300 rounded-3xl">
           {children}
         </div>
       </main>
