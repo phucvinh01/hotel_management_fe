@@ -60,6 +60,7 @@
     "react-resizable-panels": "^2.0.19",
     "react-simple-star-rating": "^5.1.7",
     "react-swipeable": "^7.0.1",
+    "react-tooltip": "^5.26.4",
     "react-use": "^17.5.0",
     "recharts": "^2.12.7",
     "sass": "^1.77.0",

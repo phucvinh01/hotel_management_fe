@@ -14,7 +14,7 @@ import React, { Dispatch, Fragment, SetStateAction } from 'react'
 import { EMPTY, NOT_EMPTY } from '@/constant';
 
 type FormEditRoomProps = {
-    room:Room,
+    room:ViewRoom,
     setRoom:Dispatch<SetStateAction<Room>>
     typeroom:SelectRoomsResult[]
 }

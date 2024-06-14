@@ -315,7 +315,6 @@ interface IBooking {
   GiftCodePrice: number,
   VAT: number,
   TypePay: string,
-
   members: IMemberBooking[],
   room: IRoom | null
 }

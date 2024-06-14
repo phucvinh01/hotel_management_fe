@@ -18,7 +18,7 @@ import FormEditRoom from './form-edit-room';
 
 export const ModalEditRoom = ({ data }: { data: any }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [formData, setFormData] = useState<Room>({});
+  const [formData, setFormData] = useState<ViewRoom>({});
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const { admin } = useAuth();
 
@@ -35,7 +35,7 @@ export const ModalEditRoom = ({ data }: { data: any }) => {
 
   useEffect(() => {
     if (isOpen) {
-      setFormData(data as Room);
+      setFormData(data as ViewRoom);
     }
   }, [isOpen, data]);
 

@@ -1,7 +1,7 @@
 "use client";;
 import { Row } from "@tanstack/react-table"
-import { AlertComfrim } from "./alert-comfrim";
 import { ModalDetailBooking } from "./modal-view-detail";
+import AlertCheckIn from "./alert-checkin";
 
 
 
@@ -16,7 +16,8 @@ export function DataTableRowActions<TData>({
 
   return (
     <div className="flex space-x-2">
-      <ModalDetailBooking data={row.original}/>
+      <ModalDetailBooking data={row.original} className="detail"/> 
+
     </div>
   )
 }

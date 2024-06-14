@@ -10,23 +10,36 @@ import {
 } from '@/components/ui/dialog';
 import { Separator } from '@/components/ui/separator';
 import { IResultGetBookings } from '@/service/_booking.service';
-import { EyeIcon, X } from 'lucide-react';
+import { BookImageIcon, EyeIcon, X } from 'lucide-react';
 import { AlertComfrim } from './alert-comfrim';
 import formatDate from '@/util/formatDate';
 import { formatCurrency } from '@/lib/formatCurrency';
 import { WATTING_COMFRIM } from '@/constant';
 import { getColorByBookingStatus, getNameStatus } from './columns';
+import { Tooltip } from 'react-tooltip';
+import { Fragment } from 'react';
 
 type ModalDetailBookingProp = {
   data: any;
+  className?: string;
 };
 
-export function ModalDetailBooking({ data }: ModalDetailBookingProp) {
+export function ModalDetailBooking({
+  data,
+  className,
+}: ModalDetailBookingProp) {
   const booking: IResultGetBookings = data;
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <EyeIcon />
+        <Fragment>
+        <BookImageIcon className='detail' />
+           <Tooltip
+          anchorSelect='.detail'
+          place='top'>
+          Xem thông tin chi tiết phòng ⛱️
+        </Tooltip>
+        </Fragment>
       </DialogTrigger>
       <DialogContent className='font-mono sm:max-w-[1025px] bg-white dark:bg-black text-black dark:text-white'>
         <DialogHeader>
@@ -92,11 +105,10 @@ export function ModalDetailBooking({ data }: ModalDetailBookingProp) {
                 {formatDate(booking.check_out_date)}
               </span>
             </p>
-           
           </div>
-           <div className='w-1/2 p-5 border border-green-500 rounded-xl'>
-              <p>{booking.note ??  "Không có ghi chú 📝📝"}</p>
-            </div>
+          <div className='w-1/2 p-5 border border-green-500 rounded-xl'>
+            <p>{booking.note ?? 'Không có ghi chú 📝📝'}</p>
+          </div>
           {booking.booking_status === 'Đã hủy' && (
             <div className='w-1/2 p-5 border border-red-500 rounded-xl'>
               <p className='font-bold text-red-500'>Lý do hủy</p>
@@ -120,7 +132,7 @@ export function ModalDetailBooking({ data }: ModalDetailBookingProp) {
                 <li key={index}>
                   <div className='flex gap-4'>
                     <p>🫅🏻 {item.FullName}</p>
-                    <p>📆 {item.DateOfBirth ?? "unknown"}</p>
+                    <p>📆 {item.DateOfBirth ?? 'unknown'}</p>
                     <p>👩 🧑 {item.Sex === 1 ? 'Nam' : 'Nữ'}</p>
                   </div>
                 </li>
@@ -129,12 +141,7 @@ export function ModalDetailBooking({ data }: ModalDetailBookingProp) {
           </ul>
         </div>
         <div className='flex gap-4 items-center'>
-          <h3>✉️ Xác nhận và gữi email cho khách hàng ➜</h3>
-          {booking.booking_status === WATTING_COMFRIM.toString() ? (
-           <AlertComfrim data={booking} />
-          ) : (
-             'Đã xác nhận'
-          )}
+          <AlertComfrim data={booking} />
         </div>
       </DialogContent>
     </Dialog>

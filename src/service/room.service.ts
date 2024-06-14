@@ -119,3 +119,24 @@ export const getRoomAvailability = async (
     throw error;
   }
 };
+
+export type IStateRoomUpdate = {
+  idRoom: string,
+  state: number
+}
+
+export const updateStateRoom = async (body: IStateRoomUpdate): Promise<boolean> => {
+  try {
+    const response = await http.put<boolean>(`/room/update-state-room`, body);
+    if (response.status === 200) {
+      return true;
+    } else if (response.status === 201) {
+      return false;
+    } else {
+      throw new Error(`Error fetching rooms: Status ${response.status}`);
+    }
+  } catch (error) {
+    console.error('Error fetching rooms:', error);
+    return false;
+  }
+};
