@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation"
 
 import { cn } from "@/lib/utils"
 import { buttonVariants } from "@/components/ui/button"
+import { SettingsIcon, User } from "lucide-react"
 
 interface SidebarNavProps extends React.HTMLAttributes<HTMLElement> {
   items: {
@@ -31,12 +32,12 @@ export function SidebarNav({ className, items, ...props }: SidebarNavProps) {
           className={cn(
            
             pathname === item.href
-              ? "bg-cyan-500"
+              ? "bg-cyan-400"
               : "hover:bg-transparent hover:underline",
-            "justify-start p-3  rounded-3xl"
+            "justify-start p-3 flex gap-4 items-center  rounded-3xl"
           )}
         >
-          {item.title}
+         <SettingsIcon/> {item.title}
         </Link>
       ))}
     </nav>

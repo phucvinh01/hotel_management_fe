@@ -13,12 +13,24 @@ import {
 } from '@/components/ui/table';
 
 type ViewRoomProps = {
-  room: Room;
+  room: ViewRoom;
   typerooms: SelectRoomsResult[];
   className?: string;
 };
 
+function filterBookingsByDate(bookings:Booking[]) {
+    const today = new Date();
+    return bookings.filter(booking => {
+        const timeLeave = new Date(booking.TimeLeave);
+        const timeRecive = new Date(booking.TimeRecive);
+        return today >= timeRecive && today <= timeLeave;
+    });
+}
+
 const ViewRoom = ({ room, typerooms, className }: ViewRoomProps) => {
+  const filteredBookings = filterBookingsByDate(room.booking as Booking[]);
+
+  console.log(room.State);
   return (
     <div className={`grid gird-col-12  p-4 border-t ${className}`}>
       <div className='col-span-12 flex justify-end items-center'>
@@ -71,8 +83,8 @@ const ViewRoom = ({ room, typerooms, className }: ViewRoomProps) => {
               <TableHead className='text-left py-2 px-4 text-gray-600'>
                 Người thuê
               </TableHead>
-              <TableHead className='text-left py-2 px-4 text-gray-600'>
-                Số ngày thuê
+               <TableHead className='text-left py-2 px-4 text-gray-600'>
+                Số người
               </TableHead>
               <TableHead className='text-left py-2 px-4 text-gray-600'>
                 Thời gian đến
@@ -87,13 +99,15 @@ const ViewRoom = ({ room, typerooms, className }: ViewRoomProps) => {
               <TableCell className='font-bold text-[14px] py-2 px-4'>
                 {room.State === AVAILABLE ? EMPTY : NOT_EMPTY}
               </TableCell>
-              <TableCell className='font-bold text-[14px] py-2 px-4'></TableCell>
-              <TableCell className='font-bold text-[14px] py-2 px-4'></TableCell>
+              <TableCell className='font-bold text-[14px] py-2 px-4'>{filteredBookings[0].guest_name}</TableCell>
               <TableCell className='font-bold text-[14px] py-2 px-4'>
-                {room.TimeRecive}
+                 {filteredBookings[0].members.length}
               </TableCell>
               <TableCell className='font-bold text-[14px] py-2 px-4'>
-                {room.TimeLeave}
+               {filteredBookings[0].TimeRecive}
+              </TableCell>
+              <TableCell className='font-bold text-[14px] py-2 px-4'>
+               {filteredBookings[0].TimeLeave}
               </TableCell>
             </TableRow>
           </TableBody>

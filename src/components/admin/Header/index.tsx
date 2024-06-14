@@ -69,13 +69,7 @@ const Header = (props: {
         </div>
 
         <div className='flex w-full items-center justify-end gap-3 2xsm:gap-7'>
-          <ul className='flex w-full items-center gap-2 2xsm:gap-4 justify-end'>
-            <DarkModeSwitcher />
-
-            <DropdownNotification />
-
-            <DropdownMessage />
-          </ul>
+          
 
           <UserNav
             user={admin}

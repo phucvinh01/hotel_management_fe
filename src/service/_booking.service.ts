@@ -1,6 +1,4 @@
-import { number } from 'zod';
 import http from '../axios/http';
-import axios from 'axios';
 
 export type IResultGetBookings = {
   booking_id: string;

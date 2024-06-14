@@ -8,10 +8,11 @@ import {
 } from "@tanstack/react-query";
 
 import { getTypeRooms, insertTyperoom, updateTyperoom, getImageTypeRoom, uploadMultipleImage, } from "./typeroom.service";
-import { getRooms, insertRoom, updateRoom } from "./room.service";
+import { getRooms, insertRoom, IStateRoomUpdate, updateRoom, updateStateRoom } from "./room.service";
 import { getHotel, getRenvenuByHotel, IHotel, updateHotel } from "./hotel.service";
 import { getBookings, getFrequentGuests, getPeopleStayToday } from "./_booking.service";
 import { getFullInfoUserAdmin, IInfoUserAdmin, updateFullInfoUserAdmin } from "./_user.service";
+import { getComments } from "./_comment.service";
 
 // Query Typeroom
 
@@ -110,6 +111,21 @@ export function useUpdateRoom() {
   });
 }
 
+export function useUpdateStateRoom() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (data: IStateRoomUpdate) => updateStateRoom(data),
+    onSuccess: async () => {
+        await queryClient.invalidateQueries({ queryKey: ['rooms'] }); 
+        await queryClient.prefetchQuery({ queryKey: ['rooms'] }); 
+    },
+    onError: async (error) => {
+      return "Cập nhật phòng thất bại";
+    },
+  });
+}
+
+
 //Query hotel 
 
 export function useGetRenvenuHotel(id: string | undefined) {
@@ -202,3 +218,17 @@ export function useUpdateInfoUserAdminl() {
     },
   });
 }
+
+
+
+// Commenent Manager
+
+export function useGetListComment(idHotel: string) {
+  return useQuery({
+    queryKey: ["useGetListComment",idHotel],
+    queryFn: () => getComments(idHotel),
+    placeholderData: keepPreviousData,
+    refetchOnWindowFocus: true,
+  });
+}
+

@@ -27,7 +27,8 @@ type Booking = {
   GiftCode: string;
   GiftCodePrice: string;
   VAT: 0;
-  members: Member[]
+  members: Member[],
+  guest_name?:string
 };
 
 type _RoomResult = {
@@ -38,3 +39,9 @@ type _RoomResult = {
   hotel_name: string;
   booking: Booking[]
 };
+
+
+interface ViewRoom extends Room {
+    booking?: Booking[];
+}
+

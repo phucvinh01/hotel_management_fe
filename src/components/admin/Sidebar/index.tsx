@@ -87,7 +87,6 @@ const id = getHotelId();
        bg-white duration-300 ease-linear dark:bg-black lg:static lg:translate-x-0 
        ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
        ${showTitle ? 'w-72.5' : 'w-24'}`}>
-      {/* <!-- SIDEBAR HEADER --> */}
       <div className='flex items-center justify-between gap-2 px-3 py-5.5 lg:py-6.5 overflow-hidden  '>
         <Button
           ref={trigger}
@@ -109,14 +108,11 @@ const id = getHotelId();
           </svg>
         </Button>
       </div>
-      {/* <!-- SIDEBAR HEADER --> */}
 
       <div className=' flex flex-col   duration-300 ease-linear'>
-        {/* <!-- Sidebar Menu --> */}
         <nav className='mt-2 px-4 py-4 lg:mt-5 lg:px-3'>
-          {/* <!-- Menu Group --> */}
           <div>
-            <div
+            {/* <div
               className='flex hover:cursor-pointer mb-6'
               onClick={() => handleShowTile()}>
               <h3
@@ -125,9 +121,9 @@ const id = getHotelId();
                  <MenuSquareIcon className=''/>
               </h3>
              
-            </div>
+            </div> */}
 
-            <ul className='mb-6 flex flex-col gap-4'>
+            <ul className='mb-6 mt-6 flex flex-col gap-4'>
               <li                >
                <Link
                         href='/dashbroad'
@@ -135,7 +131,7 @@ const id = getHotelId();
                         font-medium text-black duration-300 ease-in-out hover:bg-cyan-400 dark:text-white
                          dark:hover:bg-gray-900 hover:rounded-xl ${
                            (pathname === '/' ||
-                             pathname.includes('dashboard')) &&
+                             pathname=== 'dashbroad') &&
                            'bg-cyan-400 dark:bg-cyan-700'
                          }`}>
                        
@@ -150,7 +146,7 @@ const id = getHotelId();
                 <Link
                   href='/dashbroad/booking'
                   className={`group relative text-sm flex items-center gap-2.5 rounded-3xl px-4 py-2 font-medium text-black duration-300 ease-in-out hover:bg-cyan-400 dark:text-white dark:hover:bg-gray-900 hover:rounded-xl ${
-                    pathname.includes('Booking') &&
+                    pathname.includes('booking') &&
                     'bg-cyan-400 dark:bg-cyan-700'
                   }`}>
                  <CalendarDaysIcon />
@@ -161,7 +157,6 @@ const id = getHotelId();
               </li>
              
 
-              {/* Room*/}
               <SidebarLinkGroup
                 activeCondition={
                   pathname === '/rooms' || pathname.includes('room')
@@ -228,7 +223,6 @@ const id = getHotelId();
                           </li>
                         </ul>
                       </div>
-                      {/* <!-- Dropdown Menu End --> */}
                     </React.Fragment>
                   );
                 }}
@@ -261,13 +255,13 @@ const id = getHotelId();
               </li>
               <li>
                 <Link
-                  href='/dashbroad/support'
+                  href='/dashbroad/comments'
                   className={`group relative text-sm flex items-center gap-2.5 rounded-3xl px-4 py-2 font-medium text-black duration-300 ease-in-out hover:bg-cyan-400 dark:text-white dark:hover:bg-gray-900 hover:rounded-xl ${
-                    pathname.includes('support') && 'bg-cyan-400 dark:bg-cyan-700'
+                    pathname.includes('comments') && 'bg-cyan-400 dark:bg-cyan-700'
                   }`}>
                  <MessageCircleIcon />
                   <span className={`${showTitle ? 'block' : 'hidden'}`}>
-                    Support
+                    Comments
                   </span>
                 </Link>
               </li>
@@ -295,11 +289,9 @@ const id = getHotelId();
                   </span>
                 </Link>
               </li>
-              {/* <!-- Menu Item Settings --> */}
             </ul>
           </div>
         </nav>
-        {/* <!-- Sidebar Menu --> */}
       </div>
     </aside>
   );
