@@ -30,7 +30,6 @@ function filterBookingsByDate(bookings:Booking[]) {
 const ViewRoom = ({ room, typerooms, className }: ViewRoomProps) => {
   const filteredBookings = filterBookingsByDate(room.booking as Booking[]);
 
-  console.log(room.State);
   return (
     <div className={`grid gird-col-12  p-4 border-t ${className}`}>
       <div className='col-span-12 flex justify-end items-center'>

@@ -49,7 +49,6 @@ const RoomAvailabilityCalendar = () => {
   const { admin } = useAuth();
   const calendarRef = useRef<any>(null);
 
-  console.log(events);
 
   const handleSelectEvent = (info: any) => {
     setSelectedEvent(info.event);
