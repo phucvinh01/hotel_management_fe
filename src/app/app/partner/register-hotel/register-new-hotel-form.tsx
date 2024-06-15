@@ -33,6 +33,7 @@ import {
 import { Separator } from '@/components/ui/separator';
 import { insertTyperooms } from '@/service/typeroom.service';
 import { insertRooms } from '@/service/room.service';
+import { INeighborhoob, insertNeighboob } from '@/service/_neighborhook.service';
 
 export function RegisterNewHotelForm() {
   const [currentStep, setCurrentStep] = useState<string>('main');
@@ -43,9 +44,28 @@ export function RegisterNewHotelForm() {
   const [dataRooms, setDataRooms] = useState<Room[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
+  const [neighborhood, setNeighborhood] = useState<INeighborhoob[]>([{
+    category:"",
+    created_at:"",
+    distance:"",
+    icon:"",
+    id_hotel:"",
+    is_popular:"",
+    name:"",
+    updated_at:""
+  }])
+
   const { admin } = useAuth();
 
   const router = useRouter();
+
+  async function updateAndInsertNeighborhoods(neighborhood: INeighborhoob[], id_hotel: { hotel_id: string }) {
+  for (const item of neighborhood) {
+    item.id_hotel = id_hotel.hotel_id;
+    await insertNeighboob(item);
+  }
+}
+
 
   const handleSubmit = async () => {
     try {
@@ -53,7 +73,6 @@ export function RegisterNewHotelForm() {
 
       const id_hotel = await insertHotel(dataHotel as Hotel);
      
-      console.log(id_hotel);
       if (id_hotel && id_hotel?.status) {
         const res = await uploadImage(
           filesImageHotel[0].file,
@@ -132,6 +151,9 @@ export function RegisterNewHotelForm() {
             admin?.id_staff as string,
           );
 
+          updateAndInsertNeighborhoods(neighborhood, id_hotel);
+
+
           if (res) {
             toast({
               title: 'Đăng ký thành công vui lòng đăng nhập lại',
@@ -170,6 +192,7 @@ export function RegisterNewHotelForm() {
       value={currentStep}
       className='w-[70%]'
       orientation='vertical'>
+        
       <TabsList className='grid w-full grid-cols-5'>
         <TabsTrigger
           onClick={() => setCurrentStep('main')}
@@ -208,6 +231,8 @@ export function RegisterNewHotelForm() {
           data={dataHotel}
           files={filesImageHotel}
           setFiles={setfilesImageHotel}
+          setNeighborhood={setNeighborhood}
+          neighborhood={neighborhood}
         />
         <div className='flex justify-end items-end'>
           <Button
@@ -232,6 +257,7 @@ export function RegisterNewHotelForm() {
           </Button>
         </div>
       </TabsContent>
+
       <TabsContent
         value='typeroom'
         className='flex flex-col gap-3'>
@@ -294,6 +320,7 @@ export function RegisterNewHotelForm() {
           </Button>
         </div>
       </TabsContent>
+
       <TabsContent
         value='image'
         className='flex flex-col gap-3'>
@@ -327,6 +354,7 @@ export function RegisterNewHotelForm() {
           </Button>
         </div>
       </TabsContent>
+
       <TabsContent
         value='review'
         className='flex flex-col gap-3'>

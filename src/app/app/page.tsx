@@ -99,7 +99,6 @@ export default function Home() {
 
   useEffect(() => {
     const generateDsDate = () => {
-      console.log('date', startDate);
       var listDate: DemAndDate[] = [];
       for (var i = 0; i < 29; i++) {
         const currentDate = new Date(Number.parseInt(startDate.split('-')[0])

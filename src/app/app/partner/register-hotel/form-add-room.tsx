@@ -272,7 +272,6 @@ const FormAddNewRoom = ({
       />,
     ]);
   };
-  console.log(dataRender);
 
   return (
     <>
