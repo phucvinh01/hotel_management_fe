@@ -13,6 +13,7 @@ import { getHotel, getRenvenuByHotel, IHotel, updateHotel } from "./hotel.servic
 import { getBookings, getFrequentGuests, getPeopleStayToday } from "./_booking.service";
 import { getFullInfoUserAdmin, IInfoUserAdmin, updateFullInfoUserAdmin } from "./_user.service";
 import { getComments } from "./_comment.service";
+import { getCurrentMonthBookings, getStatistics, getTopHotelsByRevenue, getTotalRegisterByType, getUserRegistrationsByMonth } from "./_superadmin.service";
 
 // Query Typeroom
 
@@ -231,4 +232,55 @@ export function useGetListComment(idHotel: string) {
     refetchOnWindowFocus: true,
   });
 }
+
+
+
+// Super Admin Management
+export function useGetUserRegistrations() {
+  return useQuery({
+    queryKey: ["getUserRegistrationsByMonth"],
+    queryFn: () => getUserRegistrationsByMonth(),
+    placeholderData: keepPreviousData,
+    refetchOnWindowFocus: true,
+  });
+}
+
+
+export function useGetTopHotelsByRevenue() {
+  return useQuery({
+    queryKey: ["useGetTopHotelsByRevenue"],
+    queryFn: () => getTopHotelsByRevenue(),
+    placeholderData: keepPreviousData,
+    refetchOnWindowFocus: true,
+  });
+}
+
+
+ export function useCurrentMonthBookings() {
+   return useQuery({
+    queryKey: ["getCurrentMonthBookings"],
+    queryFn: () => getCurrentMonthBookings(),
+    placeholderData: keepPreviousData,
+    refetchOnWindowFocus: true,
+  });
+}
+
+ export function useGetTotalRegisterByType() {
+   return useQuery({
+    queryKey: ["getTotalRegisterByType"],
+    queryFn: () => getTotalRegisterByType(),
+    placeholderData: keepPreviousData,
+    refetchOnWindowFocus: true,
+  });
+}
+
+ export function useGetStatistics(month:string) {
+   return useQuery({
+    queryKey: ["getStatistics",month],
+    queryFn: () => getStatistics(month),
+    placeholderData: keepPreviousData,
+    refetchOnWindowFocus: true,
+  });
+}
+
 
