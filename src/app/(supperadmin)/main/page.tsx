@@ -12,6 +12,7 @@ import Loader from "@/components/admin/common/Loader"
 import TabOverview from "./_components/tab-overview"
 import { Download } from "lucide-react"
 import ExportToExcel from "./_components/export-excel"
+import TabAnaLysis from "./_components/tab-analysis"
 
 
 
@@ -25,22 +26,6 @@ export default function DashboardPage() {
 
   return (
     <>
-      <div className="md:hidden">
-        <Image
-          src="/examples/dashboard-light.png"
-          width={1280}
-          height={866}
-          alt="Dashboard"
-          className="block dark:hidden"
-        />
-        <Image
-          src="/examples/dashboard-dark.png"
-          width={1280}
-          height={866}
-          alt="Dashboard"
-          className="hidden dark:block"
-        />
-      </div>
       <div className="hidden flex-col md:flex">
         <div className="border-b">
           <div className="flex h-16 items-center px-4">
@@ -63,14 +48,14 @@ export default function DashboardPage() {
           }
           <Tabs defaultValue="overview" className="space-y-4">
             <TabsList>
-              <TabsTrigger value="overview">Tổng quan</TabsTrigger>
-              <TabsTrigger value="analytics" disabled>
+              <TabsTrigger className="data-[state=active]:border-white data-[state=active]:bg-black data-[state=active]:text-white" value="overview">Tổng quan</TabsTrigger>
+              <TabsTrigger className="data-[state=active]:border-white data-[state=active]:bg-black data-[state=active]:text-white" value="analytics" >
                 Phân tích
               </TabsTrigger>
-              <TabsTrigger value="reports" disabled>
+              <TabsTrigger className="data-[state=active]:border-white data-[state=active]:bg-black data-[state=active]:text-white" value="reports" disabled>
                 Báo cáo
               </TabsTrigger>
-              <TabsTrigger value="notifications" disabled>
+              <TabsTrigger className="data-[state=active]:border-white data-[state=active]:bg-black data-[state=active]:text-white" value="notifications" disabled>
                 Thông báo
               </TabsTrigger>
             </TabsList>
@@ -79,6 +64,9 @@ export default function DashboardPage() {
                 data &&  <TabOverview data={data}/>
               }
              
+            </TabsContent>
+             <TabsContent value="analytics" className="space-y-4">
+              <TabAnaLysis/>
             </TabsContent>
           </Tabs>
         </div>
