@@ -91,7 +91,7 @@ const ModallistImagessHotel = (props: IProps) => {
                     <button className="absolute right-5 top-5" onClick={() => {
                         setModalState(false);
                     }}>
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="text-whiten w-8 h-8">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="text-white w-8 h-8">
                             <path fillRule="evenodd" d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z" clipRule="evenodd" />
                         </svg>
 
@@ -145,7 +145,7 @@ const ModallistImagessHotel = (props: IProps) => {
                         <CarouselContent className="">
                             {listImagesTemp?.map((item, index) => (
                                 <CarouselItem key={item.id} className="basis-1/5">
-                                    <img src={`${item.FileName}`}
+                                    <img src={`${URL_Enum.BaseURL_Image + item.FileName}`}
                                         alt={item.FileName} className={`w-full
                                                 h-[70px] rounded-3xl object-cover cursor-pointer
                                                 ${indexImageModal === index ? 'border border-b-2 border-blue-700' : ''}`}

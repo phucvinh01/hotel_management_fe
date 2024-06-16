@@ -1,5 +1,4 @@
 'use client'
-
 import LocalStoreEnum from "@/axios/LocalStoreEnum";
 import URL_Enum from "@/axios/URL_Enum";
 import Loading from "@/components/shared/Loading";
@@ -18,6 +17,7 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 
 import { ReactEventHandler, useEffect, useRef, useState } from "react";
+import ModalVnpay from '@/components/shared/ModalVnpay';
 
 const todoGetPriceDiscoun = (price: number, discount: number): number => {
     return price - price * discount / 100;
@@ -43,6 +43,8 @@ interface IProps {
     QuantityRoom: number;
 }
 const Booking = () => {
+    const [vnpayModalState, setVnpayModalState] = useState<boolean>(false);
+
     const IdBooking = GenerateId("bookinghotel");
     const [modalErr, setModalErr] = useState<boolean>(false);
     const [modalQuestionYN, setModalQuestionYN] = useState<boolean>(false);
@@ -679,7 +681,11 @@ const Booking = () => {
                                                     //handlePayByHand();
                                                 }}>Thanh toán trực tiếp</button>
                                             <button className="w-3/12 bg-white border border-blue-700 mx-3 p-2 rounded-lg
-                                            text-white font-semibold hover:scale-105 shadow shadow-cyan-400 flex justify-center">
+                                            text-white font-semibold hover:scale-105 shadow shadow-cyan-400 flex justify-center"
+                                                onClick={() => {
+                                                    event?.preventDefault();
+                                                    setVnpayModalState(true);
+                                                }}>
                                                 <img src="/logo/logo-en.webp" className="h-8" />
                                             </button>
                                         </div>
@@ -994,13 +1000,13 @@ const Booking = () => {
                                         </div>
                                         <div className="w-full flex items-center justify-start pl-3">
                                             <div className="h-[40px] text-amber-950">
-                                                Phí hủy phòng là  ₫5.709.165. Mức phí này áp dụng nếu hủy trước
+                                                Phí hủy phòng là  30% giá trị phiếu đặt. Mức phí này áp dụng nếu hủy trước
                                                 <p className="text-left font-semibold">{FormatDate(room.TimeRecive)}</p>
                                             </div>
                                         </div>
                                         <div className="w-full flex items-center justify-start pl-3">
                                             <div className="h-[40px] text-red-500">
-                                                Phí hủy phòng là  ₫16.613.669. Mức phí này áp dụng nếu hủy sau
+                                                Hủy phòng sẽ không hoàn tiền. Nếu hủy sau:
                                                 <p className="text-left font-semibold">{FormatDate(room.TimeRecive)}</p>
                                             </div>
                                         </div>
@@ -1020,6 +1026,8 @@ const Booking = () => {
                         </div>
                     </div>
                 </div>
+
+                <ModalVnpay vnpayModalState={vnpayModalState} setVnpayModalState={setVnpayModalState} />
 
             </div>
                 : null}

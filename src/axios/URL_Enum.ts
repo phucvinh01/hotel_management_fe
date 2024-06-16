@@ -1,5 +1,5 @@
 enum URL_Enum {
-    BaseURL = 'http://127.0.1:8000/',
+    BaseURL = 'http://192.168.1.66:8000/',
     BaseURL_Api = BaseURL + 'api/',
     BaseURL_ImageProvince = BaseURL + 'images/province/',
     BaseURL_Poster = BaseURL + 'images/poster/',

@@ -226,7 +226,7 @@ const SearchForm2 = (props: searchForm2Props) => {
                                                         amount_room: formData.amount_adult,
                                                     }));
                                                 } else
-                                                    setFormData((prev) => ({
+                                                    setFormData((prev: any) => ({
                                                         ...prev,
                                                         amount_room: formData.amount_room + 1,
                                                     }));
