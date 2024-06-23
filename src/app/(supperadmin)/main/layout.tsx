@@ -5,6 +5,8 @@ import "@/css/style.css";
 import React, { useEffect, useState } from "react";
 import ReactQueryProvider from "@/hooks/useQuery";
 import { Metadata } from "next";
+import { UserNav } from "./_components/user-nav";
+import { MainNav } from "./_components/main-nav";
 
 export const metadata: Metadata = {
   title: "Dashboard",
