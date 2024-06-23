@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import SidebarLinkGroup from './SidebarLinkGroup';
 import { Button } from '@/components/ui/button';
@@ -18,6 +18,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
   const pathname = usePathname();
 
   const {logout}= useAuth()
+  const router = useRouter()
 
   const trigger = useRef<any>(null);
   const sidebar = useRef<any>(null);
@@ -280,7 +281,7 @@ const id = getHotelId();
                 <li>
                 <Link
                 href={"#"}
-                onClick={() => logout()}
+                onClick={() => {logout() , router.push("/app")}}
                   className={`group relative text-sm flex items-center gap-2.5 rounded-3xl px-4 py-2 font-medium text-black duration-300 ease-in-out hover:bg-cyan-400 dark:text-white dark:hover:bg-gray-900 hover:rounded-xl 
                   }`}>
                  <LogOutIcon />
