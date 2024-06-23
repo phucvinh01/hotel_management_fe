@@ -12,22 +12,22 @@ export function MainNav({
       {...props}
     >
       <Link
-        href="/examples/dashboard"
+        href="/main/overview"
         className="text-sm font-medium transition-colors hover:text-primary"
       >
-        Overview
+        Tổng Quan
       </Link>
       <Link
-        href="/examples/dashboard"
+        href="/main/analysis"
         className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
       >
-        Customers
+        Phân tích
       </Link>
       <Link
-        href="/examples/dashboard"
+        href="/main/hotel"
         className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
       >
-        Products
+        Khách sạn
       </Link>
       <Link
         href="/examples/dashboard"

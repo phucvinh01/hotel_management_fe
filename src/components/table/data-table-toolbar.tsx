@@ -30,7 +30,16 @@ export function DataTableToolbar<TData>({
             }
             className='h-8 w-[150px] lg:w-[250px]'
           />
-        ) : (
+        ) : pathName === '/main/hotel' ? ( <Input
+            placeholder='Lọc theo tên...'
+            value={
+              (table.getColumn('hotel_name')?.getFilterValue() as string) ?? ''
+            }
+            onChange={(event) =>
+              table.getColumn('hotel_name')?.setFilterValue(event.target.value)
+            }
+            className='h-8 w-[150px] lg:w-[250px]'
+          />)  : (
           <Input
             placeholder='Lọc theo tên...'
             value={

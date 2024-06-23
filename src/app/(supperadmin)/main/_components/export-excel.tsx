@@ -35,8 +35,9 @@ const ExportToExcel = ({ month }: ExportToExcelProps) => {
   const exportToExcel = async () => {
     setIsLoading(true);
     const data = await getHotelRegisterByMonth(month);
-    const csvData = data.flatMap((user) =>
-      user.rooms.map((room) => ({
+
+    const csvData = data.map((user) => {
+      const baseData = {
         user_id: user.user_id,
         user_email: user.user_email,
         user_name: user.user_name,
@@ -48,15 +49,27 @@ const ExportToExcel = ({ month }: ExportToExcelProps) => {
         hotel_phone: user.hotel_phone,
         hotel_decs: user.hotel_decs,
         hotel_created: user.hotel_created,
-        room_name: room.type_room_name,
-        room_price: room.typeroom_price,
-        room_max_people: room.typeroom_maxpeople,
-        room_type_bed: room.typeroom_type_bed,
-        room_num_bed: room.typeroom_num_bed,
-        room_convenient: room.typeroom_convenient,
-        room_count: room.room_count,
-      })),
-    );
+        room_name: '',
+        room_price: '',
+        room_max_people: '',
+        room_type_bed: '',
+        room_num_bed: '',
+        room_convenient: '',
+        room_count: '',
+      };
+
+      if (user.rooms && user.rooms.length > 0) {
+        baseData.room_name = user.rooms.map(room => room.type_room_name).join('; ');
+        baseData.room_price = user.rooms.map(room => room.typeroom_price).join('; ');
+        baseData.room_max_people = user.rooms.map(room => room.typeroom_maxpeople).join('; ');
+        baseData.room_type_bed = user.rooms.map(room => room.typeroom_type_bed).join('; ');
+        baseData.room_num_bed = user.rooms.map(room => room.typeroom_num_bed).join('; ');
+        baseData.room_convenient = user.rooms.map(room => room.typeroom_convenient).join('; ');
+        baseData.room_count = user.rooms.map(room => room.room_count).join('; ');
+      }
+
+      return baseData;
+    });
     setIsLoading(false);
     setData(csvData)
     if (csvInstance) {
@@ -81,7 +94,7 @@ const ExportToExcel = ({ month }: ExportToExcelProps) => {
       asyncOnClick={true}
       className='px-3 py-3 border rounded-3xl bg-black text-white'
        onClick={(event, csvLink) => handleClick(csvLink)}>
-      {isLoading ? <Loader/> : <span className='space-x-3 flex'><Download /> <span>Xuất dữ liệu</span></span>}
+      {isLoading ? <Loader/> : <span className='space-x-3 flex'><Download /> <span>Xuất dữ liệu các khách sạn đăng ký mới</span></span>}
     </CSVLink>
   );
 };
