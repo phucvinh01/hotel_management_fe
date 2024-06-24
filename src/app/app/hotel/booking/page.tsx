@@ -51,7 +51,7 @@ const Booking = () => {
     const [typePay, setTypePay] = useState<boolean>(false);
     const [modalErrValue, setModalErrValue] = useState<string>('');
     const [userGuest, setUserGuest] = useState<IGuest>();
-    const TotalRoom = (typeof localStorage !== 'undefined') ? localStorage.getItem(LocalStoreEnum.TOTAL_ROOM) : 1;
+    const TotalRoom = (typeof localStorage !== 'undefined') ? localStorage.getItem(LocalStoreEnum.TOTAL_ROOM) : '1';
     const getIGuest = () => {
         const IGusetStorage = (typeof localStorage !== undefined) ? localStorage.getItem(LocalStoreEnum.IGUEST) : null;
         console.log('IGusetStorage', IGusetStorage)
@@ -168,7 +168,7 @@ const Booking = () => {
     const [message, setMessage] = useState<string>('')
     const [resultBooking, setResultBooking] = useState<IBooking>()
     const handlePayByHand = async () => {
-        event?.preventDefault();
+        //event?.preventDefault();
         let thueVAT = room?.Bao_Gom_Thue_Va_Phi ? 0 : totalPriceActual * 8 / 100;
         if (userGuest != undefined && room != undefined) {
             let newBookingHotel: BookingHotel_Model = {
@@ -191,21 +191,30 @@ const Booking = () => {
                 GiftCode: discountCode,
                 GiftCodePrice: discountPrice,
                 VAT: thueVAT,
+                totalRoom: TotalRoom != null ? Number.parseInt(TotalRoom) : 1,
                 members: listMember,
                 room: null
             }
             setLoadingBookingState(true);
             const bookingResult = await createBookingHotel(newBookingHotel)
                 .then((response) => {
-                    console.log('response', response)
-                    setMessage(response.data.message);
-                    setResultBooking(response.data.result);
+                    if (response.status === 200) {
+                        console.log('response', response)
+                        setMessage(response.data.message);
+                        setResultBooking(response.data.result);
+                    }
+                    else {
+                        setMessage(response.data.message);
+                    }
+
 
                 }).catch((err) => {
-                    setModalErrValue(err)
+                    setModalErrValue('Lỗi kết nối cơ sở dữ liệu')
                     setModalErr(true);
                 })
-                .finally(() => { setLoadingBookingState(false) });
+                .finally(() => {
+                    setLoadingBookingState(false)
+                });
         }
     }
     const handlePayByVNPay = () => {
@@ -232,6 +241,7 @@ const Booking = () => {
                 GiftCode: discountCode,
                 GiftCodePrice: discountPrice,
                 VAT: thueVAT,
+                totalRoom: TotalRoom != null ? Number.parseInt(TotalRoom) : 1,
                 members: listMember,
                 room: null
             }
@@ -418,9 +428,9 @@ const Booking = () => {
 
 
                                         </div>
-                                        <p className="w-full text-xl font-semibold text-gray-900">Thêm người đi cùng</p>
+                                        {/* <p className="w-full text-xl font-semibold text-gray-900">Thêm người đi cùng</p> */}
                                         <div className="flex w-full flex-row flex-wrap">
-                                            <div className="w-4/12 flex flex-col justify-start items-start text-lg my-2 px-2">
+                                            {/* <div className="w-4/12 flex flex-col justify-start items-start text-lg my-2 px-2">
                                                 <span className="w-full flex flex-row ">Họ tên <span className="text-red-500">*</span>:</span>
                                                 <input type="text" name="subhoten" placeholder="Nhập họ tên người đi cùng.."
                                                     className="w-8/12 h-[22px] border border-cyan-400 px-2 rounded-sm mx-1
@@ -429,9 +439,9 @@ const Booking = () => {
                                                     onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                                                         setMemberName(event.target.value);
                                                     }} />
-                                            </div>
+                                            </div> */}
 
-                                            <div className="w-4/12 flex flex-col justify-start items-start text-lg my-2 px-2">
+                                            {/* <div className="w-4/12 flex flex-col justify-start items-start text-lg my-2 px-2">
                                                 <span className="w-full flex flex-row ">Ngày sinh:</span>
                                                 <input type="date" name="subhoten" placeholder="Nhập họ tên người đi cùng.."
                                                     className="w-8/12 h-[22px] border border-cyan-400 px-2 rounded-sm mx-1
@@ -440,9 +450,9 @@ const Booking = () => {
                                                     onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                                                         setMemberBirth(event.target.value);
                                                     }} />
-                                            </div>
+                                            </div> */}
 
-                                            <div className="w-4/12 flex flex-col justify-start items-start text-lg my-2 px-2">
+                                            {/* <div className="w-4/12 flex flex-col justify-start items-start text-lg my-2 px-2">
                                                 <span className="w-full flex flex-row ">Giới tính <span className="text-red-500">*</span>:</span>
                                                 <div className="flex flex-row">
                                                     <input type="radio" id="raNam" name="memberGender" value="1"
@@ -462,9 +472,9 @@ const Booking = () => {
                                             <div className="w-full flex justify-end items-end text-lg my-2 ">
                                                 <button className="w-4/12 py-1 bg-blue-500 rounded-lg text-white font-bold"
                                                     onClick={() => { handleAddMember(event) }}>Thêm</button>
-                                            </div>
-                                            <p className="w-full text-xl font-semibold text-gray-900">Danh sách người đi cùng</p>
-                                            <div className="w-full flex justify-start items-end text-lg my-2 ">
+                                            </div> */}
+                                            {/* <p className="w-full text-xl font-semibold text-gray-900">Danh sách người đi cùng</p> */}
+                                            {/* <div className="w-full flex justify-start items-end text-lg my-2 ">
                                                 {listMember != undefined && listMember.length > 0
                                                     ? <table className="w-full table-auto order-collapse border border-green-800">
                                                         <thead className="bg-green-100">
@@ -496,7 +506,7 @@ const Booking = () => {
                                                         </tbody>
                                                     </table> : <p>Chưa có người ở cùng, hãy thêm nếu bạn có người đi cùng.</p>}
 
-                                            </div>
+                                            </div> */}
 
                                             {/* git code */}
                                             <div className="w-full flex flex-row justify-center items-center text-lg my-2 
@@ -673,7 +683,7 @@ const Booking = () => {
                                         <div className="flex flex-row justify-center items-center">
                                             <button className="w-3/12 bg-blue-700 border border-blue-700 mx-3 rounded-lg h-12
                                             text-white font-semibold hover:scale-105 shadow shadow-cyan-400"
-                                                onClick={() => {
+                                                onClick={(event) => {
                                                     event?.preventDefault();
                                                     setModalErrValue(`'Xác nhận thanh toán trực tiếp, phiếu đặt: ${room.id}(${room.typeroom?.Name})`);
                                                     setModalQuestionYN(true);
@@ -702,6 +712,7 @@ const Booking = () => {
                                             <p>Ngày trả phòng: {resultBooking?.TimeLeave != undefined ? FormatDateDDD(resultBooking?.TimeLeave) : null}</p>
                                             <p>Chi phí: {resultBooking?.Price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</p>
                                             <p>Giảm giá: {resultBooking?.Discount.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</p>
+                                            <p>Ghi chú: +{resultBooking?.Notes}</p>
                                             <p>Hình thức thanh toán: {resultBooking?.TypePay}</p>
                                         </div>
 
@@ -919,18 +930,21 @@ const Booking = () => {
                                 <button data-modal-hide="popup-modal" type="button" className="text-white bg-green-600  w-[110px]
                                  hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800
                                   font-medium rounded-lg text-sm inline-flex items-center px-10 py-2.5 text-center mr-5 justify-center"
-                                    onClick={() => {
-                                        event?.preventDefault()
-                                        setModalQuestionYN(false)
-                                        handlePay(1)
-                                        setModalErrValue('')
+                                    onClick={(event) => {
+                                        event?.preventDefault();
+                                        setModalQuestionYN(false);
+                                        handlePay(1);
+                                        setModalErrValue('');
                                     }}>
                                     Xác nhận
                                 </button>
                                 <button data-modal-hide="popup-modal" type="button" className="text-white bg-red-600 w-[110px]
                                  hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800
                                   font-medium rounded-lg text-sm inline-flex items-center px-10 py-2.5 text-center ml-5 justify-center"
-                                    onClick={() => { setModalQuestionYN(false) }}>
+                                    onClick={(event) => {
+                                        event.preventDefault();
+                                        setModalQuestionYN(false)
+                                    }}>
                                     Hủy
                                 </button>
                             </div>
