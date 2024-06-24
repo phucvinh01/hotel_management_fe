@@ -43,7 +43,6 @@ export function RegisterNewHotelForm() {
   const [dataTypeRoom, setDataTypeRoom] = useState<TypeRoom[]>([]);
   const [dataRooms, setDataRooms] = useState<Room[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-
   const [neighborhood, setNeighborhood] = useState<INeighborhoob[]>([{
     category:"",
     created_at:"",
