@@ -96,9 +96,9 @@ export type IgetRoomAvailabilityResult = {
   type_name: string;
   type_price: number;
   hotel_name: string;
-  guest_name: string;
-  guest_email: string;
-  guest_phone: string;
+  guest_name?: string;
+  guest_email?: string;
+  guest_phone?: string;
   availability: IAvailability[];
 };
 
