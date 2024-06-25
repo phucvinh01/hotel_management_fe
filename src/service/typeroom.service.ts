@@ -1,6 +1,7 @@
 import http from '@/axios/http';
 import axios from 'axios';
 import { InsertResult } from './hotel.service';
+import URL_Enum from '@/axios/URL_Enum';
 
 export const getTypeRooms = async (id: string): Promise<any> => {
   try {
@@ -23,7 +24,7 @@ export const insertTyperoom = async (
 ): Promise<string | undefined> => {
   try {
     const response = await axios.post<string>(
-      `http://localhost:8000/api/room/insert-typeroom`,
+      `${URL_Enum.BaseURL_Api}room/insert-typeroom`,
       body,
       {
         headers: {
@@ -84,7 +85,7 @@ export async function uploadMultipleImage(
 ): Promise<boolean | undefined> {
   try {
     const response = await axios.post<boolean>(
-      `http://localhost:8000/api/upload-multiple-image`,
+      `${URL_Enum.BaseURL_Api}upload-multiple-image`,
       formData,
       {
         headers: {

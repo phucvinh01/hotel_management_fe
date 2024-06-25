@@ -11,6 +11,7 @@
 //   SelectRoomsResult,
 //   TypeRoom,
 // } from '@/types/hotel';
+import URL_Enum from '@/axios/URL_Enum';
 import http from '../axios/http';
 import axios, { AxiosInstance, AxiosError } from 'axios';
 
@@ -175,7 +176,7 @@ export async function uploadImage(
     formData.append('id_typeroom', typeRoom.id);
     formData.append('region', region);
 
-    const response = await fetch('http://localhost:8000/api/upload-image', {
+    const response = await fetch(`${URL_Enum.BaseURL_Api}upload-image`, {
       method: 'POST',
       body: formData,
     });
@@ -306,7 +307,7 @@ export const updateImageCover = async (
   body: IUploadCoverImagePayload,
 ): Promise<IUploadCoverImageResult> => {
   const res = await axios.post<IUploadCoverImageResult>(
-    `http://localhost:8000/api/update-cover-image-hotel`,
+    `${URL_Enum.BaseURL_Api}/update-cover-image-hotel`,
     body,
     {
       headers: {
