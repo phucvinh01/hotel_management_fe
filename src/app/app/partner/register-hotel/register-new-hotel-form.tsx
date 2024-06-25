@@ -34,6 +34,7 @@ import { Separator } from '@/components/ui/separator';
 import { insertTyperooms } from '@/service/typeroom.service';
 import { insertRooms } from '@/service/room.service';
 import { INeighborhoob, insertNeighboob } from '@/service/_neighborhook.service';
+import URL_Enum from '@/axios/URL_Enum';
 
 export function RegisterNewHotelForm() {
   const [currentStep, setCurrentStep] = useState<string>('main');
@@ -44,14 +45,14 @@ export function RegisterNewHotelForm() {
   const [dataRooms, setDataRooms] = useState<Room[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [neighborhood, setNeighborhood] = useState<INeighborhoob[]>([{
-    category:"",
-    created_at:"",
-    distance:"",
-    icon:"",
-    id_hotel:"",
-    is_popular:"",
-    name:"",
-    updated_at:""
+    category: "",
+    created_at: "",
+    distance: "",
+    icon: "",
+    id_hotel: "",
+    is_popular: "",
+    name: "",
+    updated_at: ""
   }])
 
   const { admin } = useAuth();
@@ -59,11 +60,11 @@ export function RegisterNewHotelForm() {
   const router = useRouter();
 
   async function updateAndInsertNeighborhoods(neighborhood: INeighborhoob[], id_hotel: { hotel_id: string }) {
-  for (const item of neighborhood) {
-    item.id_hotel = id_hotel.hotel_id;
-    await insertNeighboob(item);
+    for (const item of neighborhood) {
+      item.id_hotel = id_hotel.hotel_id;
+      await insertNeighboob(item);
+    }
   }
-}
 
 
   const handleSubmit = async () => {
@@ -71,7 +72,7 @@ export function RegisterNewHotelForm() {
       setIsLoading(true);
 
       const id_hotel = await insertHotel(dataHotel as Hotel);
-     
+
       if (id_hotel && id_hotel?.status) {
         const res = await uploadImage(
           filesImageHotel[0].file,
@@ -191,7 +192,7 @@ export function RegisterNewHotelForm() {
       value={currentStep}
       className='w-[70%]'
       orientation='vertical'>
-        
+
       <TabsList className='grid w-full grid-cols-5'>
         <TabsTrigger
           onClick={() => setCurrentStep('main')}
@@ -402,7 +403,7 @@ export function RegisterNewHotelForm() {
                     src={URL.createObjectURL(
                       filesImageHotel[0] && filesImageHotel[0]?.file,
                     )}
-                    alt={`http://localhost:8000/images/${filesImageHotel[0]?.file}`}
+                    alt={`${URL_Enum.BaseURL_Image + filesImageHotel[0]?.file}`}
                     width={288}
                     height={264}
                   />

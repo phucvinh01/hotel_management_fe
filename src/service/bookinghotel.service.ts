@@ -14,12 +14,14 @@ export const createBookingHotel = async (body: BookingHotel_Model): Promise<any>
                 },
             },
         );
+
+        //return response;
         if (response.status === 200) {
             return response;
         } else if (response.status === 201) {
             return response;
         } else {
-            throw new Error(`Error fetching rooms: Status ${response.status}`);
+            return false;
         }
     } catch (error) {
         console.error('Error fetching rooms:', error);

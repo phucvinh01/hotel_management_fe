@@ -5,6 +5,7 @@ import { run } from './genimi-sumnary';
 import axios from 'axios';
 import { Card, CardContent } from '@/components/ui/card';
 import { Loader } from 'lucide-react';
+import URL_Enum from '@/axios/URL_Enum';
 
 type TextRenderProps = {
   data: string;
@@ -19,7 +20,7 @@ const TextRender = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        'http://localhost:8000/api/get-top-province-booking',
+        `${URL_Enum.BaseURL_Api}get-top-province-booking`,
       );
       setData(response.data);
     } catch (error) {
@@ -30,11 +31,11 @@ const TextRender = () => {
   const handleClick = async () => {
     setIsLoading(true);
     const response = await axios.get(
-        'http://localhost:8000/api/get-top-province-booking',
-      );
+      `${URL_Enum.BaseURL_Api}get-top-province-booking`,
+    );
     const res = await run(
-     JSON.stringify(response.data) + 'Với data trên phân tích các khu vực và lý do tại sao các khu vực có lượt booking cao và tại sao lại thấp ở Việt Nam \n' 
-        
+      JSON.stringify(response.data) + 'Với data trên phân tích các khu vực và lý do tại sao các khu vực có lượt booking cao và tại sao lại thấp ở Việt Nam \n'
+
     );
     setTypedText(res);
     setIsLoading(false);
