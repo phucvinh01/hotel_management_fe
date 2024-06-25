@@ -192,6 +192,7 @@ interface ITypeRoom {
   updated_at: string | null;
 
   hotel?: IHotel;
+  room?: IRoom[];
 }
 
 interface InsertTyperoomAndImage extends ITypeRoom {
@@ -329,7 +330,7 @@ interface IHotelImage {
 }
 
 
-interface HotelResponse  {
+interface HotelResponse {
   id: string;
   Name: string;
   Address: string;
@@ -346,13 +347,13 @@ interface HotelResponse  {
   Province_Id?: string | null;
   number_of_room_interfaces?: string;
   total_rooms_state_0?: string,
-  hotel_image:string,
-  idImage:string
+  hotel_image: string,
+  idImage: string
 };
 
 interface IUploadCoverImagePayload {
   file: File | null,
-  idImage: string  | undefined,
+  idImage: string | undefined,
   nameFileOld: string | undefined,
 }
 

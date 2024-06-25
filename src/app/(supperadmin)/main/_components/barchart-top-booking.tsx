@@ -1,5 +1,6 @@
 'use client';
 
+import URL_Enum from '@/axios/URL_Enum';
 import Loader from '@/components/admin/common/Loader';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
@@ -17,7 +18,7 @@ const BarChartTopBooking = () => {
     setIsLoading(true);
     try {
       const response = await axios.get(
-        'http://localhost:8000/api/get-top-province-booking',
+        `${URL_Enum.BaseURL_Api}get-top-province-booking`,
       );
       setData(response.data);
     } catch (error) {

@@ -28,6 +28,7 @@ import {
 import { FileData } from './upload-image';
 import { INeighborhoob } from '@/service/_neighborhook.service';
 import FromInsertNeiborhood from './form-insert-neighborhood';
+import URL_Enum from '@/axios/URL_Enum';
 
 type formHotelInfoProps = {
   setFormData: Dispatch<SetStateAction<Hotel | undefined>>;
@@ -54,7 +55,7 @@ const FormHotelInfo = ({
 
   useEffect(() => {
     axios
-      .get('http://localhost:8000/api/address/provices')
+      .get(`${URL_Enum.BaseURL_Api}address/provices`)
       .then((response) => {
         setProvinces(response.data);
       })
@@ -67,7 +68,7 @@ const FormHotelInfo = ({
     if (selectedProvince) {
       axios
         .get(
-          `http://localhost:8000/api/address/provices/district?id=${selectedProvince.code}`,
+          `${URL_Enum.BaseURL_Api}address/provices/district?id=${selectedProvince.code}`,
         )
         .then((response) => {
           setDistricts(response.data);
@@ -194,41 +195,41 @@ const FormHotelInfo = ({
               max={10}
             />
           </div>
-                <Card className=''>
-        <CardHeader className='flex flex-row justify-between items-center'>
-          <CardTitle>Thời gian làm việc</CardTitle>
-        </CardHeader>
-        <CardContent className='flex items-center gap-10'>
-          <div className='space-y-1'>
-            <Label htmlFor='time-checkin'>Thời gian check-in</Label>
-            <Input
-              value={data?.TimeCheckIn}
-              onChange={(e) =>
-                setFormData((prev) => ({
-                  ...prev!,
-                  TimeCheckIn: e.target.value,
-                }))
-              }
-              type='time'
-              id='time-checkin'
-            />
-          </div>
-          <div className='space-y-1'>
-            <Label htmlFor='time-checkout'>Thời gian check-out</Label>
-            <Input
-              value={data?.TimeCheckOut}
-              onChange={(e) =>
-                setFormData((prev) => ({
-                  ...prev!,
-                  TimeCheckOut: e.target.value,
-                }))
-              }
-              type='time'
-              id='time-checkout'
-            />
-          </div>
-        </CardContent>
-      </Card>
+          <Card className=''>
+            <CardHeader className='flex flex-row justify-between items-center'>
+              <CardTitle>Thời gian làm việc</CardTitle>
+            </CardHeader>
+            <CardContent className='flex items-center gap-10'>
+              <div className='space-y-1'>
+                <Label htmlFor='time-checkin'>Thời gian check-in</Label>
+                <Input
+                  value={data?.TimeCheckIn}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev!,
+                      TimeCheckIn: e.target.value,
+                    }))
+                  }
+                  type='time'
+                  id='time-checkin'
+                />
+              </div>
+              <div className='space-y-1'>
+                <Label htmlFor='time-checkout'>Thời gian check-out</Label>
+                <Input
+                  value={data?.TimeCheckOut}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev!,
+                      TimeCheckOut: e.target.value,
+                    }))
+                  }
+                  type='time'
+                  id='time-checkout'
+                />
+              </div>
+            </CardContent>
+          </Card>
         </CardContent>
       </Card>
       <Card className='w-1/2'>
@@ -236,7 +237,7 @@ const FormHotelInfo = ({
           <CardTitle>Địa điểm lận cận</CardTitle>
         </CardHeader>
         <CardContent className='space-y-2'>
-          <FromInsertNeiborhood neighborhood={neighborhood} setNeiborhood={setNeighborhood}/>
+          <FromInsertNeiborhood neighborhood={neighborhood} setNeiborhood={setNeighborhood} />
         </CardContent>
       </Card>
     </div>

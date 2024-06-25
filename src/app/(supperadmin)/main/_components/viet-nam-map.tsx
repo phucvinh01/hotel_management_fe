@@ -5,6 +5,7 @@ import { MapContainer, TileLayer, Circle, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import axios from 'axios';
 import { provinceCoordinates } from './provinceCoordinates';
+import URL_Enum from '@/axios/URL_Enum';
 
 const VietnamMap = () => {
   const [provinceCounts, setProvinceCounts] = useState<Record<string, number>>({});
@@ -14,9 +15,9 @@ const VietnamMap = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const result = await axios.get('http://localhost:8000/api/get-province-counts');
+        const result = await axios.get(`${URL_Enum.BaseURL_Api}get-province-counts`);
         setProvinceCounts(result.data);
-      } catch (error:any) {
+      } catch (error: any) {
         setError(error);
       } finally {
         setLoading(false);
@@ -30,7 +31,7 @@ const VietnamMap = () => {
   if (error) return <div>Error: {error}</div>;
 
   return (
-    <MapContainer 
+    <MapContainer
       center={[14.058324, 108.277199]}
       style={{ height: "600px", width: "100%" }}
       zoom={5}

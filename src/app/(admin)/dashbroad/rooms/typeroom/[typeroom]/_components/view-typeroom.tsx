@@ -1,3 +1,4 @@
+import URL_Enum from '@/axios/URL_Enum';
 import Badge from '@/components/shared/Badge';
 import { Card, CardContent } from '@/components/ui/card';
 import { formatCurrency } from '@/lib/formatCurrency';
@@ -20,7 +21,7 @@ const ViewTypeRoom = ({
     <div className='grid gird-col-12 p-4 border-t'>
       <div className='col-span-12 flex justify-end items-center'>
         <Badge
-          name={formData?.state_room !=null ? (formData.state_room + '/'+ formData?.total_rooms) : 0 + '/' + formData?.total_rooms}
+          name={formData?.state_room != null ? (formData.state_room + '/' + formData?.total_rooms) : 0 + '/' + formData?.total_rooms}
           color={'green'}
         />
       </div>
@@ -77,6 +78,7 @@ const ViewTypeRoom = ({
                 <Image
                   className='rounded-2xl object-contain min-w-[80px] min-h-[80px]'
                   src={item.FileName}
+                  // alt={`${URL_Enum.BaseURL_Image + imageUrl}`}
                   alt={`http://localhost:8000/images/$imageUrl`}
                   width={80}
                   height={80}

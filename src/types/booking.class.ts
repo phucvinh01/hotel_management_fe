@@ -20,6 +20,7 @@ class BookingHotel_Model implements IBooking {
     GiftCodePrice: number;
     VAT: number;
 
+    totalRoom: number;
     members: IMemberBooking[];
     room: IRoom | null;
 
@@ -43,6 +44,7 @@ class BookingHotel_Model implements IBooking {
         this.GiftCode = bookingHotel.GiftCode
         this.GiftCodePrice = bookingHotel.GiftCodePrice
         this.VAT = bookingHotel.VAT
+        this.totalRoom = bookingHotel.totalRoom;
         this.members = bookingHotel.members;
         this.room = bookingHotel.room;
     }
