@@ -25,6 +25,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { PlusCircle, XCircleIcon } from 'lucide-react';
 import Uploader, { FileData } from './upload-image';
 import ImageUploader from './upload-image';
+import { toast } from '@/components/ui/use-toast';
 
 type formTypeRoomProps = {
   setFormData: Dispatch<SetStateAction<TypeRoom[]>>;
@@ -89,7 +90,7 @@ const FormTypeRoom = ({
                 />
               </div>
               <div className='space-y-1'>
-                <Label htmlFor='typeroom-floor'>Số sảnh</Label>
+                <Label htmlFor='typeroom-floor'>Diện tích phòng</Label>
                 <Input
                   value={data && data[index]?.FloorArea}
                   onChange={(e) =>
@@ -169,15 +170,15 @@ const FormTypeRoom = ({
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
-                  <SelectItem value={'Single'}>Single</SelectItem>
-                  <SelectItem value={'Double'}>Double</SelectItem>
-                  <SelectItem value={'Queen'}>Queen</SelectItem>
-                  <SelectItem value={'King'}>King</SelectItem>
-                  <SelectItem value={'Superking'}>Super king</SelectItem>
-                  <SelectItem value={'Murphy'}>Murphy</SelectItem>
-                  <SelectItem value={'Bunk'}>Bunk</SelectItem>
-                  <SelectItem value={'Round'}>Round</SelectItem>
-                </SelectGroup>
+                    <SelectItem value={'Single'}>Single</SelectItem>
+                    <SelectItem value={'Double'}>Double</SelectItem>
+                    <SelectItem value={'Queen'}>Queen</SelectItem>
+                    <SelectItem value={'King'}>King</SelectItem>
+                    <SelectItem value={'Superking'}>Super king</SelectItem>
+                    <SelectItem value={'Murphy'}>Murphy</SelectItem>
+                    <SelectItem value={'Bunk'}>Bunk</SelectItem>
+                    <SelectItem value={'Round'}>Round</SelectItem>
+                  </SelectGroup>
                 </SelectContent>
               </Select>
             </div>
@@ -207,7 +208,7 @@ const FormTypeRoom = ({
               <div className='flex items-center space-x-2'>
                 <Checkbox
                   value={data && data[index]?.Voi_Tam_Dung}
-                  defaultChecked = {data && data[index]?.Voi_Tam_Dung === 1 && true}
+                  defaultChecked={data && data[index]?.Voi_Tam_Dung === 1 && true}
                   id='shower'
                   onCheckedChange={(e) =>
                     setFormData((prev) => {
@@ -230,7 +231,7 @@ const FormTypeRoom = ({
                 <Checkbox
                   value={data && data[index]?.Ban_Cong_San_Hien}
                   id='bacon'
-                  defaultChecked = {data && data[index]?.Ban_Cong_San_Hien ===1 && true}
+                  defaultChecked={data && data[index]?.Ban_Cong_San_Hien === 1 && true}
 
                   onCheckedChange={(e) =>
                     setFormData((prev) => {
@@ -252,7 +253,7 @@ const FormTypeRoom = ({
               <div className='flex items-center space-x-2'>
                 <Checkbox
                   value={data && data[index]?.Khu_Vuc_Cho}
-                  defaultChecked = {data && data[index]?.Khu_Vuc_Cho ===1 && true}
+                  defaultChecked={data && data[index]?.Khu_Vuc_Cho === 1 && true}
 
                   id='wating'
                   onCheckedChange={(e) =>
@@ -276,7 +277,7 @@ const FormTypeRoom = ({
                 <Checkbox
                   value={data && data[index]?.May_Lanh}
                   id='air-conditioner'
-                  defaultChecked = {data && data[index]?.May_Lanh ===1 && true}
+                  defaultChecked={data && data[index]?.May_Lanh === 1 && true}
 
                   onCheckedChange={(e) =>
                     setFormData((prev) => {
@@ -299,7 +300,7 @@ const FormTypeRoom = ({
                 <Checkbox
                   id='fridge'
                   value={data && data[index]?.Tu_Lanh}
-                  defaultChecked = {data && data[index]?.Tu_Lanh ===1 && true}
+                  defaultChecked={data && data[index]?.Tu_Lanh === 1 && true}
 
                   onCheckedChange={(e) =>
                     setFormData((prev) => {
@@ -321,7 +322,7 @@ const FormTypeRoom = ({
               <div className='flex items-center space-x-2'>
                 <Checkbox
                   value={data && data[index]?.Lo_Vi_Song}
-                  defaultChecked = {data && data[index]?.Lo_Vi_Song === 1 && true}
+                  defaultChecked={data && data[index]?.Lo_Vi_Song === 1 && true}
 
                   id='microway'
                   onCheckedChange={(e) =>
@@ -343,7 +344,7 @@ const FormTypeRoom = ({
               </div>
               <div className='flex items-center space-x-2'>
                 <Checkbox
-                  defaultChecked = {data && data[index]?.Tu_Lanh === 1&& true}
+                  defaultChecked={data && data[index]?.Tu_Lanh === 1 && true}
 
                   value={data && data[index]?.Tu_Lanh}
                   id='fridge'
@@ -368,7 +369,7 @@ const FormTypeRoom = ({
                 <Checkbox
                   id='wash-machine'
                   value={data && data[index]?.May_Giat}
-                  defaultChecked = {data && data[index]?.May_Giat ===1 && true}
+                  defaultChecked={data && data[index]?.May_Giat === 1 && true}
 
                   onCheckedChange={(e) =>
                     setFormData((prev) => {
@@ -391,7 +392,7 @@ const FormTypeRoom = ({
                 <Checkbox
                   id='isMorking'
                   value={data && data[index]?.No_Moking}
-                  defaultChecked = {data && data[index]?.No_Moking ===1 && true}
+                  defaultChecked={data && data[index]?.No_Moking === 1 && true}
 
                   onCheckedChange={(e) =>
                     setFormData((prev) => {
@@ -413,7 +414,7 @@ const FormTypeRoom = ({
               <div className='flex items-center space-x-2'>
                 <Checkbox
                   id='bathtub'
-                  defaultChecked = {data && data[index]?.Bon_Tam  === 1 && true}
+                  defaultChecked={data && data[index]?.Bon_Tam === 1 && true}
                   value={data && data[index]?.Bon_Tam}
                   onCheckedChange={(e) =>
                     setFormData((prev) => {
@@ -462,34 +463,71 @@ const FormTypeRoom = ({
       setFiles={setFiles}
     />,
   ]);
-
+  const [errValue, setErrValue] = useState<string>('');
   const addRoomType = () => {
-    setRoomTypes((prevRoomTypes) => [
-      ...prevRoomTypes,
-      <RoomTypeCard
-        key={Math.random()}
-        index={prevRoomTypes.length}
-        removeRoomType={removeRoomType}
-        files={files}
-        setFiles={setFiles}
-      />,
-    ]);
-    setLen((prevLen) => prevLen + 1);
+    console.log('aaa', data);
+    if (data != undefined && data.length > 0) {
+      if (data[data?.length - 1].Name == undefined || data[data?.length - 1].Name == null) {
+        setErrValue('Vui lòng nhập tên loại phòng để tiếp tục');
+      }
+      else if (data[data?.length - 1].FloorArea == undefined || data[data?.length - 1].FloorArea == null) {
+        setErrValue('Vui lòng nhập diện tích phòng để tiếp tục');
+      }
+      else if (data[data?.length - 1].MaxQuantityMember == undefined || data[data?.length - 1].MaxQuantityMember == null) {
+        setErrValue('Vui lòng nhập số lượng người ở tối đa của phòng để tiếp tục');
+      }
+      else if (data[data?.length - 1].Price == undefined || data[data?.length - 1].Price == null) {
+        setErrValue('Vui lòng nhập giá phòng để tiếp tục');
+      }
+      else if (data[data?.length - 1].TenLoaiGiuong == undefined || data[data?.length - 1].TenLoaiGiuong == null) {
+        setErrValue('Vui lòng chọn loại giường để tiếp tục');
+      }
+      else if (data[data?.length - 1].SoLuongGiuong == undefined || data[data?.length - 1].SoLuongGiuong == null) {
+        setErrValue('Vui lòng nhập số lượng giường để tiếp tục');
+      }
+      else {
+        setRoomTypes((prevRoomTypes) => [
+          ...prevRoomTypes,
+          <RoomTypeCard
+            key={Math.random()}
+            index={prevRoomTypes.length}
+            removeRoomType={removeRoomType}
+            files={files}
+            setFiles={setFiles}
+          />,
+        ]);
+        setLen((prevLen) => prevLen + 1);
+        setErrValue('');
+      }
+      errValue != '' ? toast({
+        title: 'Dữ liệu không hợp lệ',
+        description: (
+          <p>{errValue}</p>
+        ),
+      }) : null;
+    }
   };
 
   return (
-    <>
-      <div className='flex justify-end items-end'>
+    <div className='flex flex-col max-h-[490px] overflow-y-auto gap-2'>
+      {roomTypes.length < 2 ? <div className='flex justify-end items-start'>
         <Button
-          onClick={addRoomType}
+          onClick={() => { addRoomType() }}
           className='space-x-2 bg-cyan-500 text-white'>
           <PlusCircle /> <span>Thêm loại phòng</span>
         </Button>
-      </div>
+      </div> : null}
       {roomTypes.map((roomType, index) => (
-        <div key={index}>{roomType}</div>
+        <div className='flex flex-col-reverse' key={index}>{roomType}</div>
       ))}
-    </>
+      {roomTypes.length > 1 ? <div className='flex justify-end items-start'>
+        <Button
+          onClick={() => addRoomType()}
+          className='space-x-2 bg-cyan-700 text-white'>
+          <PlusCircle /> <span>Thêm loại phòng</span>
+        </Button>
+      </div> : null}
+    </div>
   );
 };
 

@@ -9,6 +9,8 @@ import { Button } from "@/components/ui/button"
 import { Loader } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { toast } from "@/components/ui/use-toast"
+import { loginWithAdministrator } from "@/service/auth.service"
+import { loginSuperAdmin } from "@/service/_superadmin.service"
 
 const account_supper_admin = {
   username: "Administrator",
@@ -16,34 +18,31 @@ const account_supper_admin = {
 };
 
 
-interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
+interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> { }
 
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false)
-    const [email, setEmail] = React.useState('');
+  const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
-  const router = useRouter();       
-   async function onSubmit(event: any) {
+  const router = useRouter();
+  async function onSubmit(event: any) {
     event.preventDefault();
     setIsLoading(true);
-    console.log(email, password);
-    setTimeout(() => {
-      setIsLoading(false);
-      if (email === account_supper_admin.username && password === account_supper_admin.password) {
-        toast(
-            {
-                title:"Đăng nhập thành công"
-            }
-        )
+    let formData = new FormData();
+    formData.append('email', email);
+    formData.append('password', password);
+    loginSuperAdmin(formData).then(response => {
+      toast(
+        {
+          title: response.message
+        }
+      )
+      if (response.success == true) {
         router.push('/main/overview');
-      } else {
-        toast(
-            {
-                title:"Tên tài khoản hoặc mật khẩu không đúng"
-            }
-        )
       }
-    }, 3000);
+    }
+
+    )
   }
 
   return (
@@ -84,7 +83,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
             Đăng nhập
           </Button>
         </div>
-      </form>      
+      </form>
     </div>
   )
 }

@@ -64,7 +64,7 @@ export const insertTyperooms = async (
 ): Promise<InsertResult | false | undefined> => {
   try {
     const response = await axios.post<InsertResult>(
-      `http://127.0.1:8000/api/room/insert-typeroom`,
+      `${URL_Enum.BaseURL_Api}room/insert-typeroom`,
       { ...body, HotelId: id },
       {
         headers: {
@@ -109,7 +109,7 @@ export async function deleteImageTypeRoom(id: string): Promise<boolean> {
     const res = await http.delete(`delete-image-typeroom?id=${id}`);
     if (res) return true;
     else return false;
-  } catch (error) { return false}
+  } catch (error) { return false }
 }
 
 export const getImageTypeRoom = async (

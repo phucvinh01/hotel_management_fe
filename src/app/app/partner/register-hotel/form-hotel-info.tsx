@@ -134,7 +134,7 @@ const FormHotelInfo = ({
                 <SelectContent>
                   <SelectGroup>
                     <SelectLabel>Thành phố</SelectLabel>
-                    {provinces.map((item: any, index: number) => {
+                    {provinces.sort((a: any, b: any) => a.name.localeCompare(b.name)).map((item: any, index: number) => {
                       return (
                         <SelectItem
                           key={index}
@@ -158,7 +158,7 @@ const FormHotelInfo = ({
                 <SelectContent>
                   <SelectGroup>
                     <SelectLabel>Huyện</SelectLabel>
-                    {districts.map((item: any, index: number) => {
+                    {districts.sort((a: any, b: any) => a.name.localeCompare(b.name)).map((item: any, index: number) => {
                       return (
                         <SelectItem
                           key={index}
