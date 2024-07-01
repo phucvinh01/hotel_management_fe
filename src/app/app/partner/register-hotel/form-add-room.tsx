@@ -97,7 +97,7 @@ const RoomCard = ({
                   {dataRender?.map((item, index) => {
                     return (
                       <SelectItem
-                        value={item.Name}
+                        value={item?.Name}
                         key={index}>
                         {item.Name}
                       </SelectItem>

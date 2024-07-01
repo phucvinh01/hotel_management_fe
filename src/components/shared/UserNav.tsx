@@ -13,7 +13,7 @@ import {
 } from '../ui/dropdown-menu';
 import { Button } from '../ui/button';
 import Link from 'next/link';
-import { GUEST } from '@/constant';
+import { GUEST, STAFF, SUPERADMIN } from '@/constant';
 
 
 type UserNavProps = {
@@ -28,9 +28,9 @@ export function UserNav({ user, logout }: UserNavProps) {
         <Button
           variant='ghost'
           className='relative h-8 w-8 rounded-full'>
-          <Avatar className='h-8 w-8'>
+          <Avatar className='h-16 w-16'>
             <AvatarImage
-              src='https://github.com/shadcn.png'
+              src='/icon/AvartaDefault.jpg'
               alt='@shadcn'
             />
             <AvatarFallback>{user && user.name}</AvatarFallback>
@@ -38,45 +38,45 @@ export function UserNav({ user, logout }: UserNavProps) {
         </Button>
       </DropdownMenuTrigger>
       {
-        user && user?.Type === GUEST &&  <DropdownMenuContent
-        className='w-56 dark:bg-black dark:text-white text-black bg-white z-[9999999]'
-        align='end'
-        forceMount>
-        <DropdownMenuLabel className='font-normal'>
-          <div className='flex flex-col space-y-1'>
-            <p className='text-sm font-medium leading-none'>
-              {user && user.name}
-            </p>
-            <p className='text-xs leading-none text-muted-foreground'>
-              {user && user.email}
-            </p>
-          </div>
-        </DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        <DropdownMenuGroup>
-          <DropdownMenuItem>
-            <Link href={'/app/hotel/lichsu?page=account'}>Trang cá nhân</Link>
-            <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <Link href={'/app/hotel/lichsu?page=history'}>Lịch sử đặt phòng</Link>
-            <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <Link href={'/app/hotel/lichsu?page=account'}>Cài đặt</Link>
+        user && user?.Type !== SUPERADMIN && user?.Type !== STAFF && <DropdownMenuContent
+          className='w-56 dark:bg-black dark:text-white text-black bg-white z-50'
+          align='end'
+          forceMount>
+          <DropdownMenuLabel className='font-normal'>
+            <div className='flex flex-col space-y-1'>
+              <p className='text-sm font-medium leading-none'>
+                {user && user.name}
+              </p>
+              <p className='text-xs leading-none text-muted-foreground'>
+                {user && user.email}
+              </p>
+            </div>
+          </DropdownMenuLabel>
+          <DropdownMenuSeparator />
+          <DropdownMenuGroup>
+            <DropdownMenuItem>
+              <Link href={'/app/hotel/lichsu?page=account'}>Trang cá nhân</Link>
+              <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <Link href={'/app/hotel/lichsu?page=history'}>Lịch sử đặt phòng</Link>
+              <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <Link href={'/app/hotel/lichsu?page=account'}>Cài đặt</Link>
 
-            <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
+              <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
+            </DropdownMenuItem>
+            {/* <DropdownMenuItem>New Team</DropdownMenuItem> */}
+          </DropdownMenuGroup>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem onClick={() => logout()}>
+            Đăng xuất
+            <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
           </DropdownMenuItem>
-          {/* <DropdownMenuItem>New Team</DropdownMenuItem> */}
-        </DropdownMenuGroup>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={() => logout()}>
-          Đăng xuất
-          <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
-        </DropdownMenuItem>
-      </DropdownMenuContent>
+        </DropdownMenuContent>
       }
-     
+
     </DropdownMenu>
   );
 }

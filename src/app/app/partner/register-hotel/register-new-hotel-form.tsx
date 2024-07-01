@@ -44,6 +44,9 @@ export function RegisterNewHotelForm() {
   const [dataTypeRoom, setDataTypeRoom] = useState<TypeRoom[]>([]);
   const [dataRooms, setDataRooms] = useState<Room[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [allowNextAddTypeRoom, setAllowNextAddTypeRoom] = useState<boolean>(false);
+  const [allowNextAddRoom, setAllowNextAddRoom] = useState<boolean>(false);
+  const [allowNextAddImage, setAllowNextAddImage] = useState<boolean>(false);
   const [neighborhood, setNeighborhood] = useState<INeighborhoob[]>([{
     category: "",
     created_at: "",
@@ -185,6 +188,110 @@ export function RegisterNewHotelForm() {
       throw error;
     }
   };
+  const [errMessage, setErrMessage] = useState<string>('');
+  const validateHotelInfo = () => {
+    if (dataHotel?.Name == undefined || dataHotel.Name == null || dataHotel.Name == '') {
+      setErrMessage('Vui lòng nhập tên khách sạn để tiếp tục');
+      toast({
+        title: 'Vui lòng nhập tên khách sạn để tiếp tục'
+      });
+    }
+    else if (dataHotel?.Address == undefined || dataHotel.Address == null || dataHotel.Address == '') {
+      setErrMessage('Vui lòng nhập địa chỉ khách sạn để tiếp tục');
+      toast({
+        title: 'Vui lòng nhập địa chỉ khách sạn để tiếp tục'
+      });
+    }
+    else if (dataHotel?.Telephone == undefined || dataHotel.Telephone == null || dataHotel.Telephone == '') {
+      setErrMessage('Vui lòng nhập số điện thoại liên hệ khách sạn để tiếp tục');
+      toast({
+        title: 'Vui lòng nhập số điện thoại liên hệ khách sạn để tiếp tục'
+      });
+    }
+    else {
+      setAllowNextAddTypeRoom(true);
+      setCurrentStep('typeroom')
+      toast({
+        title: 'You submitted the following values:',
+        description: (
+          <pre className='mt-2 w-[340px] rounded-3xl bg-slate-950 p-4'>
+            <code className='text-white'>
+              {JSON.stringify(dataHotel, null, 2)}
+            </code>
+            <code className='text-white'>
+              {JSON.stringify(filesImageHotel, null, 2)}
+            </code>
+          </pre>
+        ),
+      });
+    }
+  }
+  const validateTypeRoom = () => {
+    dataTypeRoom.map((item, index) => {
+      setAllowNextAddTypeRoom(false);
+      if (item.Name == undefined || item.Name == null) {
+        toast({
+          title: 'Loại phòng thứ ' + index + 'chưa đủ thông tin',
+          description: (
+            <p>Vui lòng nhập tên loại phòng để tiếp tục</p>)
+        });
+      }
+      else if (item.FloorArea == undefined || item.FloorArea == null) {
+        toast({
+          title: 'Loại phòng thứ ' + index + 'chưa đủ thông tin',
+          description: (
+            <p>Vui lòng nhập diện tích phòng để tiếp tục</p>)
+        });
+      }
+      else if (item.MaxQuantityMember == undefined || item.MaxQuantityMember == null) {
+        toast({
+          title: 'Loại phòng thứ ' + index + 'chưa đủ thông tin',
+          description: (
+            <p>Vui lòng nhập số lượng người ở tối đa của phòng để tiếp tục</p>)
+        });
+      }
+      else if (item.Price == undefined || item.Price == null) {
+        toast({
+          title: 'Loại phòng thứ ' + index + 'chưa đủ thông tin',
+          description: (
+            <p>Vui lòng nhập giá phòng để tiếp tục</p>)
+        });
+      }
+      else if (item.TenLoaiGiuong == undefined || item.TenLoaiGiuong == null) {
+        toast({
+          title: 'Loại phòng thứ ' + index + 'chưa đủ thông tin',
+          description: (
+            <p>Vui lòng chọn loại giường để tiếp tục</p>)
+        });
+      }
+      else if (item.SoLuongGiuong == undefined || item.SoLuongGiuong == null) {
+        toast({
+          title: 'Loại phòng thứ ' + index + 'chưa đủ thông tin',
+          description: (
+            <p>Vui lòng nhập số lượng giường để tiếp tục</p>)
+        });
+      }
+      else { setAllowNextAddTypeRoom(true); }
+    })
+    if (allowNextAddTypeRoom == true) {
+      setCurrentStep('room'),
+        toast({
+          title: 'You submitted the following values:',
+          description: (
+            <pre className='mt-2 w-[340px] rounded-3xl bg-slate-950 p-4'>
+              <code className='text-white'>
+                {JSON.stringify(dataTypeRoom, null, 2)}
+              </code>
+              <code className='text-white'>
+                {JSON.stringify(filesImageTyperoom, null, 2)}
+              </code>
+            </pre>
+          ),
+        });
+    }
+
+  }
+
 
   return (
     <Tabs
@@ -193,25 +300,36 @@ export function RegisterNewHotelForm() {
       className='w-[70%]'
       orientation='vertical'>
 
-      <TabsList className='grid w-full grid-cols-5'>
+      <TabsList className='grid w-[70%] grid-cols-5 fixed top-1 shadow shadow-gray-500'>
         <TabsTrigger
           onClick={() => setCurrentStep('main')}
           value='main'>
           Thông tin chung
         </TabsTrigger>
         <TabsTrigger
-          onClick={() => setCurrentStep('typeroom')}
+          disabled={!allowNextAddTypeRoom}
+          onClick={() => {
+            if (allowNextAddTypeRoom == true) {
+              setCurrentStep('typeroom')
+            }
+          }}
           value='typeroom'>
           Thêm loại phòng
         </TabsTrigger>
         <TabsTrigger
-          onClick={() => setCurrentStep('room')}
+          disabled={!allowNextAddRoom}
+          onClick={() => {
+            if (allowNextAddRoom) {
+              setCurrentStep('room')
+            }
+          }}
           value='room'>
           Thêm phòng
         </TabsTrigger>
 
         <TabsTrigger
-          onClick={() => setCurrentStep('image')}
+          disabled={!allowNextAddImage}
+          onClick={() => { if (allowNextAddImage) { setCurrentStep('image') } }}
           value='image'>
           Hình ảnh
         </TabsTrigger>
@@ -225,7 +343,7 @@ export function RegisterNewHotelForm() {
 
       <TabsContent
         value='main'
-        className='flex flex-col gap-3'>
+        className='flex flex-col gap-3 pt-10'>
         <FormHotelInfo
           setFormData={setDataHotel}
           data={dataHotel}
@@ -237,26 +355,13 @@ export function RegisterNewHotelForm() {
         <div className='flex justify-end items-end'>
           <Button
             onClick={() => {
-              setCurrentStep('typeroom'),
-                toast({
-                  title: 'You submitted the following values:',
-                  description: (
-                    <pre className='mt-2 w-[340px] rounded-3xl bg-slate-950 p-4'>
-                      <code className='text-white'>
-                        {JSON.stringify(dataHotel, null, 2)}
-                      </code>
-                      <code className='text-white'>
-                        {JSON.stringify(filesImageHotel, null, 2)}
-                      </code>
-                    </pre>
-                  ),
-                });
+              validateHotelInfo()
             }}
             className='bg-cyan-500 text-white w-full'>
             Lưu và tiếp tục bước tiếp theo
           </Button>
         </div>
-      </TabsContent>
+      </TabsContent >
 
       <TabsContent
         value='typeroom'
@@ -271,20 +376,7 @@ export function RegisterNewHotelForm() {
         <div className='flex justify-end items-end'>
           <Button
             onClick={() => {
-              setCurrentStep('room'),
-                toast({
-                  title: 'You submitted the following values:',
-                  description: (
-                    <pre className='mt-2 w-[340px] rounded-3xl bg-slate-950 p-4'>
-                      <code className='text-white'>
-                        {JSON.stringify(dataTypeRoom, null, 2)}
-                      </code>
-                      <code className='text-white'>
-                        {JSON.stringify(filesImageTyperoom, null, 2)}
-                      </code>
-                    </pre>
-                  ),
-                });
+              validateTypeRoom()
             }}
             className='bg-cyan-500 text-white w-full'>
             Lưu và tiếp tục bước tiếp theo
@@ -304,6 +396,7 @@ export function RegisterNewHotelForm() {
           <Button
             onClick={() => {
               setCurrentStep('image'),
+                setAllowNextAddRoom(true),
                 toast({
                   title: 'You submitted the following values:',
                   description: (
@@ -338,6 +431,7 @@ export function RegisterNewHotelForm() {
           <Button
             onClick={() => {
               setCurrentStep('review'),
+                setAllowNextAddImage(true),
                 toast({
                   title: 'You submitted the following values:',
                   description: (
@@ -434,7 +528,7 @@ export function RegisterNewHotelForm() {
                 key={index}>
                 <CardContent className='text-gray-600 space-y-6 mt-5'>
                   <CardTitle className='flex gap-2'>
-                    <Hotel /> {roomType.Name}
+                    <Hotel /> {roomType?.Name}
                   </CardTitle>
                   <p>
                     Số lượng phòng:
@@ -464,7 +558,7 @@ export function RegisterNewHotelForm() {
                   <Image
                     className='rounded-3xl object-contain w-full'
                     src={URL.createObjectURL(imageUrl.file)}
-                    alt={`http://localhost:8000/images/$imageUrl`}
+                    alt={`${URL_Enum.BaseURL_Image + imageUrl.filename}`}
                     width={288}
                     height={264}
                   />
@@ -490,6 +584,6 @@ export function RegisterNewHotelForm() {
           </Button>
         </div>
       </TabsContent>
-    </Tabs>
+    </Tabs >
   );
 }

@@ -1,4 +1,6 @@
 import http from '@/axios/http';
+import { EMAIL, PHONE } from '@/constant';
+import axios from 'axios';
 import { string } from 'zod';
 
 type UserRegistrationsByMonth = {
@@ -154,7 +156,7 @@ export interface AllHotel {
     created_at: string;
     total_room_types: string;
     total_rooms: string;
-    is_active:number
+    is_active: number
   };
 }
 
@@ -168,3 +170,42 @@ export const getAllHotel = async (): Promise<AllHotel[]> => {
     throw error;
   }
 };
+
+export const loginSuperAdmin = async (formData: FormData): Promise<any> => {
+  try {
+    const data = await http.post(`login-super-administrator`, formData);
+    console.log(data);
+    if (data.status === 200) {
+
+      return {
+        user: data.data,
+        success: true,
+        message: "Đăng nhập thành công"
+      };
+    }
+    else if (data.status = 204) {
+      return {
+        user: null,
+        success: false,
+        message: "Tài khoản không có quyên truy cập chức năng này"
+      };
+    }
+    else if (data.status == 205) {
+      return {
+        user: null,
+        success: false,
+        message: "Mật khẩu không đúng, vui lòng nhập lại"
+      };
+    }
+    else {
+      return {
+        user: null,
+        success: false,
+        message: "Lỗi sever vui lòng kiểm tra kết nối"
+      };
+    }
+  } catch (error) {
+    console.log(error);
+  }
+
+}
