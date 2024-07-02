@@ -69,7 +69,7 @@ export function ModalAddTypeRoom() {
       console.warn('formData is undefined. Amenities cannot be assigned.');
     }
 
-     if (formData) {
+    if (formData) {
       formData.file = file.map(fileData => fileData.file);
       formData.region = file.map(fileData => fileData.regions);
       formData.HotelId = admin?.id_hotel;
@@ -97,7 +97,7 @@ export function ModalAddTypeRoom() {
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={() =>setFiles([])}>
+    <Dialog open={isOpen} onOpenChange={() => setFiles([])}>
       <DialogTrigger asChild>
         <Button
           className='bg-cyan-500 dark:bg-cyan-700'
@@ -112,295 +112,295 @@ export function ModalAddTypeRoom() {
         <form
           className='grid gap-2 py-2 grid-cols-12 border-t'
           onSubmit={(e) => handleSubmit(e)}>
-            <div className='col-span-6 grid grid-cols-12 gap-2'>
+          <div className='col-span-6 grid grid-cols-12 gap-2'>
 
-          <h3 className='col-span-12 text-[18px] underline my-2'>Thông tin</h3>
+            <h3 className='col-span-12 text-[18px] underline my-2'>Thông tin</h3>
 
-          <div className='flex space-y-2 flex-col col-span-6'>
-            <Label
-              htmlFor='name'
-              className='text-start'>
-              Tên Loại Phòng
-            </Label>
-            <Input
-              required
-              id='name'
-              onChange={(e) =>
-                setFormData((prev) => ({ ...prev!, Name: e.target.value }))
-              }
-            />
-          </div>
-          <div className='flex space-y-2 flex-col col-span-6'>
-            <Label
-              htmlFor='floor'
-              className='text-start'>
-              Số sảnh
-            </Label>
-            <Input
-              min={1}
-              maxLength={4}
-              id='floor'
-              type='number'
-              onChange={(e) =>
-                setFormData((prev) => ({
-                  ...prev!,
-                  FloorArea: e.target.valueAsNumber,
-                }))
-              }
-            />
-          </div>
-          <div className='flex space-y-2 flex-col col-span-6'>
-            <Label
-              htmlFor='people'
-              className='text-start'>
-              Số người tối đa
-            </Label>
-            <Input
-              min={1}
-              maxLength={4}
-              id='people'
-              type='number'
-              onChange={(e) =>
-                setFormData((prev) => ({
-                  ...prev!,
-                  MaxQuantityMember: e.target.valueAsNumber,
-                }))
-              }
-            />
-          </div>
-          <div className='flex space-y-2 flex-col col-span-6'>
-            <Label
-              htmlFor='Price'
-              className='text-start'>
-              Giá
-            </Label>
-            <Input
-              min={0}
-              maxLength={8}
-              id='Price'
-              type='number'
-              onChange={(e) =>
-                setFormData((prev) => ({
-                  ...prev!,
-                  Price: e.target.valueAsNumber,
-                }))
-              }
-            />
-          </div>
-          <h3 className='col-span-12 text-[18px] underline my-3'>Tiện nghi</h3>
-          <div className='flex space-y-2 flex-col col-span-6'>
-            <Label
-              htmlFor='typebed'
-              className='text-start'>
-              Giường
-            </Label>
-            <Select
-              name='typebed'
-              required
-              onValueChange={(e) =>
-                setFormData((prev) => ({ ...prev!, TenLoaiGiuong: e }))
-              }>
-              <SelectTrigger className=''>
-                <SelectValue placeholder='Chọn loại giường' />
-              </SelectTrigger>
-              <SelectContent className='bg-white text-black dark:bg-black dark:text-white'>
-                <SelectGroup>
-                  <SelectItem value={'Single'}>Single</SelectItem>
-                  <SelectItem value={'Double'}>Double</SelectItem>
-                  <SelectItem value={'Queen'}>Queen</SelectItem>
-                  <SelectItem value={'King'}>King</SelectItem>
-                  <SelectItem value={'Superking'}>Super king</SelectItem>
-                  <SelectItem value={'Murphy'}>Murphy</SelectItem>
-                  <SelectItem value={'Bunk'}>Bunk</SelectItem>
-                  <SelectItem value={'Round'}>Round</SelectItem>
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-          </div>
-          <div className='flex space-y-2 flex-col col-span-6'>
-            <Label
-              htmlFor='bed-quantity'
-              className='text-start'>
-              Số lượng giường
-            </Label>
-            <Input
-              min={0}
-              maxLength={8}
-              id='bed-quantity'
-              type='number'
-              onChange={(e) =>
-                setFormData((prev) => ({
-                  ...prev!,
-                  SoLuongGiuong: e.target.valueAsNumber,
-                }))
-              }
-            />
-          </div>
-
-          <h3 className='col-span-12 text-[18px] underline my-2'>Tiện ích</h3>
-
-          <div className='grid grid-cols-12 col-span-12 px-3'>
-            <h4 className='col-span-12 my-3'>Phòng</h4>
-            <div className='flex items-center space-x-2 col-span-4'>
-              <Checkbox
-                id='bacon'
-                onCheckedChange={(e) =>
+            <div className='flex space-y-2 flex-col col-span-6'>
+              <Label
+                htmlFor='name'
+                className='text-start'>
+                Tên Loại Phòng
+              </Label>
+              <Input
+                required
+                id='name'
+                onChange={(e) =>
+                  setFormData((prev) => ({ ...prev!, Name: e.target.value }))
+                }
+              />
+            </div>
+            <div className='flex space-y-2 flex-col col-span-6'>
+              <Label
+                htmlFor='floor'
+                className='text-start'>
+                Diện tích phòng
+              </Label>
+              <Input
+                min={1}
+                maxLength={4}
+                id='floor'
+                type='number'
+                onChange={(e) =>
                   setFormData((prev) => ({
                     ...prev!,
-                    Ban_Cong_San_Hien: e ? 1 : 0,
+                    FloorArea: e.target.valueAsNumber,
                   }))
                 }
               />
-              <label
-                htmlFor='bacon'
-                className='text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'>
-                Ban công
-              </label>
             </div>
-            <div className='flex items-center space-x-2 col-span-4'>
-              <Checkbox
-                id='wating-room'
-                onCheckedChange={(e) =>
-                  setFormData((prev) => ({ ...prev!, Khu_Vuc_Cho: e ? 1 : 0 }))
+            <div className='flex space-y-2 flex-col col-span-6'>
+              <Label
+                htmlFor='people'
+                className='text-start'>
+                Số người tối đa
+              </Label>
+              <Input
+                min={1}
+                maxLength={4}
+                id='people'
+                type='number'
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev!,
+                    MaxQuantityMember: e.target.valueAsNumber,
+                  }))
                 }
               />
-              <label
-                htmlFor='wating-room'
-                className='text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'>
-                Khu vực chờ
-              </label>
             </div>
-          </div>
+            <div className='flex space-y-2 flex-col col-span-6'>
+              <Label
+                htmlFor='Price'
+                className='text-start'>
+                Giá
+              </Label>
+              <Input
+                min={0}
+                maxLength={8}
+                id='Price'
+                type='number'
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev!,
+                    Price: e.target.valueAsNumber,
+                  }))
+                }
+              />
+            </div>
+            <h3 className='col-span-12 text-[18px] underline my-3'>Tiện nghi</h3>
+            <div className='flex space-y-2 flex-col col-span-6'>
+              <Label
+                htmlFor='typebed'
+                className='text-start'>
+                Giường
+              </Label>
+              <Select
+                name='typebed'
+                required
+                onValueChange={(e) =>
+                  setFormData((prev) => ({ ...prev!, TenLoaiGiuong: e }))
+                }>
+                <SelectTrigger className=''>
+                  <SelectValue placeholder='Chọn loại giường' />
+                </SelectTrigger>
+                <SelectContent className='bg-white text-black dark:bg-black dark:text-white'>
+                  <SelectGroup>
+                    <SelectItem value={'Single'}>Single</SelectItem>
+                    <SelectItem value={'Double'}>Double</SelectItem>
+                    <SelectItem value={'Queen'}>Queen</SelectItem>
+                    <SelectItem value={'King'}>King</SelectItem>
+                    <SelectItem value={'Superking'}>Super king</SelectItem>
+                    <SelectItem value={'Murphy'}>Murphy</SelectItem>
+                    <SelectItem value={'Bunk'}>Bunk</SelectItem>
+                    <SelectItem value={'Round'}>Round</SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className='flex space-y-2 flex-col col-span-6'>
+              <Label
+                htmlFor='bed-quantity'
+                className='text-start'>
+                Số lượng giường
+              </Label>
+              <Input
+                min={0}
+                maxLength={8}
+                id='bed-quantity'
+                type='number'
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev!,
+                    SoLuongGiuong: e.target.valueAsNumber,
+                  }))
+                }
+              />
+            </div>
 
-          <div className='grid grid-cols-12 col-span-12 px-3'>
-            <h4 className='col-span-12 my-3'>Phòng tắm</h4>
-            <div className='flex items-center space-x-2 col-span-4'>
-              <Checkbox
-                id='shower'
-                onCheckedChange={(e) =>
-                  setFormData((prev) => ({ ...prev!, Voi_Tam_Dung: e ? 1 : 0 }))
-                }
-              />
-              <label
-                htmlFor='shower'
-                className='text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'>
-                Vòi tắm đứng
-              </label>
-            </div>
-            <div className='flex items-center space-x-2 col-span-4'>
-              <Checkbox
-                id='bath'
-                onCheckedChange={(e) =>
-                  setFormData((prev) => ({ ...prev!, Bon_Tam: e ? 1 : 0 }))
-                }
-              />
-              <label
-                htmlFor='bath'
-                className='text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'>
-                Bồn tắm
-              </label>
-            </div>
-            <div className='flex items-center space-x-2 col-span-4'>
-              <Checkbox
-                id='hotwater'
-                onCheckedChange={(e) =>
-                  setFormData((prev) => ({ ...prev!, Nuoc_Nong: e ? 1 : 0 }))
-                }
-              />
-              <label
-                htmlFor='hotwater'
-                className='text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'>
-                Nước nóng
-              </label>
-            </div>
-          </div>
+            <h3 className='col-span-12 text-[18px] underline my-2'>Tiện ích</h3>
 
-          <div className='grid grid-cols-12 gap-2 col-span-12 px-3'>
-            <h4 className='col-span-12 my-3'>Khác</h4>
-            <div className='flex items-center space-x-2 col-span-4'>
-              <Checkbox
-                id='air-machine'
-                onCheckedChange={(e) =>
-                  setFormData((prev) => ({ ...prev!, May_Lanh: e ? 1 : 0 }))
-                }
-              />
-              <label
-                htmlFor='air-machine'
-                className='text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'>
-                Máy lạnh
-              </label>
+            <div className='grid grid-cols-12 col-span-12 px-3'>
+              <h4 className='col-span-12 my-3'>Phòng</h4>
+              <div className='flex items-center space-x-2 col-span-4'>
+                <Checkbox
+                  id='bacon'
+                  onCheckedChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev!,
+                      Ban_Cong_San_Hien: e ? 1 : 0,
+                    }))
+                  }
+                />
+                <label
+                  htmlFor='bacon'
+                  className='text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'>
+                  Ban công
+                </label>
+              </div>
+              <div className='flex items-center space-x-2 col-span-4'>
+                <Checkbox
+                  id='wating-room'
+                  onCheckedChange={(e) =>
+                    setFormData((prev) => ({ ...prev!, Khu_Vuc_Cho: e ? 1 : 0 }))
+                  }
+                />
+                <label
+                  htmlFor='wating-room'
+                  className='text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'>
+                  Khu vực chờ
+                </label>
+              </div>
             </div>
-            <div className='flex items-center space-x-2 col-span-4'>
-              <Checkbox
-                id='bath'
-                onCheckedChange={(e) =>
-                  setFormData((prev) => ({ ...prev!, Bon_Tam: e ? 1 : 0 }))
-                }
-              />
-              <label
-                htmlFor='bath'
-                className='text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'>
-                Bồn tắm
-              </label>
+
+            <div className='grid grid-cols-12 col-span-12 px-3'>
+              <h4 className='col-span-12 my-3'>Phòng tắm</h4>
+              <div className='flex items-center space-x-2 col-span-4'>
+                <Checkbox
+                  id='shower'
+                  onCheckedChange={(e) =>
+                    setFormData((prev) => ({ ...prev!, Voi_Tam_Dung: e ? 1 : 0 }))
+                  }
+                />
+                <label
+                  htmlFor='shower'
+                  className='text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'>
+                  Vòi tắm đứng
+                </label>
+              </div>
+              <div className='flex items-center space-x-2 col-span-4'>
+                <Checkbox
+                  id='bath'
+                  onCheckedChange={(e) =>
+                    setFormData((prev) => ({ ...prev!, Bon_Tam: e ? 1 : 0 }))
+                  }
+                />
+                <label
+                  htmlFor='bath'
+                  className='text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'>
+                  Bồn tắm
+                </label>
+              </div>
+              <div className='flex items-center space-x-2 col-span-4'>
+                <Checkbox
+                  id='hotwater'
+                  onCheckedChange={(e) =>
+                    setFormData((prev) => ({ ...prev!, Nuoc_Nong: e ? 1 : 0 }))
+                  }
+                />
+                <label
+                  htmlFor='hotwater'
+                  className='text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'>
+                  Nước nóng
+                </label>
+              </div>
             </div>
-            <div className='flex items-center space-x-2 col-span-4'>
-              <Checkbox
-                id='microway'
-                onCheckedChange={(e) =>
-                  setFormData((prev) => ({ ...prev!, Lo_Vi_Song: e ? 1 : 0 }))
-                }
-              />
-              <label
-                htmlFor='microway'
-                className='text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'>
-                Lò vi sóng
-              </label>
-            </div>
-            <div className='flex items-center space-x-2 col-span-4'>
-              <Checkbox
-                id='watsing-machine'
-                onCheckedChange={(e) =>
-                  setFormData((prev) => ({ ...prev!, May_Giat: e ? 1 : 0 }))
-                }
-              />
-              <label
-                htmlFor='cancel'
-                className='text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'>
-                Máy giặt
-              </label>
-            </div>
-            <div className='flex items-center space-x-2 col-span-4'>
-              <Checkbox
-                id='frige'
-                onCheckedChange={(e) =>
-                  setFormData((prev) => ({ ...prev!, Tu_Lanh: e ? 1 : 0 }))
-                }
-              />
-              <label
-                htmlFor='frige'
-                className='text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'>
-                Tủ lạnh
-              </label>
-            </div>
-            <div className='flex items-center space-x-2 col-span-4'>
-              <Checkbox
-                id='fax'
-                onCheckedChange={(e) =>
-                  setFormData((prev) => ({ ...prev!, No_Moking: e ? 1 : 0 }))
-                }
-              />
-              <label
-                htmlFor='fax'
-                className='text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'>
-                Được hút thuốc
-              </label>
+
+            <div className='grid grid-cols-12 gap-2 col-span-12 px-3'>
+              <h4 className='col-span-12 my-3'>Khác</h4>
+              <div className='flex items-center space-x-2 col-span-4'>
+                <Checkbox
+                  id='air-machine'
+                  onCheckedChange={(e) =>
+                    setFormData((prev) => ({ ...prev!, May_Lanh: e ? 1 : 0 }))
+                  }
+                />
+                <label
+                  htmlFor='air-machine'
+                  className='text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'>
+                  Máy lạnh
+                </label>
+              </div>
+              <div className='flex items-center space-x-2 col-span-4'>
+                <Checkbox
+                  id='bath'
+                  onCheckedChange={(e) =>
+                    setFormData((prev) => ({ ...prev!, Bon_Tam: e ? 1 : 0 }))
+                  }
+                />
+                <label
+                  htmlFor='bath'
+                  className='text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'>
+                  Bồn tắm
+                </label>
+              </div>
+              <div className='flex items-center space-x-2 col-span-4'>
+                <Checkbox
+                  id='microway'
+                  onCheckedChange={(e) =>
+                    setFormData((prev) => ({ ...prev!, Lo_Vi_Song: e ? 1 : 0 }))
+                  }
+                />
+                <label
+                  htmlFor='microway'
+                  className='text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'>
+                  Lò vi sóng
+                </label>
+              </div>
+              <div className='flex items-center space-x-2 col-span-4'>
+                <Checkbox
+                  id='watsing-machine'
+                  onCheckedChange={(e) =>
+                    setFormData((prev) => ({ ...prev!, May_Giat: e ? 1 : 0 }))
+                  }
+                />
+                <label
+                  htmlFor='cancel'
+                  className='text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'>
+                  Máy giặt
+                </label>
+              </div>
+              <div className='flex items-center space-x-2 col-span-4'>
+                <Checkbox
+                  id='frige'
+                  onCheckedChange={(e) =>
+                    setFormData((prev) => ({ ...prev!, Tu_Lanh: e ? 1 : 0 }))
+                  }
+                />
+                <label
+                  htmlFor='frige'
+                  className='text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'>
+                  Tủ lạnh
+                </label>
+              </div>
+              <div className='flex items-center space-x-2 col-span-4'>
+                <Checkbox
+                  id='fax'
+                  onCheckedChange={(e) =>
+                    setFormData((prev) => ({ ...prev!, No_Moking: e ? 1 : 0 }))
+                  }
+                />
+                <label
+                  htmlFor='fax'
+                  className='text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'>
+                  Được hút thuốc
+                </label>
+              </div>
             </div>
           </div>
-            </div>
-            <div className='col-span-6'>
-                <h3 className='col-span-12 text-[18px] underline my-2'>Hình ảnh</h3>
-              <ImageUploader files={file} setFiles={setFiles} type='typeroom' />
-            </div>
+          <div className='col-span-6'>
+            <h3 className='col-span-12 text-[18px] underline my-2'>Hình ảnh</h3>
+            <ImageUploader files={file} setFiles={setFiles} type='typeroom' />
+          </div>
 
           <DialogFooter className='col-span-12 mt-2'>
             <Button

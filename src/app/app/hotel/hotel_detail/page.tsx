@@ -232,7 +232,7 @@ export default function HotelDetail() {
                     {/* hinh anh */}
                     <div className='w-10/12 flex flex-col my-2 lg:flex-row'>
                         <div className='w-full lg:w-7/12 relative'>
-                            <img loading='lazy' src={`${URL_Enum.BaseURL_Image}/${hotel.images && hotel?.images.find((image) => {
+                            <img loading='lazy' src={`${URL_Enum.BaseURL_Image}${hotel.images && hotel?.images.find((image) => {
                                 return image.TypeRoom === 'None;Ảnh bìa'
                             })?.FileName}`} className='w-full rounded-xl lg:h-[410px]'
                                 onClick={() => handleStateModalListImagesChange(true, 0)} />
@@ -272,7 +272,7 @@ export default function HotelDetail() {
                                      bg-black opacity-70 flex justify-center items-center'>
                                                 <button className='font-bold text-white text-center'>Xem tất cả hình ảnh</button>
                                             </div>
-                                            <img loading='lazy' src={` ${URL_Enum.BaseURL_Image}/${item.FileName}`}
+                                            <img loading='lazy' src={` ${URL_Enum.BaseURL_Image}${item.FileName}`}
                                                 onClick={() => handleStateModalListImagesChange(true, 5)}
                                                 className='w-full rounded-3xl  h-[137px]' />
                                         </div>

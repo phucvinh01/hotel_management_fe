@@ -307,7 +307,7 @@ export const updateImageCover = async (
   body: IUploadCoverImagePayload,
 ): Promise<IUploadCoverImageResult> => {
   const res = await axios.post<IUploadCoverImageResult>(
-    `${URL_Enum.BaseURL_Api}/update-cover-image-hotel`,
+    `${URL_Enum.BaseURL_Api}update-cover-image-hotel`,
     body,
     {
       headers: {

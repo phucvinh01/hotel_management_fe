@@ -51,9 +51,9 @@ export function AlertDeleteImage({ idImage, images }: AlertDeleteImageProps) {
     <AlertDialog>
       <AlertDialogTrigger>
         <Trash
-          color='red'
+          color='white'
           size={16}
-          className='hover:cursor-pointer'
+          className='hover:cursor-pointer bg-red-500 p-0.5 rounded-lg'
         />{' '}
       </AlertDialogTrigger>
       <AlertDialogContent className='bg-white text-black dark:bg-black drak:text-while rounded-2xl'>

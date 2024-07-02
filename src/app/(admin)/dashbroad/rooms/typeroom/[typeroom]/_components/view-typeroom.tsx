@@ -77,9 +77,9 @@ const ViewTypeRoom = ({
               <div className='relative justify-center items-center'>
                 <Image
                   className='rounded-2xl object-contain min-w-[80px] min-h-[80px]'
-                  src={item.FileName}
+                  src={URL_Enum.BaseURL_Image + item.FileName}
                   // alt={`${URL_Enum.BaseURL_Image + imageUrl}`}
-                  alt={`http://localhost:8000/images/$imageUrl`}
+                  alt={`${URL_Enum.BaseURL_Image + item.FileName}`}
                   width={80}
                   height={80}
                 />
