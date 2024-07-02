@@ -26,7 +26,7 @@ const FormEditTypeRoom = ({
   className,
 }: FormEditTypeRoomProps) => {
   return (
-    <div className={`grid grid-cols-12 gap-10 ${className}`}>
+    <div className={`grid grid-cols-12 gap-10 ${className} overflow-y-scroll max-h-[480px]`}>
       <div className='col-span-6 grid grid-cols-12 gap-2'>
         <h3 className=' col-span-12 text-[18px] underline my-2 font-bold'>
           Thông tin
@@ -352,8 +352,8 @@ const FormEditTypeRoom = ({
           </div>
         </div>
       </div>
-      <div className='col-span-6 grid place-items-center'>
-        <CarouselImageTypeRoom listData={imageTypeRoom} typeroom={formData?.id} hotel={formData?.HotelId}/>
+      <div className='col-span-12 grid place-items-center p-2'>
+        <CarouselImageTypeRoom listData={imageTypeRoom} typeroom={formData?.id} hotel={formData?.HotelId} />
       </div>
     </div>
   );

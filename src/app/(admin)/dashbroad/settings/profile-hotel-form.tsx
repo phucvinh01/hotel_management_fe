@@ -13,6 +13,7 @@ import { useUpdateHotel } from '@/service/query.service';
 import { Hotel } from 'lucide-react';
 import { updateImageCover } from '@/service/hotel.service';
 import { Label } from '@/components/ui/label';
+import URL_Enum from '@/axios/URL_Enum';
 
 const profileFormSchema = z.object({
   name: z
@@ -64,6 +65,7 @@ export function ProfileHotelForm({ data, isLoading }: ProfileHotelFormProps) {
       file: file,
       idImage: hotel?.idImage,
       nameFileOld: hotel?.hotel_image,
+      hotelId: hotel?.id
     };
     const res = await updateImageCover(body);
     if (res.success) {
@@ -88,7 +90,7 @@ export function ProfileHotelForm({ data, isLoading }: ProfileHotelFormProps) {
     return <Loader />;
   }
 
-   const handleCheckOutChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleCheckOutChange = (e: ChangeEvent<HTMLInputElement>) => {
     const checkOutTime = e.target.value;
     const checkInTime = hotel?.TimeCheckIn;
 
@@ -206,7 +208,7 @@ export function ProfileHotelForm({ data, isLoading }: ProfileHotelFormProps) {
         <div className='font-bold'>Giờ bắt đầu làm việc</div>
         <Input
           onChange={(e) =>
-                       handleCheckInChange(e)
+            handleCheckInChange(e)
           }
           required
           type='time'
@@ -238,7 +240,7 @@ export function ProfileHotelForm({ data, isLoading }: ProfileHotelFormProps) {
       <div>Ảnh bìa</div>
       <ImageUpLoader
         hanldUpload={handleUpLoading}
-        defaultImageUrl={hotel?.hotel_image as string}
+        defaultImageUrl={URL_Enum.BaseURL_Image + hotel?.hotel_image as string}
         setImageFile={setFile}
       />
     </form>

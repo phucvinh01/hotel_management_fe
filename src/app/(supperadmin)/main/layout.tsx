@@ -19,11 +19,11 @@ export default function Layout({
 }>) {
   return (
     <ReactQueryProvider>
-      <main suppressHydrationWarning={true}  className='font-sans' style={{ fontFamily: 'cursive' }}>
+      <main suppressHydrationWarning={true} className='font-sans' style={{ fontFamily: 'sans-serif' }}>
         <div className="dark:bg-black dark:text-gray-300 rounded-3xl bg-slate-100">
           {children}
         </div>
       </main>
-      </ReactQueryProvider>
+    </ReactQueryProvider>
   );
 }

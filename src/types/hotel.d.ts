@@ -355,6 +355,7 @@ interface IUploadCoverImagePayload {
   file: File | null,
   idImage: string | undefined,
   nameFileOld: string | undefined,
+  hotelId: string | undefined
 }
 
 interface IUploadCoverImageResult {
