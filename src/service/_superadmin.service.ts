@@ -160,6 +160,22 @@ export interface AllHotel {
   };
 }
 
+export interface UserData {
+  user_email: string;
+  user_name: string;
+  user_phone: string;
+  created_at: string;
+  user_type: string
+}
+
+export interface UserDataManagement {
+  current_month: {
+    staff:UserData[],
+    guest:UserData[]
+  };
+  all_users:UserData[]
+}
+
 export const getAllHotel = async (): Promise<AllHotel[]> => {
   try {
     const res = await http.get<AllHotel[]>(
@@ -209,3 +225,14 @@ export const loginSuperAdmin = async (formData: FormData): Promise<any> => {
   }
 
 }
+
+export const getUserData = async (): Promise<UserDataManagement> => {
+  try {
+    const res = await http.get<UserDataManagement>(
+      `/get-user-data`,
+    );
+    return res.data;
+  } catch (error) {
+    throw error;
+  }
+};

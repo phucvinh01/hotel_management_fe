@@ -39,7 +39,9 @@ export function DataTableToolbar<TData>({
               table.getColumn('hotel_name')?.setFilterValue(event.target.value)
             }
             className='h-8 w-[150px] lg:w-[250px]'
-          />)  : (
+          />)  : pathName === '/main/user' ? (
+            null
+          ) :(
           <Input
             placeholder='Lọc theo tên...'
             value={

@@ -30,10 +30,10 @@ export function MainNav({
         Khách sạn
       </Link>
       <Link
-        href="/examples/dashboard"
+        href="/main/user"
         className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
       >
-        Settings
+        User
       </Link>
     </nav>
   )

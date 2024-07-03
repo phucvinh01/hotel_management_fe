@@ -13,7 +13,7 @@ import { getHotel, getRenvenuByHotel, IHotel, updateHotel } from "./hotel.servic
 import { getBookings, getFrequentGuests, getPeopleStayToday } from "./_booking.service";
 import { getFullInfoUserAdmin, IInfoUserAdmin, updateFullInfoUserAdmin } from "./_user.service";
 import { getComments } from "./_comment.service";
-import { getAllHotel, getCurrentMonthBookings, getStatistics, getTopHotelsByRevenue, getTotalRegisterByType, getUserRegistrationsByMonth } from "./_superadmin.service";
+import { getAllHotel, getCurrentMonthBookings, getStatistics, getTopHotelsByRevenue, getTotalRegisterByType, getUserData, getUserRegistrationsByMonth } from "./_superadmin.service";
 
 // Query Typeroom
 
@@ -290,6 +290,15 @@ export function useGetAllHotel() {
     placeholderData: keepPreviousData,
     refetchOnWindowFocus: true,
   });
+}
+
+export function useGetAllUseData() {
+  return useQuery({
+   queryKey: ["useGetAllUseData"],
+   queryFn: () => getUserData(),
+   placeholderData: keepPreviousData,
+   refetchOnWindowFocus: true,
+ });
 }
 
 
